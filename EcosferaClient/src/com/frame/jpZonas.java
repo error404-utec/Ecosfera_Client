@@ -33,6 +33,8 @@ import com.entities.Zona;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
 import com.services.ZonaBeanRemote;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class jpZonas extends JPanel {
@@ -106,28 +108,47 @@ public class jpZonas extends JPanel {
 		});
 		Close_Panel.setForeground(Color.WHITE);
 		Close_Panel.setBackground(new Color(255, 255, 255));
+		
+		JButton BtnCancelar = new JButton("Cancelar");
+		BtnCancelar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				zonaActualizar = null;
+				txtCodigo.setText("");
+				txtNombre.setText("");
+			}
+		});
+		BtnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		BtnCancelar.setForeground(new Color(46, 139, 87));
+		BtnCancelar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
+		BtnCancelar.setBackground(new Color(245, 255, 250));
 		GroupLayout gl_pnlNew = new GroupLayout(pnlNew);
 		gl_pnlNew.setHorizontalGroup(
 			gl_pnlNew.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_pnlNew.createSequentialGroup()
-					.addGroup(gl_pnlNew.createParallelGroup(Alignment.LEADING)
-						.addGroup(Alignment.TRAILING, gl_pnlNew.createSequentialGroup()
+					.addGroup(gl_pnlNew.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_pnlNew.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(lblCodigo)
-							.addPreferredGap(ComponentPlacement.RELATED, 306, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED, 363, Short.MAX_VALUE)
 							.addComponent(Close_Panel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-						.addGroup(Alignment.TRAILING, gl_pnlNew.createSequentialGroup()
+						.addGroup(gl_pnlNew.createSequentialGroup()
 							.addGap(22)
-							.addComponent(txtCodigo, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
+							.addComponent(txtCodigo, GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE))
 						.addGroup(gl_pnlNew.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(gl_pnlNew.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_pnlNew.createSequentialGroup()
 									.addGap(10)
-									.addComponent(txtNombre, GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE))
+									.addComponent(txtNombre, GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE))
 								.addComponent(lblNombre)))
-						.addGroup(Alignment.TRAILING, gl_pnlNew.createSequentialGroup()
-							.addContainerGap(347, Short.MAX_VALUE)
+						.addGroup(gl_pnlNew.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(BtnCancelar)
+							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(btnAgregar)))
 					.addContainerGap())
 		);
@@ -144,8 +165,10 @@ public class jpZonas extends JPanel {
 					.addComponent(lblNombre)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(txtNombre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-					.addComponent(btnAgregar)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(gl_pnlNew.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnAgregar)
+						.addComponent(BtnCancelar))
 					.addContainerGap())
 		);
 		pnlNew.setLayout(gl_pnlNew);
@@ -153,8 +176,8 @@ public class jpZonas extends JPanel {
 		JScrollPane scroolTablaZonas = new JScrollPane();
 		
 		
-		scroolTablaZonas.setLayout(new ScrollPaneLayout() {
-
+		//scroolTablaZonas.setLayout(new ScrollPaneLayout() {
+/*
 		private static final long serialVersionUID = 1L;
 
 			@Override
@@ -193,11 +216,10 @@ public class jpZonas extends JPanel {
 				
 				
 			}
-		});
+		});*/
 		
 		txtfiltro = new JTextField();
 		txtfiltro.addKeyListener(new KeyAdapter() {
-			@Override
 			public void keyReleased(KeyEvent e) {
 				filtrar();
 			}
