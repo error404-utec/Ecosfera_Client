@@ -71,9 +71,12 @@ public class JFRPrincipal extends JFrame {
 	private final JLabel lblTopMenu_4 = new JLabel("");
 	private static JFRPrincipal frame = new JFRPrincipal();
 
+	
+	
 	/**
 	 * Launch the application.
 	 */
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -566,16 +569,28 @@ public class JFRPrincipal extends JFrame {
 	//Mouse Cliked
 
 	private void PnlZonas_MouseClicked() throws NamingException {
+		jpZonas jp = new jpZonas();
+		jp.setBounds(290, 238, 660, 600);
+		jp.setVisible(true);
+		jp.setLocation(12,12);
+		
+		
+		PnlWorkSpace.removeAll();
+		PnlWorkSpace.add(jp);
+		PnlWorkSpace.revalidate();
+		PnlWorkSpace.repaint();
+		LblNavegacion.setText("Inicio"+ " - " + "Zonas");
+		lblTitulopanel.setText("Mantenimiento de Zonas");
+		
 		new Thread() {
 			public void run() {
 				reinicarMenu();
 				int x = 278;
 				int y = 57;
-				System.out.println(PnlUsuarios.getBounds().y);
 				while (y >1) {
 					x= x -1;
 					y--;
-					PnlZonas.setBounds(0, 121, x, y);
+					PnlZonas.setSize(x, y);
 					PnlMenuInicio_MouseClikedFX(5);
 					try {
 						sleep(0,1);
@@ -596,21 +611,11 @@ public class JFRPrincipal extends JFrame {
 				lblTopMenu_2.setText("Departamentos");
 				lblTopMenu_3.setText("Localidades");
 				PnlTopMenu_Repaint();
+				
 			}
 		}.start();
 		
-		jpZonas jp = new jpZonas();
-		jp.setBounds(290, 238, 660, 600);
-		jp.setVisible(true);
-		jp.setLocation(12,12);
 		
-		
-		PnlWorkSpace.removeAll();
-		PnlWorkSpace.add(jp);
-		PnlWorkSpace.revalidate();
-		PnlWorkSpace.repaint();
-		LblNavegacion.setText("Inicio"+ " - " + "Zonas");
-		lblTitulopanel.setText("Mantenimiento de Zonas");
 	}
 	
 	private void PnlUsuarios_MouseClicked() {	
@@ -688,6 +693,17 @@ public class JFRPrincipal extends JFrame {
 	}
 	
 	private void PnlPermisos_MouseClicked() throws NamingException {
+		JPanel jp = new jpPermisos();
+		jp.setBounds(290, 238, 660, 600);
+		jp.setVisible(true);
+		jp.setLocation(12,12);
+		
+		PnlWorkSpace.removeAll();
+		PnlWorkSpace.add(jp);
+		PnlWorkSpace.revalidate();
+		PnlWorkSpace.repaint();
+		LblNavegacion.setText("Inicio"+ " - " + "Permisos");
+		lblTitulopanel.setText("Mantenimiento de Permisos");
 		new Thread() {
 			public void run() {
 				reinicarMenu();
@@ -710,17 +726,7 @@ public class JFRPrincipal extends JFrame {
 			}
 		}.start();
 		
-		JPanel jp = new jpPermisos();
-		jp.setBounds(290, 238, 660, 600);
-		jp.setVisible(true);
-		jp.setLocation(12,12);
 		
-		PnlWorkSpace.removeAll();
-		PnlWorkSpace.add(jp);
-		PnlWorkSpace.revalidate();
-		PnlWorkSpace.repaint();
-		LblNavegacion.setText("Inicio"+ " - " + "Permisos");
-		lblTitulopanel.setText("Mantenimiento de Permisos");
 	}
 	
 	private void PnlObservacion_MouseClicked() {
