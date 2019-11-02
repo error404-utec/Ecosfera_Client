@@ -645,46 +645,41 @@ public class JFRPrincipal extends JFrame {
 
 	
 	private void PnlTiposObervacion_MouseClicked() {
-		jpTiposDocumentos jp;
+		JPTipoObservacion jp;
 		
-		try {
-			jp = new jpTiposDocumentos();
-			jp.setBounds(290, 238, 660, 600);
-			jp.setVisible(true);
-			jp.setLocation(12,12);
-			
-			PnlWorkSpace.removeAll();
-			PnlWorkSpace.add(jp);
-			PnlWorkSpace.revalidate();
-			PnlWorkSpace.repaint();
-			LblNavegacion.setText("Inicio" + " - " + "Tipos de Obervaciones");
-			lblTitulopanel.setText("Mantenimiento de Tipos de Obervaciones");
-			
-			new Thread() {
-				public void run() {
-					reinicarMenu();
-					int x = 278;
-					int y = 57;
-					while (y >1) {
-						x= x -3;
-						y--;
-						PnlTiposObservaciones.setSize(x, y);
-						PnlMenuInicio_MouseClikedFX(3);
-						try {
-							sleep(0,1);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}	
+		jp = new JPTipoObservacion();
+		jp.setBounds(290, 238, 660, 600);
+		jp.setVisible(true);
+		jp.setLocation(12,12);
+		
+		PnlWorkSpace.removeAll();
+		PnlWorkSpace.add(jp);
+		PnlWorkSpace.revalidate();
+		PnlWorkSpace.repaint();
+		LblNavegacion.setText("Inicio" + " - " + "Tipos de Obervaciones");
+		lblTitulopanel.setText("Mantenimiento de Tipos de Obervaciones");
+		
+		new Thread() {
+			public void run() {
+				reinicarMenu();
+				int x = 278;
+				int y = 57;
+				while (y >1) {
+					x= x -3;
+					y--;
+					PnlTiposObservaciones.setSize(x, y);
+					PnlMenuInicio_MouseClikedFX(3);
+					try {
+						sleep(0,1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}	
-					PnlTiposObservaciones.setVisible(false);
-					PnlMenuInicio.revalidate();
-					PnlMenuInicio.repaint();
-				}
-			}.start();
-			
-		} catch (NamingException e1) {
-			e1.printStackTrace();
-		}
+				}	
+				PnlTiposObservaciones.setVisible(false);
+				PnlMenuInicio.revalidate();
+				PnlMenuInicio.repaint();
+			}
+		}.start();
 	}
 	
 	private void PnlPermisos_MouseClicked() throws NamingException {
