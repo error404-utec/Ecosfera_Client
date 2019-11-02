@@ -457,7 +457,6 @@ public class jpZonas extends JPanel {
 
 		
 		for (Zona c : lista) {
-			System.out.println(c.getId());
 			datos[fila][0] = c.getId();
 			datos[fila][1] = c.getCodigo();
 			datos[fila][2] = c.getNombre();
