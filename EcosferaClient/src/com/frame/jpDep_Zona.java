@@ -342,8 +342,10 @@ public class jpDep_Zona extends JPanel {
 					departamento.setCodigo(Long.parseLong(txtCodigo.getText()));
 					departamento.setNombre(txtNombre.getText());			
 					try {
-						zona.asignarDepartamento(departamento);
-						crearDepartamento(zona);
+						Zona zona1 = new Zona();
+						zona1 = obtenerZonaPorID(zona.getId());
+						zona1.asignarDepartamento(departamento);
+						crearDepartamento(zona1);
 						tablaDepartamento.setVisible(false);
 						tablaDepartamento = cargarDepartamento();
 						scroolTablaDepartamento.setViewportView(tablaDepartamento);
@@ -400,9 +402,7 @@ public class jpDep_Zona extends JPanel {
 	
 	
 	private JTable cargarDepartamento() throws NamingException {
-		System.out.println("ACA1");
 		zona= obtenerZonaPorID(zona.getId());
-		System.out.println("ACA2");
 		List<Departamento> lista = zona.getDepartamentos();
 		
 		
