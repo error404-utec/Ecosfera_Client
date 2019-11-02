@@ -176,8 +176,8 @@ public class jpZonas extends JPanel {
 		JScrollPane scroolTablaZonas = new JScrollPane();
 		
 		
-		//scroolTablaZonas.setLayout(new ScrollPaneLayout() {
-/*
+		scroolTablaZonas.setLayout(new ScrollPaneLayout() {
+
 		private static final long serialVersionUID = 1L;
 
 			@Override
@@ -216,7 +216,7 @@ public class jpZonas extends JPanel {
 				
 				
 			}
-		});*/
+		});
 		
 		txtfiltro = new JTextField();
 		txtfiltro.addKeyListener(new KeyAdapter() {
