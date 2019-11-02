@@ -3,8 +3,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ECOSFERA_MARK1"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/Java/hibernate-commons-annotations-5.1.0.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files (x86)/Java/hibernate-core-5.4.3.Final.jar"/>
-	<classpathentry kind="lib" path="C:/wildfly-10.1.0.Final/bin/client/jboss-client.jar"/>
+	<classpathentry kind="lib" path="C:/Users/pc/Downloads/jars/hibernate-commons-annotations-5.1.0.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/pc/Downloads/jars/hibernate-core-5.4.3.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/pc/wildfly-10.1.0.Final/wildfly-10.1.0.Final/bin/client/jboss-client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
