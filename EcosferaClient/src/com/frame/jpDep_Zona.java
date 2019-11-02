@@ -106,6 +106,19 @@ public class jpDep_Zona extends JPanel {
 		
 		lblZona.setForeground(new Color(46, 139, 87));
 		lblZona.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 17));
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				txtCodigo.setText("");
+				txtNombre.setText("");
+				departamentoActualizar = null;
+			}
+		});
+		btnCancelar.setForeground(new Color(46, 139, 87));
+		btnCancelar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
+		btnCancelar.setBackground(new Color(245, 255, 250));
 		GroupLayout gl_pnlNew = new GroupLayout(pnlNew);
 		gl_pnlNew.setHorizontalGroup(
 			gl_pnlNew.createParallelGroup(Alignment.LEADING)
@@ -113,15 +126,18 @@ public class jpDep_Zona extends JPanel {
 					.addContainerGap()
 					.addGroup(gl_pnlNew.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_pnlNew.createSequentialGroup()
-							.addGroup(gl_pnlNew.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnAgregar, Alignment.TRAILING)
-								.addGroup(Alignment.TRAILING, gl_pnlNew.createSequentialGroup()
+							.addGroup(gl_pnlNew.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_pnlNew.createSequentialGroup()
+									.addComponent(btnCancelar, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnAgregar))
+								.addGroup(gl_pnlNew.createSequentialGroup()
 									.addComponent(lblCodigo)
 									.addGap(383))
-								.addGroup(Alignment.TRAILING, gl_pnlNew.createSequentialGroup()
+								.addGroup(gl_pnlNew.createSequentialGroup()
 									.addGap(10)
 									.addComponent(txtCodigo, GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE))
-								.addGroup(Alignment.TRAILING, gl_pnlNew.createSequentialGroup()
+								.addGroup(gl_pnlNew.createSequentialGroup()
 									.addGap(10)
 									.addComponent(txtNombre, GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)))
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -144,7 +160,9 @@ public class jpDep_Zona extends JPanel {
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtNombre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnAgregar))
+							.addGroup(gl_pnlNew.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnAgregar)
+								.addComponent(btnCancelar, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)))
 						.addComponent(lblZona, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)))
 		);
 		pnlNew.setLayout(gl_pnlNew);
