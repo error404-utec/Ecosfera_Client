@@ -226,7 +226,6 @@ public class JFRPrincipal extends JFrame {
 		
 		PnlWorkSpace.setBounds(284, 229, 662, 609);
 		PnlWorkSpace.setBackground(new Color(255, 255, 255));
-		PnlWorkSpace.setLayout(null);
 		GroupLayout gl_PnlTopMenu = new GroupLayout(PnlTopMenu);
 		gl_PnlTopMenu.setHorizontalGroup(
 			gl_PnlTopMenu.createParallelGroup(Alignment.LEADING)
@@ -557,10 +556,16 @@ public class JFRPrincipal extends JFrame {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				PnlTiposObervacion_MouseClicked();
+				try {
+					PnlTiposObervacion_MouseClicked();
+				} catch (NamingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		contentPane.add(PnlWorkSpace);
+		PnlWorkSpace.setLayout(null);
 		contentPane.add(PnlTopMenu);
 		
 
@@ -575,8 +580,10 @@ public class JFRPrincipal extends JFrame {
 		jp.setLocation(12,12);
 		
 		
+		
 		PnlWorkSpace.removeAll();
 		PnlWorkSpace.add(jp);
+		
 		PnlWorkSpace.revalidate();
 		PnlWorkSpace.repaint();
 		LblNavegacion.setText("Inicio"+ " - " + "Zonas");
@@ -649,47 +656,42 @@ public class JFRPrincipal extends JFrame {
 	}
 
 	
-	private void PnlTiposObervacion_MouseClicked() {
-		jpTiposDocumentos jp;
+	private void PnlTiposObervacion_MouseClicked() throws NamingException {
+		JpTiposObservaciones jp;
 		
-		try {
-			jp = new jpTiposDocumentos();
-			jp.setBounds(290, 238, 660, 600);
-			jp.setVisible(true);
-			jp.setLocation(12,12);
-			
-			PnlWorkSpace.removeAll();
-			PnlWorkSpace.add(jp);
-			PnlWorkSpace.revalidate();
-			PnlWorkSpace.repaint();
-			LblNavegacion.setText("Inicio" + " - " + "Tipos de Obervaciones");
-			lblTitulopanel.setText("Mantenimiento de Tipos de Obervaciones");
-			
-			new Thread() {
-				public void run() {
-					reinicarMenu();
-					int x = 278;
-					int y = 57;
-					while (y >1) {
-						x= x -3;
-						y--;
-						PnlTiposObservaciones.setSize(x, y);
-						PnlMenuInicio_MouseClikedFX(3);
-						try {
-							sleep(0,1);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}	
+		jp = new JpTiposObservaciones();
+		jp.setBounds(290, 238, 660, 600);
+		jp.setVisible(true);
+		jp.setLocation(12,12);
+		
+		PnlWorkSpace.removeAll();
+		PnlWorkSpace.add(jp);
+		PnlWorkSpace.revalidate();
+		PnlWorkSpace.repaint();
+		LblNavegacion.setText("Inicio" + " - " + "Tipos de Obervaciones");
+		lblTitulopanel.setText("Mantenimiento de Tipos de Obervaciones");
+		
+		new Thread() {
+			public void run() {
+				reinicarMenu();
+				int x = 278;
+				int y = 57;
+				while (y >1) {
+					x= x -3;
+					y--;
+					PnlTiposObservaciones.setSize(x, y);
+					PnlMenuInicio_MouseClikedFX(3);
+					try {
+						sleep(0,1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}	
-					PnlTiposObservaciones.setVisible(false);
-					PnlMenuInicio.revalidate();
-					PnlMenuInicio.repaint();
-				}
-			}.start();
-			
-		} catch (NamingException e1) {
-			e1.printStackTrace();
-		}
+				}	
+				PnlTiposObservaciones.setVisible(false);
+				PnlMenuInicio.revalidate();
+				PnlMenuInicio.repaint();
+			}
+		}.start();
 	}
 	
 	private void PnlPermisos_MouseClicked() throws NamingException {

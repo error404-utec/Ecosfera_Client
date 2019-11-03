@@ -40,6 +40,7 @@ public class jpDep_Zona extends JPanel {
 	private JTextField txtNombre;
 	private JTextField txtCodigo;
 	private Zona zona;
+	
 
 
 	private JTable tablaDepartamento;
