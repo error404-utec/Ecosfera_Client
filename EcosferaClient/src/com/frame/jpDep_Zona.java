@@ -305,11 +305,46 @@ public class jpDep_Zona extends JPanel {
 		btnEliminar.setForeground(new Color(46, 139, 87));
 		btnEliminar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		btnEliminar.setBackground(new Color(245, 255, 250));
+		
+		JButton btnLocalidades = new JButton("Localidades");
+		btnLocalidades.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				JPanel jp;
+				Departamento departamentoParametro= null;
+				if (tablaDepartamento.getSelectedRow() > -1) {
+					Long id = (Long) tablaDepartamento.getValueAt(tablaDepartamento.getSelectedRow(), 0);
+					try {
+						
+						departamentoParametro = obtenerPorID(id);
+						jp = new JpLoc_Dep(departamentoParametro);
+						jp.setBounds(290, 238, 660, 600);
+						jp.setVisible(true);
+						jp.setLocation(12,12);
+						JFRPrincipal.getIntance();
+						JFRPrincipal.PnlWorkSpace.removeAll();
+						JFRPrincipal.PnlWorkSpace.add(jp);
+						JFRPrincipal.PnlWorkSpace.revalidate();
+						JFRPrincipal.PnlWorkSpace.repaint();
+						JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Localidades");
+					} catch (NamingException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
+			}
+		});
+		btnLocalidades.setForeground(new Color(46, 139, 87));
+		btnLocalidades.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
+		btnLocalidades.setBackground(new Color(245, 255, 250));
 		GroupLayout gl_pnlOptions = new GroupLayout(pnlOptions);
 		gl_pnlOptions.setHorizontalGroup(
 			gl_pnlOptions.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_pnlOptions.createSequentialGroup()
-					.addContainerGap(247, Short.MAX_VALUE)
+					.addContainerGap()
+					.addComponent(btnLocalidades, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
 					.addComponent(btnEliminar, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnModificat)
@@ -321,7 +356,9 @@ public class jpDep_Zona extends JPanel {
 					.addGap(13)
 					.addGroup(gl_pnlOptions.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_pnlOptions.createSequentialGroup()
-							.addComponent(btnEliminar, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+							.addGroup(gl_pnlOptions.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnEliminar, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnLocalidades, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
 							.addContainerGap())
 						.addGroup(gl_pnlOptions.createSequentialGroup()
 							.addComponent(btnModificat, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
