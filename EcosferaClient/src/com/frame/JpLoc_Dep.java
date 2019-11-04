@@ -384,7 +384,7 @@ public class JpLoc_Dep extends JPanel {
 	public Localidad obtenerPorID(Long id) throws NamingException {
 		LocalidadBeanRemote localidadBeanRemote  = (LocalidadBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/LocalidadBean!com.services.LocalidadBeanRemote");
-		return localidadBeanRemote.obtenerporID(id);
+		return localidadBeanRemote.obtenerPorID(id);
 	}
 	
 	private JTable cargarLocalidad() throws NamingException {
