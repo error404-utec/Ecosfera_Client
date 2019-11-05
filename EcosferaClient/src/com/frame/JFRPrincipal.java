@@ -314,7 +314,12 @@ public class JFRPrincipal extends JFrame {
 			@Override
 	
 			public void mouseClicked(MouseEvent e) {
-				PnlUsuarios_MouseClicked();
+				try {
+					PnlUsuarios_MouseClicked();
+				} catch (NamingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		PnlUsuarios.setLayout(null);
@@ -625,8 +630,20 @@ public class JFRPrincipal extends JFrame {
 		
 	}
 	
-	private void PnlUsuarios_MouseClicked() {	
+	private void PnlUsuarios_MouseClicked() throws NamingException {	
 		reinicarMenu();
+		
+		JpRegistroUsuario jp = new JpRegistroUsuario();
+		jp.setBounds(290, 238, 660, 600);
+		jp.setVisible(true);
+		jp.setLocation(12,12);
+		
+		PnlWorkSpace.removeAll();
+		PnlWorkSpace.add(jp);
+		PnlWorkSpace.revalidate();
+		PnlWorkSpace.repaint();
+		LblNavegacion.setText("Inicio" + " - " + "Tipos de Obervaciones");
+		lblTitulopanel.setText("Mantenimiento de Tipos de Obervaciones");
 		new Thread() {
 			public void run() {
 				reinicarMenu();
