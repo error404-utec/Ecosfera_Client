@@ -267,51 +267,7 @@ public class JpRegistroUsuario extends JPanel {
 				InitialContext.doLookup("ECOSFERA_MARK1/TipoDocumentoBean!com.services.TipoDocumentoBeanRemote");
 		return tipoDocumentoBeanRemote.obtenerPorNombre(nombre);
 	}
-	/*
-	private JTable cargarLocalidad() throws NamingException {
-		departamento = obtenerDepartamentoPorID(departamento.getId());
-		List<Localidad> lista = departamento.getLocalidades();
-		
-		
-		String[] nombreColumnas = {"ID", "Código", "Nombre" };
-
-		Object[][] datos = new Object[lista.size()][3];
-		int fila = 0;
-
-		
-		for (Localidad c : lista) {
-			datos[fila][0] = c.getId();
-			datos[fila][1] = c.getCodigo();
-			datos[fila][2] = c.getNombre();
-			fila++;
-
-		}
-		
-		DefaultTableModel model = new DefaultTableModel(datos, nombreColumnas) {
-			
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				 return String.class;
-			}
-		};
-		Color color = new Color(144,238,144);
-
-	}
 	
-	private void filtrar() {
-		TableRowSorter<TableModel> filtro = new TableRowSorter<>(this.tablaLocalidad.getModel());
-		filtro.setRowFilter(RowFilter.regexFilter(this.txtfiltro.getText(), 1));
-		this.tablaLocalidad.setRowSorter(filtro);
-
-	}
-	*/
 	
 	public Estado obtenerEstado() throws NamingException {
 		EstadoBeanRemote estadoBeanRemote  = (EstadoBeanRemote)
@@ -375,10 +331,10 @@ public class JpRegistroUsuario extends JPanel {
 		UsuarioBeanRemote usuariodBeanRemote  = (UsuarioBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
 		
-		
-		if (usuariodBeanRemote.controlarUnicidad(usuario)) {
+		String respuestaBean =usuariodBeanRemote.controlarUnicidad(usuario);
+		if (!respuestaBean.equals("")) {
 			error = true;
-			JOptionPane.showMessageDialog(this, "nombre usuario control");
+			JOptionPane.showMessageDialog(this,respuestaBean);
 		}
 		return error;
 		

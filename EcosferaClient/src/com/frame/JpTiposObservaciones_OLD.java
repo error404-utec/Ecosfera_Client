@@ -28,7 +28,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-public class JpTiposObservaciones extends JPanel {
+public class JpTiposObservaciones_OLD extends JPanel {
 	/**
 	 * 
 	 */
@@ -46,7 +46,7 @@ public class JpTiposObservaciones extends JPanel {
 	 * Create the panel.
 	 * @throws NamingException 
 	 */
-	public JpTiposObservaciones() throws NamingException {
+	public JpTiposObservaciones_OLD() throws NamingException {
 		setBackground(Color.WHITE);
 		
 		JPanel pnlNew = new JPanel();
@@ -54,7 +54,7 @@ public class JpTiposObservaciones extends JPanel {
 		pnlNew.setBackground(Color.WHITE);
 		
 		JPanel pnlTable = new JPanel();
-		pnlTable.setBounds(0, 234, 449, 210);
+		pnlTable.setBounds(0, 234, 449, 245);
 		pnlTable.setBackground(Color.WHITE);
 		
 		JLabel lblFiltro = new JLabel("Filtro");
@@ -67,7 +67,7 @@ public class JpTiposObservaciones extends JPanel {
 		txtFiltro.setColumns(10);
 		
 		JScrollPane scrollTablaTipoObservacion = new JScrollPane();
-		scrollTablaTipoObservacion.setBounds(12, 29, 420, 151);
+		scrollTablaTipoObservacion.setBounds(12, 74, 420, 151);
 		
 		txtNombre = new JTextField();
 		txtNombre.setBounds(22, 40, 404, 22);
@@ -193,7 +193,7 @@ public class JpTiposObservaciones extends JPanel {
 		
 		JPanel pnlOptions = new JPanel();
 		pnlOptions.setBackground(Color.WHITE);
-		pnlOptions.setBounds(0, 457, 449, 55);
+		pnlOptions.setBounds(0, 492, 449, 55);
 		add(pnlOptions);
 		
 		JButton btnEliminar = new JButton("Eliminar");
@@ -327,7 +327,6 @@ public class JpTiposObservaciones extends JPanel {
 				InitialContext.doLookup("ECOSFERA_MARK1/TipoObservacionBean!com.services.TipoObservacionBeanRemote");
 		return TipoObservacionBean.obtenerporID(id);
 	}
-	
 	
 	private void filtrar() {
 		TableRowSorter<TableModel> filtro = new TableRowSorter<>(this.tablaTipoObservacion.getModel());
