@@ -59,18 +59,18 @@ public class jpZonas extends JPanel {
 	 * @throws NamingException 
 	 */
 	public jpZonas() throws NamingException {
-		
+		JFRPrincipal.setlblTitulopanel("Mantenimiento Zonas");
 
 		setBounds(new Rectangle(295, 256, 662, 609));
 		setBackground(new Color(255, 255, 255));
 		
 		JPanel pnlNew = new JPanel();
-		pnlNew.setBounds(110, 0, 452, 127);
+		pnlNew.setBounds(110, 0, 452, 165);
 		pnlNew.setBackground(new Color(255, 255, 255));
 		pnlNew.setForeground(new Color(255, 255, 255));
 		
 		JPanel pnltable = new JPanel();
-		pnltable.setBounds(110, 140, 452, 291);
+		pnltable.setBounds(110, 178, 452, 291);
 		pnltable.setBackground(new Color(255, 255, 255));
 		
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -78,16 +78,16 @@ public class jpZonas extends JPanel {
 		constraints.insets = new Insets(10, 2, 2, 10);
 		
 		JPanel pnlOptions = new JPanel();
-		pnlOptions.setBounds(110, 445, 452, 55);
+		pnlOptions.setBounds(110, 482, 452, 55);
 		pnlOptions.setBackground(new Color(255, 255, 255));
 		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(12, 46, 51, 20);
+		lblNombre.setBounds(12, 85, 51, 20);
 		lblNombre.setForeground(new Color(46, 139, 87));
 		lblNombre.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(78, 49, 362, 24);
+		txtNombre.setBounds(78, 88, 362, 24);
 		txtNombre.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -98,24 +98,24 @@ public class jpZonas extends JPanel {
 		txtNombre.setColumns(10);
 		
 		JLabel lblCodigo = new JLabel("C\u00F3digo");
-		lblCodigo.setBounds(12, 13, 45, 20);
+		lblCodigo.setBounds(12, 52, 45, 20);
 		lblCodigo.setForeground(new Color(46, 139, 87));
 		lblCodigo.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtCodigo = new JTextField();
-		txtCodigo.setBounds(78, 12, 362, 24);
+		txtCodigo.setBounds(78, 51, 362, 24);
 		txtCodigo.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtCodigo.setColumns(10);
 		
 		JButton btnAgregar = new JButton("Aceptar");
-		btnAgregar.setBounds(240, 86, 96, 27);
+		btnAgregar.setBounds(240, 125, 96, 27);
 		
 		btnAgregar.setBackground(new Color(245, 255, 250));
 		btnAgregar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		btnAgregar.setForeground(new Color(46, 139, 87));
 		
 		JButton BtnCancelar = new JButton("Cancelar");
-		BtnCancelar.setBounds(344, 86, 96, 27);
+		BtnCancelar.setBounds(344, 125, 96, 27);
 		BtnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -134,8 +134,7 @@ public class jpZonas extends JPanel {
 		BtnCancelar.setBackground(new Color(245, 255, 250));
 		
 		JScrollPane scroolTablaZonas = new JScrollPane();
-		scroolTablaZonas.setBounds(12, 80, 428, 198);
-		
+		scroolTablaZonas.setBounds(12, 78, 428, 200);
 		
 		scroolTablaZonas.setLayout(new ScrollPaneLayout() {
 
@@ -182,7 +181,7 @@ public class jpZonas extends JPanel {
 		
 		
 		txtfiltro = new JTextField();
-		txtfiltro.setBounds(78, 18, 362, 24);
+		txtfiltro.setBounds(78, 17, 362, 24);
 		txtfiltro.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				filtrar();
@@ -192,7 +191,7 @@ public class jpZonas extends JPanel {
 		txtfiltro.setColumns(10);
 		
 		JLabel lblfiltro = new JLabel("C\u00F3digo");
-		lblfiltro.setBounds(12, 19, 109, 20);
+		lblfiltro.setBounds(12, 18, 109, 20);
 		lblfiltro.setForeground(new Color(46, 139, 87));
 		lblfiltro.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
@@ -217,6 +216,8 @@ public class jpZonas extends JPanel {
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
+				}else {
+					reportarError("Debe seleccionar una zona");
 				}
 			}
 		});
@@ -245,6 +246,8 @@ public class jpZonas extends JPanel {
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
+				}else {
+					reportarError("Debe seleccionar una zona");
 				}
 			}
 		});
@@ -273,10 +276,12 @@ public class jpZonas extends JPanel {
 						JFRPrincipal.PnlWorkSpace.add(jp);
 						JFRPrincipal.PnlWorkSpace.revalidate();
 						JFRPrincipal.PnlWorkSpace.repaint();
-						JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Departamentos");
+						JFRPrincipal.LblNavegacion.setText("Inicio - Zonas - Departamentos");
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
+				}else {
+					reportarError("Debe seleccionar una zona");
 				}
 
 				
@@ -567,6 +572,10 @@ public class jpZonas extends JPanel {
 		}
 		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar la zona", JOptionPane.ERROR_MESSAGE);}
 		return error;		
+	}
+	
+	public void reportarError(String error) {
+		JOptionPane.showMessageDialog(this, error);
 	}
 }
 

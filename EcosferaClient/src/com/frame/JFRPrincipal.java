@@ -42,9 +42,9 @@ public class JFRPrincipal extends JFrame {
 	//---------------------------------------
 	
 	private JPanel PnlTopMenu = new JPanel();
-	private JPanel PnlTopMenu_Title = new JPanel();
+	private static JPanel PnlTopMenu_Title = new JPanel();
 	private JPanel PnlTopMenu_Menu = new JPanel();
-	private JLabel lblTitulopanel = new JLabel("");
+	private static JLabel lblTitulopanel = new JLabel("");
 	private JSeparator separator_1 = new JSeparator();
 	private JLabel LblUsuarios_Title = new JLabel("Usuarios");
 	private JLabel LblTiposObservaciones_Title = new JLabel("Tipos de Observaci\u00F3n");
@@ -71,7 +71,11 @@ public class JFRPrincipal extends JFrame {
 	private final JLabel lblTopMenu_4 = new JLabel("");
 	private static JFRPrincipal frame = new JFRPrincipal();
 
-	
+	public static void setlblTitulopanel(String titulo) {
+		lblTitulopanel.setText(titulo);
+		PnlTopMenu_Title.revalidate();
+		PnlTopMenu_Title.repaint();
+	}
 	
 	/**
 	 * Launch the application.

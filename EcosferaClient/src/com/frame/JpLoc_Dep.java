@@ -53,6 +53,8 @@ public class JpLoc_Dep extends JPanel {
 	 * @throws NamingException 
 	 */
 	public JpLoc_Dep(Departamento departamento) throws NamingException {
+		JFRPrincipal.setlblTitulopanel("Mantenimiento Departamentos");
+		
 		this.departamento = departamento;
 		setBounds(new Rectangle(295, 256, 650, 582));
 		setBackground(new Color(255, 255, 255));
