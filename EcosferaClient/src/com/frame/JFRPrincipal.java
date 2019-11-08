@@ -617,11 +617,7 @@ public class JFRPrincipal extends JFrame {
 				
 				reinicarTopMenu();
 				PnlTopMenu_1.setVisible(true);
-				PnlTopMenu_2.setVisible(true);
-				PnlTopMenu_3.setVisible(true);
 				lblTopMenu_1.setText("Zonas");
-				lblTopMenu_2.setText("Departamentos");
-				lblTopMenu_3.setText("Localidades");
 				PnlTopMenu_Repaint();
 				
 			}
