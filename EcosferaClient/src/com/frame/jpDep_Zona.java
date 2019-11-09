@@ -155,7 +155,7 @@ public class jpDep_Zona extends JPanel {
 		JScrollPane scroolTablaDepartamento = new JScrollPane();
 		scroolTablaDepartamento.setBounds(12, 78, 428, 200);
 		
-		/*
+		
 		scroolTablaDepartamento.setLayout(new ScrollPaneLayout() {
 
 
@@ -197,7 +197,7 @@ public class jpDep_Zona extends JPanel {
 				
 			}
 		});
-		*/
+		
 		txtfiltro = new JTextField();
 		txtfiltro.setBounds(78, 17, 362, 24);
 		txtfiltro.addKeyListener(new KeyAdapter() {
