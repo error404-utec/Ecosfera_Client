@@ -163,9 +163,9 @@ public class JFRPrincipal extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				
 				if (lblTopMenu_1.getText().equals("Zonas")) {
-					jpZonas jp;
+					JpZonas jp;
 					try {
-						jp = new jpZonas();
+						jp = new JpZonas();
 						jp.setBounds(290, 238, 660, 600);
 						jp.setVisible(true);
 						jp.setLocation(12,12);
@@ -583,7 +583,7 @@ public class JFRPrincipal extends JFrame {
 	//Mouse Cliked
 
 	private void PnlZonas_MouseClicked() throws NamingException {
-		jpZonas jp = new jpZonas();
+		JpZonas jp = new JpZonas();
 		jp.setBounds(290, 238, 660, 600);
 		jp.setVisible(true);
 		jp.setLocation(12,12);
@@ -712,7 +712,7 @@ public class JFRPrincipal extends JFrame {
 	}
 	
 	private void PnlPermisos_MouseClicked() throws NamingException {
-		JPanel jp = new jpPermisos();
+		JPanel jp = new JpPermisos();
 		jp.setBounds(290, 238, 660, 600);
 		jp.setVisible(true);
 		jp.setLocation(12,12);

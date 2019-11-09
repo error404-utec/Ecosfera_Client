@@ -397,9 +397,9 @@ public class jpDep_Zona extends JPanel {
 		label_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				jpZonas jp;
+				JpZonas jp;
 				try {
-					jp = new jpZonas();
+					jp = new JpZonas();
 					jp.setBounds(290, 238, 660, 600);
 					jp.setVisible(true);
 					jp.setLocation(12,12);

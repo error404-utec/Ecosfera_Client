@@ -38,7 +38,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
-public class jpZonas extends JPanel {
+public class JpZonas extends JPanel {
 
 	/**
 	 * 
@@ -58,7 +58,7 @@ public class jpZonas extends JPanel {
 	 * Create the panel.
 	 * @throws NamingException 
 	 */
-	public jpZonas() throws NamingException {
+	public JpZonas() throws NamingException {
 		JFRPrincipal.setlblTitulopanel("Mantenimiento Zonas");
 
 		setBounds(new Rectangle(295, 256, 662, 609));
