@@ -16,6 +16,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -37,6 +38,7 @@ import com.framework.EcosferaScrollBar;
 import com.services.DepartamentoBeanRemote;
 import com.services.ZonaBeanRemote;
 import javax.swing.ImageIcon;
+import javax.swing.InputVerifier;
 
 
 public class jpDep_Zona extends JPanel {
@@ -65,6 +67,7 @@ public class jpDep_Zona extends JPanel {
 		JFRPrincipal.setlblTitulopanel("Mantenimiento Localidades");
 		setBounds(new Rectangle(295, 256, 650, 582));
 		setBackground(new Color(255, 255, 255));
+		
 		
 		JPanel pnlNew = new JPanel();
 		pnlNew.setBounds(110, 0, 452, 165);
@@ -105,9 +108,27 @@ public class jpDep_Zona extends JPanel {
 		lblCodigo.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtCodigo = new JTextField();
+		txtCodigo.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!(Character.isDigit(c) ||
+				(c == KeyEvent.VK_BACK_SPACE) ||
+				(c == KeyEvent.VK_DELETE))) {
+				getToolkit().beep();
+				arg0.consume();
+				}
+				if(txtCodigo.getText().length()>=5) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			
+			}
+		});
 		txtCodigo.setBounds(78, 51, 362, 24);
 		txtCodigo.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtCodigo.setColumns(10);
+		
 		
 		JButton btnAgregar = new JButton("Aceptar");
 		btnAgregar.setBounds(240, 125, 96, 27);
@@ -628,6 +649,8 @@ public class jpDep_Zona extends JPanel {
 	public void reportarError(String error) {
 		JOptionPane.showMessageDialog(this, error);
 	}
+	
+	
 }
 
 

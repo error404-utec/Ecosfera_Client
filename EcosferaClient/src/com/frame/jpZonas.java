@@ -106,6 +106,23 @@ public class jpZonas extends JPanel {
 		txtCodigo.setBounds(78, 51, 362, 24);
 		txtCodigo.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtCodigo.setColumns(10);
+		txtCodigo.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!(Character.isDigit(c) ||
+				(c == KeyEvent.VK_BACK_SPACE) ||
+				(c == KeyEvent.VK_DELETE))) {
+				getToolkit().beep();
+				arg0.consume();
+				}
+				if(txtCodigo.getText().length()>=5) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			
+			}
+		});
 		
 		JButton btnAgregar = new JButton("Aceptar");
 		btnAgregar.setBounds(240, 125, 96, 27);
