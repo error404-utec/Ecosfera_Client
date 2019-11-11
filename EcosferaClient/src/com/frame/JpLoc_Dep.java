@@ -1,6 +1,7 @@
 package com.frame;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -9,18 +10,22 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JScrollPane;
 import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
@@ -30,6 +35,7 @@ import javax.swing.table.TableRowSorter;
 import com.entities.Departamento;
 import com.entities.Localidad;
 import com.exceptions.ServiciosException;
+import com.framework.EcosferaScrollBar;
 import com.services.DepartamentoBeanRemote;
 import com.services.LocalidadBeanRemote;
 
@@ -46,6 +52,7 @@ public class JpLoc_Dep extends JPanel {
 	private JTable tablaLocalidad;
 	private Localidad localidadActualizar = null;
 	private JTextField txtfiltro;
+	private JPanel pnlOptions = new JPanel();
 	
 	
 	/**
@@ -60,57 +67,147 @@ public class JpLoc_Dep extends JPanel {
 		setBackground(new Color(255, 255, 255));
 		
 		JPanel pnlNew = new JPanel();
-		pnlNew.setBounds(0, 13, 452, 219);
+		pnlNew.setBounds(110, 0, 452, 165);
 		pnlNew.setBackground(new Color(255, 255, 255));
 		pnlNew.setForeground(new Color(255, 255, 255));
 		
 		JPanel pnltable = new JPanel();
-		pnltable.setBounds(0, 244, 452, 259);
+		pnltable.setBounds(110, 178, 452, 291);
 		pnltable.setBackground(new Color(255, 255, 255));
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(12, 54, 144, 24);
+		pnltable.add(panel);
+		
+		JLabel lblId = new JLabel("ID");
+		panel.add(lblId);
+		lblId.setForeground(new Color(46, 139, 87));
+		lblId.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(153, 54, 144, 24);
+		pnltable.add(panel_1);
+		
+		JLabel label_1 = new JLabel("C\u00F3digo");
+		label_1.setForeground(new Color(46, 139, 87));
+		label_1.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
+		panel_1.add(label_1);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBounds(296, 54, 144, 24);
+		pnltable.add(panel_2);
+		
+		JLabel label_2 = new JLabel("Nombre");
+		label_2.setForeground(new Color(46, 139, 87));
+		label_2.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
+		panel_2.add(label_2);
+		add(pnlOptions);
+		
+		JPanel PnlVolver = new JPanel();
+		PnlVolver.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+			}
+		});
+		PnlVolver.setBackground(Color.WHITE);
+		PnlVolver.setBounds(0, 255, 51, 55);
+		add(PnlVolver);
+		PnlVolver.setLayout(null);
+		
+		JLabel label_3 = new JLabel("");
+		label_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				JpZonas jp;
+				try {
+					jp = new JpZonas();
+					jp.setBounds(290, 238, 660, 600);
+					jp.setVisible(true);
+					jp.setLocation(12,12);
+					JFRPrincipal.getIntance();
+					JFRPrincipal.PnlWorkSpace.removeAll();
+					JFRPrincipal.PnlWorkSpace.add(jp);
+					JFRPrincipal.PnlWorkSpace.revalidate();
+					JFRPrincipal.PnlWorkSpace.repaint();
+					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Zonas");
+				} catch (NamingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		label_3.setIcon(new ImageIcon(jpDep_Zona.class.getResource("/recursos/icons/go_back.png")));
+		label_3.setBounds(0, 0, 51, 55);
+		PnlVolver.add(label_3);
 		
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.insets = new Insets(10, 2, 2, 10);
 		
-		JPanel pnlOptions = new JPanel();
-		pnlOptions.setBounds(0, 511, 452, 55);
+		
+		pnlOptions.setBounds(110, 482, 452, 55);
 		pnlOptions.setBackground(new Color(255, 255, 255));
 		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(12, 115, 51, 20);
+		lblNombre.setBounds(12, 85, 51, 20);
 		lblNombre.setForeground(new Color(46, 139, 87));
 		lblNombre.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(22, 148, 418, 24);
+		txtNombre.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtNombre.setText(txtNombre.getText().toUpperCase());
+			}
+		});
+		txtNombre.setBounds(78, 88, 362, 24);
 		txtNombre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtNombre.setColumns(10);
 		
 		JLabel lblCodigo = new JLabel("C\u00F3digo");
-		lblCodigo.setBounds(12, 56, 45, 20);
+		lblCodigo.setBounds(12, 52, 45, 20);
 		lblCodigo.setForeground(new Color(46, 139, 87));
 		lblCodigo.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtCodigo = new JTextField();
-		txtCodigo.setBounds(22, 89, 418, 24);
+		txtCodigo.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!(Character.isDigit(c) ||
+				(c == KeyEvent.VK_BACK_SPACE) ||
+				(c == KeyEvent.VK_DELETE))) {
+				getToolkit().beep();
+				arg0.consume();
+				}
+				if(txtCodigo.getText().length()>=5) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			
+			}
+		});
+		txtCodigo.setBounds(78, 51, 362, 24);
 		txtCodigo.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtCodigo.setColumns(10);
 		
+		
 		JButton btnAgregar = new JButton("Aceptar");
-		btnAgregar.setBounds(346, 179, 94, 27);
+		btnAgregar.setBounds(240, 125, 96, 27);
 		
 		btnAgregar.setBackground(new Color(245, 255, 250));
 		btnAgregar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		btnAgregar.setForeground(new Color(46, 139, 87));
 		
 		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(235, 179, 99, 27);
+		btnCancelar.setBounds(344, 125, 96, 27);
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				txtCodigo.setText("");
 				txtNombre.setText("");
 				localidadActualizar = null;
+				txtCodigo.setEditable(true);
 			}
 		});
 		btnCancelar.setForeground(new Color(46, 139, 87));
@@ -118,14 +215,12 @@ public class JpLoc_Dep extends JPanel {
 		btnCancelar.setBackground(new Color(245, 255, 250));
 		
 		JScrollPane scroolTablaLocalidad = new JScrollPane();
+		scroolTablaLocalidad.setBounds(12, 76, 428, 176);
 		
-		/*
-		scroolTablaZonas.setLayout(new ScrollPaneLayout() {
 
-		private static final long serialVersionUID = 1L;
+		scroolTablaLocalidad.setLayout(new ScrollPaneLayout() {
 
-			@Override
-			  public void layoutContainer(Container parent) {
+			public void layoutContainer(Container parent) {
 			    JScrollPane scrollPane = (JScrollPane) parent;
 			
 			    Rectangle availR = scrollPane.getBounds();
@@ -153,7 +248,7 @@ public class JpLoc_Dep extends JPanel {
 			    }
 			  }
 			});
-		scroolTablaZonas.getVerticalScrollBar().setUI(new EcosferaScrollBar());*/
+		scroolTablaLocalidad.getVerticalScrollBar().setUI(new EcosferaScrollBar());
 		scroolTablaLocalidad.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -163,6 +258,7 @@ public class JpLoc_Dep extends JPanel {
 		});
 		
 		txtfiltro = new JTextField();
+		txtfiltro.setBounds(78, 17, 362, 24);
 		txtfiltro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -173,41 +269,15 @@ public class JpLoc_Dep extends JPanel {
 		txtfiltro.setColumns(10);
 		
 		JLabel lblfiltro = new JLabel("C\u00F3digo");
+		lblfiltro.setBounds(12, 18, 109, 20);
 		lblfiltro.setForeground(new Color(46, 139, 87));
 		lblfiltro.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-
-		GroupLayout gl_pnltable = new GroupLayout(pnltable);
-		gl_pnltable.setHorizontalGroup(
-			gl_pnltable.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_pnltable.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_pnltable.createParallelGroup(Alignment.LEADING)
-						.addComponent(scroolTablaLocalidad, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
-						.addGroup(gl_pnltable.createSequentialGroup()
-							.addGap(10)
-							.addComponent(txtfiltro, GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
-						.addComponent(lblfiltro, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		gl_pnltable.setVerticalGroup(
-			gl_pnltable.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_pnltable.createSequentialGroup()
-					.addGap(18)
-					.addComponent(lblfiltro, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtfiltro, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scroolTablaLocalidad, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
-					.addGap(107))
-		);
 		
 		
 		
 
 		this.tablaLocalidad = this.cargarLocalidad();
 		scroolTablaLocalidad.setViewportView(tablaLocalidad);
-				
-		pnltable.setLayout(gl_pnltable);
 		
 		JButton btnModificat = new JButton("Modificar");
 		btnModificat.addMouseListener(new MouseAdapter() {
@@ -220,9 +290,12 @@ public class JpLoc_Dep extends JPanel {
 						localidadActualizar = obtenerPorID(id);
 						txtNombre.setText(localidadActualizar.getNombre());
 						txtCodigo.setText(Long.toString(localidadActualizar.getCodigo()));
+						txtCodigo.setEditable(false);
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
+				}else {
+					reportarError("Debe seleccionar una localidad");
 				}
 			}
 		});
@@ -238,16 +311,21 @@ public class JpLoc_Dep extends JPanel {
 				if (tablaLocalidad.getSelectedRow() > -1) {
 					Long id = (Long) tablaLocalidad.getValueAt(tablaLocalidad.getSelectedRow(), 0);
 					try {
+						
 						localidadEliminar = obtenerPorID(id);
-						eliminarLocalidad(localidadEliminar);;
-						tablaLocalidad.setVisible(false);
-						tablaLocalidad = cargarLocalidad();
-						scroolTablaLocalidad.setViewportView(tablaLocalidad);
-						tablaLocalidad.setVisible(true);
-						filtrar();
+						if(!controles_preDelete(localidadEliminar)) {
+							eliminarLocalidad(localidadEliminar);
+							tablaLocalidad.setVisible(false);
+							tablaLocalidad = cargarLocalidad();
+							scroolTablaLocalidad.setViewportView(tablaLocalidad);
+							tablaLocalidad.setVisible(true);
+							filtrar();
+						}
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
+				}else {
+					reportarError("Debe seleccionar una localidad");
 				}
 			}
 		});
@@ -290,9 +368,13 @@ public class JpLoc_Dep extends JPanel {
 		JLabel lblDepartamento = new JLabel(departamento.getNombre());
 		lblDepartamento.setForeground(new Color(46, 139, 87));
 		lblDepartamento.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 18));
-		lblDepartamento.setBounds(12, 23, 272, 33);
+		lblDepartamento.setBounds(12, 6, 272, 33);
 		pnlNew.add(lblDepartamento);
 		add(pnltable);
+		pnltable.setLayout(null);
+		pnltable.add(scroolTablaLocalidad);
+		pnltable.add(txtfiltro);
+		pnltable.add(lblfiltro);
 		add(pnlOptions);
 		
 		
@@ -301,42 +383,50 @@ public class JpLoc_Dep extends JPanel {
 		btnAgregar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				if (localidadActualizar!=null) {
-					try {
-						localidadActualizar.setCodigo(Long.parseLong(txtCodigo.getText()));
-						localidadActualizar.setNombre(txtNombre.getText());
-						
-						acutalizarLocalidad(localidadActualizar);
-					
-						tablaLocalidad.setVisible(false);
-						tablaLocalidad = cargarLocalidad();
-						scroolTablaLocalidad.setViewportView(tablaLocalidad);
-						tablaLocalidad.setVisible(true);
-						txtNombre.setText("");
-						txtCodigo.setText("");
-						localidadActualizar = null;
-						filtrar();
-					} catch (NamingException e1) {
-						e1.printStackTrace();
-					}
-				}else {
-					Localidad localidad = new Localidad();
-					localidad.setCodigo(Long.parseLong(txtCodigo.getText()));
-					localidad.setNombre(txtNombre.getText());			
-					try {
-						Departamento departamento1 = new Departamento();
-						departamento1 = obtenerDepartamentoPorID(departamento.getId());
-						departamento1.asignarLocalidad(localidad);
-						crearLocalidad(departamento1);
-						tablaLocalidad.setVisible(false);
-						tablaLocalidad = cargarLocalidad();
-						scroolTablaLocalidad.setViewportView(tablaLocalidad);
-						tablaLocalidad.setVisible(true);
-						txtNombre.setText("");
-						txtCodigo.setText("");
-					} catch (NamingException e1) {
-						e1.printStackTrace();
+				if (!controles_preCreate()) {
+					if (localidadActualizar!=null) {
+						try {
+							localidadActualizar.setCodigo(Long.parseLong(txtCodigo.getText()));
+							localidadActualizar.setNombre(txtNombre.getText());
+							
+							if(!controles_postModify(localidadActualizar)) {
+								acutalizarLocalidad(localidadActualizar);
+							
+								tablaLocalidad.setVisible(false);
+								tablaLocalidad = cargarLocalidad();
+								scroolTablaLocalidad.setViewportView(tablaLocalidad);
+								tablaLocalidad.setVisible(true);
+								txtNombre.setText("");
+								txtCodigo.setText("");
+								localidadActualizar = null;
+								txtCodigo.setEditable(true);
+								filtrar();
+							}
+						} catch (NamingException e1) {
+							e1.printStackTrace();
+						}
+					}else {
+						Localidad localidad = new Localidad();
+						localidad.setCodigo(Long.parseLong(txtCodigo.getText()));
+						localidad.setNombre(txtNombre.getText());			
+						try {
+							Departamento departamento1 = new Departamento();
+							departamento1 = obtenerDepartamentoPorID(departamento.getId());
+							if (!controles_postCreate(localidad)) {
+								departamento1.asignarLocalidad(localidad);
+								
+								crearLocalidad(departamento1);
+								tablaLocalidad.setVisible(false);
+								tablaLocalidad = cargarLocalidad();
+								scroolTablaLocalidad.setViewportView(tablaLocalidad);
+								tablaLocalidad.setVisible(true);
+								txtNombre.setText("");
+								txtCodigo.setText("");
+							}
+							
+						} catch (NamingException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}				
 			}
@@ -450,7 +540,68 @@ public class JpLoc_Dep extends JPanel {
 	
 
 	
-
+	public boolean controles_preCreate() {
+		boolean error = false;
+		String mensajeError ="";
+		if (!txtCodigo.getText().isEmpty()) {
+			if(!txtNombre.getText().isEmpty()) {
+				error = false;
+			}else {
+				error = true;
+				mensajeError = "El nombre de la localidad es un campo obligatorio.";
+			}
+		}else {
+			error = true;
+			mensajeError = "El Código de la localidad es un campo obligatorio.";
+		}
+		
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear la localidad", JOptionPane.ERROR_MESSAGE);}
+		return error;	
+	}
+	
+	public boolean controles_postCreate(Localidad localidad) throws NamingException {
+		boolean error = false;
+		String mensajeError = "";
+		LocalidadBeanRemote localidadBeanRemote  = (LocalidadBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/LocalidadBean!com.services.LocalidadBeanRemote");
+		mensajeError = localidadBeanRemote.controles_postCreate(localidad);
+		if (!mensajeError.isEmpty()) {
+			error = true;
+		}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear la localidad", JOptionPane.ERROR_MESSAGE);}
+		return error;		
+	}
+	
+	
+	public boolean controles_postModify(Localidad localidad) throws NamingException {
+		boolean error = false;
+		String mensajeError = "";
+		LocalidadBeanRemote localidadBeanRemote  = (LocalidadBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/LocalidadBean!com.services.LocalidadBeanRemote");
+		mensajeError = localidadBeanRemote.controles_postModify(localidad);
+		if (!mensajeError.isEmpty()) {
+			error = true;
+		}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo modificar la localidad", JOptionPane.ERROR_MESSAGE);}
+		return error;		
+	}
+	
+	public boolean controles_preDelete(Localidad localidad) throws NamingException {
+		boolean error = false;
+		String mensajeError = "";
+		LocalidadBeanRemote localidadBeanRemote  = (LocalidadBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/LocalidadBean!com.services.LocalidadBeanRemote");
+		mensajeError = localidadBeanRemote.controles_preDelete(localidad);
+		if (!mensajeError.isEmpty()) {
+			error = true;
+		}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar la localidad", JOptionPane.ERROR_MESSAGE);}
+		return error;		
+	}
+	
+	public void reportarError(String error) {
+		JOptionPane.showMessageDialog(this, error);
+	}
 	
 	
 }
