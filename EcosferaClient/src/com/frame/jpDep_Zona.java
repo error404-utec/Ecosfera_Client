@@ -16,7 +16,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,7 +37,6 @@ import com.framework.EcosferaScrollBar;
 import com.services.DepartamentoBeanRemote;
 import com.services.ZonaBeanRemote;
 import javax.swing.ImageIcon;
-import javax.swing.InputVerifier;
 
 
 public class jpDep_Zona extends JPanel {
@@ -254,7 +252,7 @@ public class jpDep_Zona extends JPanel {
 					try {
 						departamentoEliminar = obtenerPorID(id);
 						if(!controles_preDelete(departamentoEliminar)) {
-							eliminarDepartamento(departamentoEliminar);;
+							eliminarDepartamento(departamentoEliminar);
 							tablaDepartamento.setVisible(false);
 							tablaDepartamento = cargarDepartamento();
 							scroolTablaDepartamento.setViewportView(tablaDepartamento);
@@ -410,7 +408,6 @@ public class jpDep_Zona extends JPanel {
 					JFRPrincipal.PnlWorkSpace.repaint();
 					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Zonas");
 				} catch (NamingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

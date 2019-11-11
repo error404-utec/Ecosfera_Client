@@ -21,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
@@ -131,7 +130,6 @@ public class JpLoc_Dep extends JPanel {
 					JFRPrincipal.PnlWorkSpace.repaint();
 					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Zonas");
 				} catch (NamingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -219,6 +217,11 @@ public class JpLoc_Dep extends JPanel {
 		
 
 		scroolTablaLocalidad.setLayout(new ScrollPaneLayout() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
 			public void layoutContainer(Container parent) {
 			    JScrollPane scrollPane = (JScrollPane) parent;

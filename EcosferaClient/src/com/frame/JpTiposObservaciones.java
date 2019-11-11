@@ -8,6 +8,7 @@ import javax.naming.NamingException;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,8 +23,11 @@ import javax.swing.table.TableRowSorter;
 import com.entities.Departamento;
 import com.entities.TipoObservacion;
 import com.exceptions.ServiciosException;
+import com.services.DepartamentoBeanRemote;
 import com.services.TipoObservacionBeanRemote;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -50,28 +54,42 @@ public class JpTiposObservaciones extends JPanel {
 		setBackground(Color.WHITE);
 		
 		JPanel pnlNew = new JPanel();
-		pnlNew.setBounds(0, 0, 449, 235);
-		pnlNew.setBackground(Color.WHITE);
+		pnlNew.setBounds(110, 0, 452, 165);
+		pnlNew.setBackground(new Color(255, 255, 255));
+		pnlNew.setForeground(new Color(255, 255, 255));
 		
-		JPanel pnlTable = new JPanel();
-		pnlTable.setBounds(0, 234, 449, 210);
-		pnlTable.setBackground(Color.WHITE);
+		JPanel pnltable = new JPanel();
+		pnltable.setBounds(110, 178, 452, 291);
+		pnltable.setBackground(new Color(255, 255, 255));
 		
 		JLabel lblFiltro = new JLabel("Filtro");
-		lblFiltro.setBounds(12, 13, 33, 20);
+		lblFiltro.setBounds(12, 18, 109, 20);
 		lblFiltro.setForeground(new Color(46, 139, 87));
 		lblFiltro.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtFiltro = new JTextField();
-		txtFiltro.setBounds(22, 40, 410, 22);
+		txtFiltro.setBounds(78, 17, 362, 24);
 		txtFiltro.setColumns(10);
+		txtFiltro.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				filtrar();
+			}
+		});
 		
 		JScrollPane scrollTablaTipoObservacion = new JScrollPane();
-		scrollTablaTipoObservacion.setBounds(12, 29, 420, 151);
+		scrollTablaTipoObservacion.setBounds(12, 78, 428, 200);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(22, 40, 404, 22);
+		txtNombre.setBounds(166, 12, 274, 24);
 		txtNombre.setColumns(10);
+		
+		txtNombre.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtNombre.setText(txtNombre.getText().toUpperCase());
+			}
+		});
 		
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(12, 13, 51, 20);
@@ -79,26 +97,39 @@ public class JpTiposObservaciones extends JPanel {
 		lblNombre.setForeground(new Color(46, 139, 87));
 		
 		txtDescripcion = new JTextField();
-		txtDescripcion.setBounds(22, 100, 404, 22);
+		txtDescripcion.setBounds(166, 49, 274, 22);
 		txtDescripcion.setColumns(10);
 		
 		JLabel lblDescripcion = new JLabel("Descripci\u00F3n");
-		lblDescripcion.setBounds(12, 73, 79, 20);
+		lblDescripcion.setBounds(12, 49, 79, 20);
 		lblDescripcion.setForeground(new Color(46, 139, 87));
 		lblDescripcion.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtTelEmergencia = new JTextField();
-		txtTelEmergencia.setBounds(22, 160, 404, 22);
+		txtTelEmergencia.setBounds(166, 82, 271, 22);
 		txtTelEmergencia.setColumns(10);
 		
+		txtTelEmergencia.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!(Character.isDigit(c)||
+				(c == KeyEvent.VK_BACK_SPACE) ||
+				(c == KeyEvent.VK_DELETE))) {
+				getToolkit().beep();
+				arg0.consume();
+				}
+			}
+		});
+		
 		JLabel lblTelfonoDeEmergencia = new JLabel("Tel\u00E9fono de Emergencia");
-		lblTelfonoDeEmergencia.setBounds(12, 133, 150, 20);
+		lblTelfonoDeEmergencia.setBounds(12, 82, 150, 20);
 		lblTelfonoDeEmergencia.setForeground(new Color(46, 139, 87));
 		lblTelfonoDeEmergencia.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		//--------------- Agregando tipo de observacion --------------------------
 		JButton btnAceptar = new JButton("Aceptar");
-		btnAceptar.setBounds(351, 200, 86, 27);
+		btnAceptar.setBounds(240, 125, 96, 27);
 		btnAceptar.setBackground(Color.WHITE);
 		btnAceptar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -118,7 +149,7 @@ public class JpTiposObservaciones extends JPanel {
 						txtNombre.setText("");
 						txtDescripcion.setText("");
 						txtTelEmergencia.setText("");
-						
+						txtNombre.setEditable(true);
 						observacionActualizar = null;
 						filtrar();
 						
@@ -134,14 +165,16 @@ public class JpTiposObservaciones extends JPanel {
 					tipoObservacion.setTelEmergencia(txtTelEmergencia.getText());
 					
 					try {
-						crearTipoObservacion(tipoObservacion);
-						tablaTipoObservacion.setVisible(false);
-						tablaTipoObservacion = cargarTiposObservaciones();
-						scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
-						tablaTipoObservacion.setVisible(true);
-						txtNombre.setText("");
-						txtDescripcion.setText("");
-						txtTelEmergencia.setText("");
+						if (!controles_postCreate(tipoObservacion)) {
+							crearTipoObservacion(tipoObservacion);
+							tablaTipoObservacion.setVisible(false);
+							tablaTipoObservacion = cargarTiposObservaciones();
+							scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
+							tablaTipoObservacion.setVisible(true);
+							txtNombre.setText("");
+							txtDescripcion.setText("");
+							txtTelEmergencia.setText("");
+						}
 					} catch (NamingException e1) {
 						e1.printStackTrace();
 					}
@@ -153,11 +186,6 @@ public class JpTiposObservaciones extends JPanel {
 		btnAceptar.setForeground(new Color(46, 139, 87));
 		btnAceptar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		
-		JPanel Close_Panel = new JPanel();
-		Close_Panel.setBounds(417, 13, 20, 20);
-		Close_Panel.setForeground(Color.WHITE);
-		Close_Panel.setBackground(Color.WHITE);
-		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -165,10 +193,11 @@ public class JpTiposObservaciones extends JPanel {
 				txtDescripcion.setText("");
 				txtNombre.setText("");
 				txtTelEmergencia.setText("");
+				txtNombre.setEditable(true);
 				observacionActualizar = null;
 			}
 		});
-		btnCancelar.setBounds(248, 200, 91, 27);
+		btnCancelar.setBounds(344, 125, 96, 27);
 		btnCancelar.setForeground(new Color(46, 139, 87));
 		btnCancelar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		btnCancelar.setBackground(Color.WHITE);
@@ -182,21 +211,22 @@ public class JpTiposObservaciones extends JPanel {
 		pnlNew.add(txtDescripcion);
 		pnlNew.add(txtTelEmergencia);
 		pnlNew.add(lblNombre);
-		pnlNew.add(Close_Panel);
-		add(pnlTable);
-		pnlTable.setLayout(null);
-		pnlTable.add(lblFiltro);
-		pnlTable.add(scrollTablaTipoObservacion);
+		add(pnltable);
+		pnltable.setLayout(null);
+		pnltable.add(lblFiltro);
+		pnltable.add(txtFiltro);
+		pnltable.add(scrollTablaTipoObservacion);
 
 		this.tablaTipoObservacion = this.cargarTiposObservaciones();
 		scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
 		
 		JPanel pnlOptions = new JPanel();
-		pnlOptions.setBackground(Color.WHITE);
-		pnlOptions.setBounds(0, 457, 449, 55);
+		pnlOptions.setBounds(110, 478, 452, 55);
+		pnlOptions.setBackground(new Color(255, 255, 255));
 		add(pnlOptions);
 		
 		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.setBounds(235, 0, 93, 29);
 		btnEliminar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -206,16 +236,21 @@ public class JpTiposObservaciones extends JPanel {
 					Long id = (Long) tablaTipoObservacion.getValueAt(tablaTipoObservacion.getSelectedRow(), 0);
 					try {
 						tipoObservacionEliminar = obtenerTipoObservacionPorID(id);
-						eliminarTipoObservacion(tipoObservacionEliminar);
-						tablaTipoObservacion.setVisible(false);
-						tablaTipoObservacion = cargarTiposObservaciones();
-						scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
-						tablaTipoObservacion.setVisible(true);
-						filtrar();
+						if(!controles_preDelete(tipoObservacionEliminar)) {
+							eliminarTipoObservacion(tipoObservacionEliminar);
+							tablaTipoObservacion.setVisible(false);
+							tablaTipoObservacion = cargarTiposObservaciones();
+							scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
+							tablaTipoObservacion.setVisible(true);
+							filtrar();
+						}
 					} catch (NamingException ev) {
 						ev.printStackTrace();
 					}
+				}else {
+					reportarError("Debe seleccionar un tipo de observacion");
 				}
+				
 
 			}
 		});
@@ -224,6 +259,7 @@ public class JpTiposObservaciones extends JPanel {
 		btnEliminar.setBackground(new Color(245, 255, 250));
 		
 		JButton btnModificarf = new JButton("Modificar");
+		btnModificarf.setBounds(346, 0, 99, 29);
 		btnModificarf.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -235,40 +271,21 @@ public class JpTiposObservaciones extends JPanel {
 						txtDescripcion.setText(observacionActualizar.getDescripcion());
 						txtTelEmergencia.setText(observacionActualizar.getTelEmergencia());
 						txtNombre.setText(observacionActualizar.getNombre());
+						txtNombre.setEditable(false);
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
+				}else {
+					reportarError("Debe seleccionar un tipo de observacion");
 				}
 			}
 		});
 		btnModificarf.setForeground(new Color(46, 139, 87));
 		btnModificarf.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		btnModificarf.setBackground(new Color(245, 255, 250));
-		GroupLayout gl_pnlOptions = new GroupLayout(pnlOptions);
-		gl_pnlOptions.setHorizontalGroup(
-			gl_pnlOptions.createParallelGroup(Alignment.TRAILING)
-				.addGap(0, 452, Short.MAX_VALUE)
-				.addGroup(gl_pnlOptions.createSequentialGroup()
-					.addContainerGap(247, Short.MAX_VALUE)
-					.addComponent(btnEliminar, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnModificarf)
-					.addGap(12))
-		);
-		gl_pnlOptions.setVerticalGroup(
-			gl_pnlOptions.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 55, Short.MAX_VALUE)
-				.addGroup(gl_pnlOptions.createSequentialGroup()
-					.addGap(13)
-					.addGroup(gl_pnlOptions.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_pnlOptions.createSequentialGroup()
-							.addComponent(btnEliminar, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(gl_pnlOptions.createSequentialGroup()
-							.addComponent(btnModificarf, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGap(13))))
-		);
-		pnlOptions.setLayout(gl_pnlOptions);
+		pnlOptions.setLayout(null);
+		pnlOptions.add(btnEliminar);
+		pnlOptions.add(btnModificarf);
 		
 		//scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
 		//pnlTable.add(txtFiltro);
@@ -388,10 +405,7 @@ private JTable cargarTiposObservaciones() throws NamingException {
 		Color color = new Color(144,238,144);
 		tablaTipoObservacion.setSelectionBackground(color);
 		
-		
 		return tablaTipoObservacion;
-
-
 	
 	}
 
@@ -401,6 +415,62 @@ private JTable cargarTiposObservaciones() throws NamingException {
 				InitialContext.doLookup("ECOSFERA_MARK1/TipoObservacionBean!com.services.TipoObservacionBeanRemote");
 		return tipoObservacionBean.obtenerTodos();
 	
+	}
+	
+	
+	public boolean controles_preCreate() {
+		boolean error = false;
+		String mensajeError ="";
+		if (!txtDescripcion.getText().isEmpty()) {
+			if(!txtNombre.getText().isEmpty()) {
+				if (!txtTelEmergencia.getText().isEmpty()) {
+					error = false;
+				}else {
+					error = true;
+					mensajeError = "El telefono de emeregencia del tipo de observacion es un campo obligatorio.";
+				}
+			}else {
+				error = true;
+				mensajeError = "El nombre del tipo de observacion es un campo obligatorio.";
+			}
+		}else {
+			error = true;
+			mensajeError = "La descripcion del tipo de observacion  es un campo obligatorio.";
+		}
+		
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el departamento", JOptionPane.ERROR_MESSAGE);}
+		return error;	
+	}
+	
+	public boolean controles_postCreate(TipoObservacion tipoObservacion) throws NamingException {
+		boolean error = false;
+		String mensajeError = "";
+		TipoObservacionBeanRemote tipoObservacionBean = (TipoObservacionBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/TipoObservacionBean!com.services.TipoObservacionBeanRemote");
+		mensajeError = tipoObservacionBean.controles_postCreate(tipoObservacion);
+		if (!mensajeError.isEmpty()) {
+			error = true;
+		}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el Tipo de Observacion", JOptionPane.ERROR_MESSAGE);}
+		return error;		
+	}
+	
+	
+	public boolean controles_preDelete(TipoObservacion tipoObservacion) throws NamingException {
+		boolean error = false;
+		String mensajeError = "";
+		TipoObservacionBeanRemote tipoObservacionBean = (TipoObservacionBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/TipoObservacionBean!com.services.TipoObservacionBeanRemote");
+		mensajeError = tipoObservacionBean.controles_preDelete(tipoObservacion);
+		if (!mensajeError.isEmpty()) {
+			error = true;
+		}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar el Tipo de Observacion", JOptionPane.ERROR_MESSAGE);}
+		return error;		
+	}
+	
+	public void reportarError(String error) {
+		JOptionPane.showMessageDialog(this, error);
 	}
 }
 
