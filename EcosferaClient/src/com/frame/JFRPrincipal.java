@@ -161,27 +161,42 @@ public class JFRPrincipal extends JFrame {
 		PnlTopMenu_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
-				if (lblTopMenu_1.getText().equals("Zonas")) {
-					JpZonas jp;
-					try {
+				try {
+					if (lblTopMenu_1.getText().equals("Zonas")) {
+						JpZonas jp;
 						jp = new JpZonas();
 						jp.setBounds(290, 238, 660, 600);
 						jp.setVisible(true);
 						jp.setLocation(12,12);
-						
-						
 						PnlWorkSpace.removeAll();
 						PnlWorkSpace.add(jp);
-						PnlWorkSpace.revalidate();
-						PnlWorkSpace.repaint();
-						LblNavegacion.setText("Inicio"+ " - " + "Zonas");
-						lblTitulopanel.setText("Mantenimiento de Zonas");
-					} catch (NamingException e) {
-						e.printStackTrace();
+					}else if(lblTopMenu_1.getText().equals("Documentos")){
+						JpTiposDocumentos jp;
+						jp = new JpTiposDocumentos();
+						jp.setBounds(290, 238, 660, 600);
+						jp.setVisible(true);
+						jp.setLocation(12,12);
+						PnlWorkSpace.removeAll();
+						PnlWorkSpace.add(jp);
 					}
 					
+				} catch (NamingException e) {
+					e.printStackTrace();
 				}
+
+				PnlWorkSpace.revalidate();
+				PnlWorkSpace.repaint();
+				LblNavegacion.setText("Inicio"+ " - " + lblTopMenu_1.getText());
+				lblTitulopanel.setText("Mantenimiento de " + lblTopMenu_1.getText());
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlTopMenu_1_MouseEntered();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlTopMenu_1_MouseExited();
 			}
 		});
 		
@@ -252,6 +267,39 @@ public class JFRPrincipal extends JFrame {
 		lblTopMenu_1.setForeground(new Color(240, 255, 240));
 		lblTopMenu_1.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 20));
 		PnlTopMenu_1.add(lblTopMenu_1);
+		PnlTopMenu_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					if (lblTopMenu_2.getText().equals("Estados")) {
+						JpEstados jp;
+						jp = new JpEstados();
+						jp.setBounds(290, 238, 660, 600);
+						jp.setVisible(true);
+						jp.setLocation(12,12);
+						PnlWorkSpace.removeAll();
+						PnlWorkSpace.add(jp);
+					}
+					
+				} catch (NamingException e) {
+					e.printStackTrace();
+				}
+
+				PnlWorkSpace.revalidate();
+				PnlWorkSpace.repaint();
+				LblNavegacion.setText("Inicio"+ " - " + lblTopMenu_2.getText());
+				lblTitulopanel.setText("Mantenimiento de " + lblTopMenu_2.getText());
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlTopMenu_2_MouseEntered();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlTopMenu_2_MouseExited();
+			}
+		});
 		
 		
 		PnlTopMenu_2.setBackground(new Color(60, 179, 113));
@@ -670,6 +718,11 @@ public class JFRPrincipal extends JFrame {
 		//Revalido y pinto PnlMenuInicio
 		PnlMenuInicio.revalidate();
 		PnlMenuInicio.repaint();
+		reinicarTopMenu();
+		PnlTopMenu_1.setVisible(true);
+		lblTopMenu_1.setText("Documentos");
+		PnlTopMenu_2.setVisible(true);
+		lblTopMenu_2.setText("Estados");
 	}
 
 	
@@ -918,5 +971,37 @@ public class JFRPrincipal extends JFrame {
 		if (fxNumber > 1) {			PnlObservaciones.setBounds(0, PnlObservaciones.getBounds().y-1, 278, 57);}
 		if (fxNumber >= 1) {		PnlRevision.setBounds(0, PnlRevision.getBounds().y-1, 278, 57);}
 		PnlMenuInicio_repaint();
+	}
+	
+	private void PnlTopMenu_1_MouseEntered() {
+		PnlTopMenu_1.setBackground(new Color(144, 238, 144));
+	}
+	
+	private void PnlTopMenu_1_MouseExited() {
+		PnlTopMenu_1.setBackground(new Color(60, 179, 113));
+	}
+	
+	private void PnlTopMenu_2_MouseEntered() {
+		PnlTopMenu_2.setBackground(new Color(144, 238, 144));
+	}
+	
+	private void PnlTopMenu_2_MouseExited() {
+		PnlTopMenu_2.setBackground(new Color(60, 179, 113));
+	}
+	
+	private void PnlTopMenu_3_MouseEntered() {
+		PnlTopMenu_3.setBackground(new Color(144, 238, 144));
+	}
+	
+	private void PnlTopMenu_3_MouseExited() {
+		 PnlTopMenu_3.setBackground(new Color(60, 179, 113));
+	}
+	
+	private void PnlTopMenu_4_MouseEntered() {
+		PnlTopMenu_4.setBackground(new Color(144, 238, 144));
+	}
+	
+	private void PnlTopMenu_4_MouseExited() {
+		PnlTopMenu_4.setBackground(new Color(60, 179, 113));
 	}
 }
