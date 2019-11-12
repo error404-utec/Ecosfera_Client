@@ -16,8 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 
+import com.entities.Departamento;
 import com.entities.Estado;
+import com.entities.Perfil;
 import com.entities.TipoDocumento;
 import com.entities.Usuario;
 import com.exceptions.ServiciosException;
@@ -29,7 +32,9 @@ import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 public class JpUsuarios extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -42,15 +47,21 @@ public class JpUsuarios extends JPanel {
 	private JPasswordField pssContra;
 	private JPasswordField passRepetirContra;
 	private JComboBox<String> cmbTipoDocumento = new JComboBox<String>();
-	private JTable tblCaracteristicas;
+	private JComboBox<String> cmbEstados = new JComboBox<String>();
+	private JTable TablaPerfiles;
+	private String modo;
+	private Usuario usuario;
 	
 	
 	/**
 	 * Create the panel.
 	 * @throws NamingException 
 	 */
-	public JpUsuarios() throws NamingException {
+	public JpUsuarios(String modo,Usuario usuario) throws NamingException {
+		this.modo = modo;
+		this.usuario = usuario;
 		cargarCombo();
+		cargarComboEstado();
 		setBounds(new Rectangle(295, 256, 650, 582));
 		setBackground(new Color(255, 255, 255));
 		
@@ -95,13 +106,14 @@ public class JpUsuarios extends JPanel {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				txtUsuario.setText("");
-				txtDocumento.setText("");
-				txtApellido.setText("");
-				txtDireccion.setText("");
-				txtMail.setText("");
-				txtNombre.setText("");
-				cmbTipoDocumento.setSelectedIndex(-1);
+				//if (modo.equals("INSERT"))
+				//txtUsuario.setText("");
+				//txtDocumento.setText("");
+				//txtApellido.setText("");
+				//txtDireccion.setText("");
+				//txtMail.setText("");
+				//txtNombre.setText("");
+				//cmbTipoDocumento.setSelectedIndex(-1);
 			}
 		});
 		btnCancelar.setForeground(new Color(46, 139, 87));
@@ -202,27 +214,48 @@ public class JpUsuarios extends JPanel {
 		lblEstado.setBounds(12, 314, 122, 20);
 		pnlNew.add(lblEstado);
 		
-		JComboBox<String> cmbEstados = new JComboBox<String>();
+		
 		cmbEstados.setMaximumRowCount(99);
 		cmbEstados.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		cmbEstados.setBackground(Color.WHITE);
 		cmbEstados.setBounds(137, 314, 303, 24);
 		pnlNew.add(cmbEstados);
 		
-		JPanel pnlTable = new JPanel();
-		pnlTable.setBackground(Color.WHITE);
-		pnlTable.setBounds(0, 411, 452, 158);
-		add(pnlTable);
-		pnlTable.setLayout(null);
+		JPanel PnlPerfiles = new JPanel();
+		PnlPerfiles.setBackground(Color.WHITE);
+		PnlPerfiles.setBounds(0, 414, 452, 168);
+		add(PnlPerfiles);
+		PnlPerfiles.setLayout(null);
 		
-		JScrollPane scrollCaracteristicas = new JScrollPane();
-		scrollCaracteristicas.setBounds(86, 86, 97, -41);
-		pnlTable.add(scrollCaracteristicas);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 13, 428, 108);
+		PnlPerfiles.add(scrollPane);
 		
-		tblCaracteristicas = new JTable();
-		tblCaracteristicas.setBounds(116, 58, 1, 1);
-
-		scrollCaracteristicas.setViewportView(tblCaracteristicas);
+		TablaPerfiles = new JTable((TableModel) null);
+		TablaPerfiles.setShowVerticalLines(false);
+		TablaPerfiles.setSelectionBackground(new Color(144, 238, 144));
+		TablaPerfiles.setRowSelectionAllowed(true);
+		TablaPerfiles.setForeground(new Color(153, 153, 153));
+		TablaPerfiles.setFont(new Font("Yu Gothic UI Semibold", Font.ITALIC, 13));
+		TablaPerfiles.setColumnSelectionAllowed(false);
+		TablaPerfiles.setBorder(null);
+		TablaPerfiles.setBackground(Color.WHITE);
+		TablaPerfiles.setAutoscrolls(true);
+		scrollPane.setViewportView(TablaPerfiles);
+		
+		JButton btnAgregafrPerfil = new JButton("Agregar");
+		btnAgregafrPerfil.setForeground(new Color(46, 139, 87));
+		btnAgregafrPerfil.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
+		btnAgregafrPerfil.setBackground(new Color(245, 255, 250));
+		btnAgregafrPerfil.setBounds(346, 134, 94, 27);
+		PnlPerfiles.add(btnAgregafrPerfil);
+		
+		JButton BtnEliminar = new JButton("Eliminar");
+		BtnEliminar.setForeground(new Color(46, 139, 87));
+		BtnEliminar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
+		BtnEliminar.setBackground(new Color(245, 255, 250));
+		BtnEliminar.setBounds(240, 134, 94, 27);
+		PnlPerfiles.add(BtnEliminar);
 		
 		
 		
@@ -239,7 +272,7 @@ public class JpUsuarios extends JPanel {
 					usuario.setPasswrd(pssContra.getText());	
 					usuario.setDocumento(txtDocumento.getText());
 					usuario.setUsuario(txtUsuario.getText());
-					usuario.setEstado(obtenerEstado());
+					usuario.setEstado(obtenerEstado((String)cmbEstados.getSelectedItem()));
 					usuario.setMail(txtMail.getText());
 					usuario.setTipoDocumento(obtenerTipoDocumento((String)cmbTipoDocumento.getSelectedItem()));
 					boolean error = controles(usuario);
@@ -251,8 +284,100 @@ public class JpUsuarios extends JPanel {
 				}		
 			}
 		});
+		
+		txtUsuario.setText(usuario.getNombre());
+		txtNombre.setText(usuario.getNombre());
+		txtApellido.setText(usuario.getApellido());
+		txtDireccion.setText(usuario.getDireccion());
+		txtDocumento.setText(usuario.getDocumento());
+		txtMail.setText(usuario.getMail());
+		//cmbEstados.setSelectedIndex(anIndex);
+		TablaPerfiles = cargarPerfiles();
+		
+		if(modo.equals("UPDATE_USER")) {
+			txtUsuario.setEditable(false);
+			txtDocumento.setEditable(false);
+			txtMail.setEditable(false);
+			cmbTipoDocumento.setEditable(false);
+			cmbEstados.setEditable(false);
+			btnAgregafrPerfil.setEnabled(false);
+			BtnEliminar.setEnabled(false);
+		}else if(modo.equals("UPDATE_ADMIN")) {
+			txtUsuario.setEditable(false);
+			txtDocumento.setEditable(false);
+			txtMail.setEditable(false);
+			cmbTipoDocumento.setEditable(false);
+			cmbEstados.setEditable(true);
+			btnAgregafrPerfil.setEnabled(true);
+			BtnEliminar.setEnabled(true);
+			pssContra.setEditable(false);
+			passRepetirContra.setEditable(false);
+		}else if(modo.equals("INSERT")) {
+			txtUsuario.setEditable(true);
+			txtDocumento.setEditable(true);
+			txtMail.setEditable(true);
+			cmbTipoDocumento.setEditable(true);
+			cmbEstados.setEditable(true);
+			btnAgregafrPerfil.setEnabled(true);
+			BtnEliminar.setEnabled(true);
+			pssContra.setEditable(true);
+			passRepetirContra.setEditable(true);
+		}
 
 	}
+	
+	
+	private JTable cargarPerfiles() throws NamingException {
+		List<Perfil> lista = usuario.getPerfiles();
+		
+		
+		String[] nombreColumnas = {"ID", "Nombre" };
+
+		Object[][] datos = new Object[lista.size()][2];
+		int fila = 0;
+
+		
+		for (Perfil c : lista) {
+			datos[fila][0] = c.getId();
+			datos[fila][1] = c.getNombre();
+			fila++;
+
+		}
+		
+		DefaultTableModel model = new DefaultTableModel(datos, nombreColumnas) {
+			
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				 return String.class;
+			}
+		};
+		
+		
+		TablaPerfiles = new JTable(model);
+		TablaPerfiles.setRowSelectionAllowed(true);
+		TablaPerfiles.setColumnSelectionAllowed(false);
+		TablaPerfiles.setBorder(null);
+		TablaPerfiles.setBackground(new Color(255, 255, 255));
+		TablaPerfiles.setForeground(new Color(153, 153, 153));
+		TablaPerfiles.setFont(new Font("Yu Gothic UI Semibold", Font.ITALIC, 13));
+		TablaPerfiles.setShowVerticalLines(false);
+		TablaPerfiles.setAutoscrolls(true);
+		TablaPerfiles.setSize(600, 600);
+		Color color = new Color(144,238,144);
+		TablaPerfiles.setSelectionBackground(color);
+		
+		return TablaPerfiles;
+
+	}
+	
+	
 	
 	public void crearUsuario(Usuario usuario) throws NamingException {
 		UsuarioBeanRemote usuariodBeanRemote  = (UsuarioBeanRemote)
@@ -301,12 +426,23 @@ public class JpUsuarios extends JPanel {
 	}
 	
 	
-	public Estado obtenerEstado() throws NamingException {
+	public Estado obtenerEstado(String nombre) throws NamingException {
 		EstadoBeanRemote estadoBeanRemote  = (EstadoBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/EstadoBean!com.services.EstadoBeanRemote");
 		
-		Estado estado = estadoBeanRemote.obtenerPorNombre("NUEVO");
-		return estado;
+		return estadoBeanRemote.obtenerPorNombre(nombre);
+		
+	}
+	
+	public void cargarComboEstado() throws NamingException {
+		EstadoBeanRemote estadoBeanRemote  = (EstadoBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/EstadoBean!com.services.EstadoBeanRemote");
+		
+		List<Estado> col = estadoBeanRemote.obtenerTodos();
+		
+		for(Estado elemento : col) {
+			cmbEstados.addItem(elemento.getNombre());
+		}
 		
 	}
 	

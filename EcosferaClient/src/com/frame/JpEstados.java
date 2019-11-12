@@ -24,6 +24,8 @@ import com.entities.Departamento;
 import com.entities.Estado;
 import com.entities.TipoObservacion;
 import com.exceptions.ServiciosException;
+import com.framework.Celda_CheckBox;
+import com.framework.Render_CheckBox;
 import com.services.DepartamentoBeanRemote;
 import com.services.EstadoBeanRemote;
 import com.services.TipoObservacionBeanRemote;
@@ -287,6 +289,9 @@ public class JpEstados extends JPanel {
 						estadoActualizar = obtenerEstadoPorID(id);
 
 						txtNombre.setText(estadoActualizar.getNombre());
+						chkEliminado.setSelected(estadoActualizar.isEliminado());
+						chkPemLogin.setSelected(estadoActualizar.isPermiteLogin());
+						chkPermRegistro.setSelected(estadoActualizar.isPermiteRegistro());
 						
 						txtNombre.setEditable(false);
 					} catch (NamingException e) {
@@ -370,12 +375,12 @@ public class JpEstados extends JPanel {
 
 	}
 	
-private JTable cargarEstado() throws NamingException {
+	private JTable cargarEstado() throws NamingException {
 		
 		List<Estado> lista = listarEstados();
-		String[] nombreColumnas = {"ID", "Nombre", "Descripción", "Tel Emergencia" };
+		String[] nombreColumnas = {"ID", "Nombre", "Login", "Registro", "Eliminado" };
 
-		Object[][] datos = new Object[lista.size()][4];
+		Object[][] datos = new Object[lista.size()][5];
 		int fila = 0;
 
 		
@@ -383,17 +388,13 @@ private JTable cargarEstado() throws NamingException {
 			System.out.println(o.getId());
 			datos[fila][0] = o.getId();
 			datos[fila][1] = o.getNombre();
-			//datos[fila][2] = o.getDescripcion();
-			//datos[fila][3] = o.getTelEmergencia();
+			datos[fila][2] = o.isPermiteLogin();
+			datos[fila][3] = o.isPermiteRegistro();
+			datos[fila][4] = o.isEliminado();
 			fila++;
-
 		}
 		
 		DefaultTableModel model = new DefaultTableModel(datos, nombreColumnas) {
-			
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -407,7 +408,17 @@ private JTable cargarEstado() throws NamingException {
 			}
 		};
 		
+		
+		
 		tablaTipoEstados = new JTable(model);
+		
+		tablaTipoEstados.getColumnModel().getColumn(2).setCellEditor(new Celda_CheckBox());
+		tablaTipoEstados.getColumnModel().getColumn(2).setCellRenderer(new Render_CheckBox());
+		tablaTipoEstados.getColumnModel().getColumn(3).setCellEditor(new Celda_CheckBox());
+		tablaTipoEstados.getColumnModel().getColumn(3).setCellRenderer(new Render_CheckBox());
+		tablaTipoEstados.getColumnModel().getColumn(4).setCellEditor(new Celda_CheckBox());
+		tablaTipoEstados.getColumnModel().getColumn(4).setCellRenderer(new Render_CheckBox());
+		
 		tablaTipoEstados.setRowSelectionAllowed(true);
 		tablaTipoEstados.setColumnSelectionAllowed(false);
 		tablaTipoEstados.setBorder(null);

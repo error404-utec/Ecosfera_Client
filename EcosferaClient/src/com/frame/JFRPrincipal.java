@@ -681,7 +681,7 @@ public class JFRPrincipal extends JFrame {
 	private void PnlUsuarios_MouseClicked() throws NamingException {	
 		reinicarMenu();
 		
-		JpRegistroUsuario jp = new JpRegistroUsuario();
+		JpListaUsuarios jp = new JpListaUsuarios();
 		jp.setBounds(290, 238, 660, 600);
 		jp.setVisible(true);
 		jp.setLocation(12,12);
@@ -690,8 +690,8 @@ public class JFRPrincipal extends JFrame {
 		PnlWorkSpace.add(jp);
 		PnlWorkSpace.revalidate();
 		PnlWorkSpace.repaint();
-		LblNavegacion.setText("Inicio" + " - " + "Tipos de Obervaciones");
-		lblTitulopanel.setText("Mantenimiento de Tipos de Obervaciones");
+		LblNavegacion.setText("Inicio" + " - " + "Usuarios");
+		lblTitulopanel.setText("Mantenimiento de Usuarios");
 		new Thread() {
 			public void run() {
 				reinicarMenu();
