@@ -36,6 +36,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.apache.activemq.artemis.core.protocol.core.impl.wireformat.CreateSessionResponseMessage;
+
 public class JpUsuarios extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtDocumento;
@@ -106,14 +108,22 @@ public class JpUsuarios extends JPanel {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				//if (modo.equals("INSERT"))
-				//txtUsuario.setText("");
-				//txtDocumento.setText("");
-				//txtApellido.setText("");
-				//txtDireccion.setText("");
-				//txtMail.setText("");
-				//txtNombre.setText("");
-				//cmbTipoDocumento.setSelectedIndex(-1);
+				JpListaUsuarios jp;
+				try {
+					jp = new JpListaUsuarios();
+				
+					jp.setBounds(290, 238, 660, 600);
+					jp.setVisible(true);
+					jp.setLocation(12,12);
+					JFRPrincipal.getIntance();
+					JFRPrincipal.PnlWorkSpace.removeAll();
+					JFRPrincipal.PnlWorkSpace.add(jp);
+					JFRPrincipal.PnlWorkSpace.revalidate();
+					JFRPrincipal.PnlWorkSpace.repaint();
+				} catch (NamingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		btnCancelar.setForeground(new Color(46, 139, 87));
@@ -265,19 +275,42 @@ public class JpUsuarios extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					Usuario usuario = new Usuario();
-					usuario.setNombre(txtDocumento.getText());
-					usuario.setDireccion(txtDireccion.getText());
-					usuario.setApellido(txtApellido.getText());
-					usuario.setPasswrd(pssContra.getText());	
-					usuario.setDocumento(txtDocumento.getText());
-					usuario.setUsuario(txtUsuario.getText());
-					usuario.setEstado(obtenerEstado((String)cmbEstados.getSelectedItem()));
-					usuario.setMail(txtMail.getText());
-					usuario.setTipoDocumento(obtenerTipoDocumento((String)cmbTipoDocumento.getSelectedItem()));
-					boolean error = controles(usuario);
+					Usuario usuario1 = new Usuario();
+					usuario1.setNombre(txtNombre.getText());
+					usuario1.setDireccion(txtDireccion.getText());
+					usuario1.setApellido(txtApellido.getText());
+					usuario1.setPasswrd(pssContra.getText());	
+					usuario1.setDocumento(txtDocumento.getText());
+					usuario1.setUsuario(txtUsuario.getText());
+					usuario1.setEstado(obtenerEstado((String)cmbEstados.getSelectedItem()));
+					usuario1.setMail(txtMail.getText());
+					usuario1.setTipoDocumento(obtenerTipoDocumento((String)cmbTipoDocumento.getSelectedItem()));
+					boolean error = controles(usuario1);
 					if(!error) {
-						crearUsuario(usuario);
+						if (modo.equals("UPDATE_ADMIN")) {
+							usuario1.setId(usuario.getId());
+							acutalizarUsuario(usuario1);
+							JpListaUsuarios jp = new JpListaUsuarios();
+							jp.setBounds(290, 238, 660, 600);
+							jp.setVisible(true);
+							jp.setLocation(12,12);
+							JFRPrincipal.getIntance();
+							JFRPrincipal.PnlWorkSpace.removeAll();
+							JFRPrincipal.PnlWorkSpace.add(jp);
+							JFRPrincipal.PnlWorkSpace.revalidate();
+							JFRPrincipal.PnlWorkSpace.repaint();
+						}else if(modo.equals("INSERT")) {
+							crearUsuario(usuario1);
+							JpListaUsuarios jp = new JpListaUsuarios();
+							jp.setBounds(290, 238, 660, 600);
+							jp.setVisible(true);
+							jp.setLocation(12,12);
+							JFRPrincipal.getIntance();
+							JFRPrincipal.PnlWorkSpace.removeAll();
+							JFRPrincipal.PnlWorkSpace.add(jp);
+							JFRPrincipal.PnlWorkSpace.revalidate();
+							JFRPrincipal.PnlWorkSpace.repaint();
+						}
 					}
 				} catch (NamingException e1) {
 					e1.printStackTrace();
@@ -285,32 +318,45 @@ public class JpUsuarios extends JPanel {
 			}
 		});
 		
-		txtUsuario.setText(usuario.getNombre());
-		txtNombre.setText(usuario.getNombre());
-		txtApellido.setText(usuario.getApellido());
-		txtDireccion.setText(usuario.getDireccion());
-		txtDocumento.setText(usuario.getDocumento());
-		txtMail.setText(usuario.getMail());
-		//cmbEstados.setSelectedIndex(anIndex);
-		TablaPerfiles = cargarPerfiles();
+		
 		
 		if(modo.equals("UPDATE_USER")) {
 			txtUsuario.setEditable(false);
 			txtDocumento.setEditable(false);
 			txtMail.setEditable(false);
-			cmbTipoDocumento.setEditable(false);
-			cmbEstados.setEditable(false);
+			cmbTipoDocumento.setEnabled(false);
+			cmbEstados.setEnabled(false);
 			btnAgregafrPerfil.setEnabled(false);
 			BtnEliminar.setEnabled(false);
+			txtUsuario.setText(usuario.getNombre());
+			txtNombre.setText(usuario.getNombre());
+			txtApellido.setText(usuario.getApellido());
+			txtDireccion.setText(usuario.getDireccion());
+			txtDocumento.setText(usuario.getDocumento());
+			txtMail.setText(usuario.getMail());
+			cmbEstados.setSelectedItem(usuario.getEstado().getNombre());
+			cmbTipoDocumento.setSelectedItem(usuario.getTipoDocumento().getNombre());
+			TablaPerfiles = cargarPerfiles();
 		}else if(modo.equals("UPDATE_ADMIN")) {
 			txtUsuario.setEditable(false);
 			txtDocumento.setEditable(false);
 			txtMail.setEditable(false);
-			cmbTipoDocumento.setEditable(false);
+			cmbTipoDocumento.setEnabled(false);;
 			cmbEstados.setEditable(true);
 			btnAgregafrPerfil.setEnabled(true);
 			BtnEliminar.setEnabled(true);
 			pssContra.setEditable(false);
+			txtUsuario.setText(usuario.getUsuario());
+			txtNombre.setText(usuario.getNombre());
+			txtApellido.setText(usuario.getApellido());
+			txtDireccion.setText(usuario.getDireccion());
+			txtDocumento.setText(usuario.getDocumento());
+			txtMail.setText(usuario.getMail());
+			pssContra.setText(usuario.getPasswrd());
+			passRepetirContra.setText(usuario.getPasswrd());
+			cmbEstados.setSelectedItem(usuario.getEstado().getNombre());
+			cmbTipoDocumento.setSelectedItem(usuario.getTipoDocumento().getNombre());
+			TablaPerfiles = cargarPerfiles();
 			passRepetirContra.setEditable(false);
 		}else if(modo.equals("INSERT")) {
 			txtUsuario.setEditable(true);
@@ -466,28 +512,28 @@ public class JpUsuarios extends JPanel {
 			JOptionPane.showMessageDialog(this, "El campo apellido es obligatorio");
 		}else if(txtDireccion.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo direccion es obligatorio");
+			JOptionPane.showMessageDialog(this, "El campo direccion es obligatorio");
 		}else if(txtDocumento.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo nro. de documento es obligatorio");
+			JOptionPane.showMessageDialog(this, "El campo nro. de documento es obligatorio");
 		}else if(txtMail.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo mail es obligatorio");
+			JOptionPane.showMessageDialog(this, "El campo mail es obligatorio");
 		}else if(txtNombre.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo nombre es obligatorio");
+			JOptionPane.showMessageDialog(this, "El campo nombre es obligatorio");
 		}else if(txtUsuario.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo usuario es obligatorio");
+			JOptionPane.showMessageDialog(this, "El campo usuario es obligatorio");
 		}else if(cmbTipoDocumento.getSelectedIndex()==-1) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "debe seleccionar un tipo de documento");
+			JOptionPane.showMessageDialog(this, "debe seleccionar un tipo de documento");
 		}else if(pssContra.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "el campo contraseña es obligatorio");
+			JOptionPane.showMessageDialog(this, "el campo contraseña es obligatorio");
 		}else if(passRepetirContra.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "el campo repetir contraseña es obligatorio");
+			JOptionPane.showMessageDialog(this, "el campo repetir contraseña es obligatorio");
 		}
 		
 		if (!error) {

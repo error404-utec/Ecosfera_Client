@@ -153,12 +153,20 @@ public class JpListaUsuarios extends JPanel {
 					Long id = (Long) tablaUsuario.getValueAt(tablaUsuario.getSelectedRow(), 0);
 					try {
 						usuarioActualizar = obtenerPorID(id);
-						
+						JpUsuarios jp = new JpUsuarios("UPDATE_ADMIN", usuarioActualizar);
+						jp.setBounds(290, 238, 660, 600);
+						jp.setVisible(true);
+						jp.setLocation(12,12);
+						JFRPrincipal.getIntance();
+						JFRPrincipal.PnlWorkSpace.removeAll();
+						JFRPrincipal.PnlWorkSpace.add(jp);
+						JFRPrincipal.PnlWorkSpace.revalidate();
+						JFRPrincipal.PnlWorkSpace.repaint();
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
 				}else {
-					reportarError("Debe seleccionar una zona");
+					reportarError("Debe seleccionar un Usuario");
 				}
 			}
 		});
@@ -188,7 +196,7 @@ public class JpListaUsuarios extends JPanel {
 						e.printStackTrace();
 					}
 				}else {
-					reportarError("Debe seleccionar una zona");
+					reportarError("Debe seleccionar un Usuario");
 				}
 			}
 		});
@@ -204,7 +212,21 @@ public class JpListaUsuarios extends JPanel {
 		BtnNuevo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
+				JpUsuarios jp;
+				try {
+					jp = new JpUsuarios("INSERT", null);
+					jp.setBounds(290, 238, 660, 600);
+					jp.setVisible(true);
+					jp.setLocation(12,12);
+					JFRPrincipal.getIntance();
+					JFRPrincipal.PnlWorkSpace.removeAll();
+					JFRPrincipal.PnlWorkSpace.add(jp);
+					JFRPrincipal.PnlWorkSpace.revalidate();
+					JFRPrincipal.PnlWorkSpace.repaint();
+				} catch (NamingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 
 				
