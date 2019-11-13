@@ -37,6 +37,8 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.apache.activemq.artemis.core.protocol.core.impl.wireformat.CreateSessionResponseMessage;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class JpUsuarios extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -82,6 +84,19 @@ public class JpUsuarios extends JPanel {
 		lblDocumento.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtDocumento = new JTextField();
+		txtDocumento.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtDocumento.setText(txtDocumento.getText().toUpperCase());
+			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(txtDocumento.getText().length()>=31) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		txtDocumento.setBounds(137, 82, 303, 24);
 		txtDocumento.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtDocumento.setColumns(10);
@@ -92,6 +107,19 @@ public class JpUsuarios extends JPanel {
 		lblUsuario.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtUsuario = new JTextField();
+		txtUsuario.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtUsuario.setText(txtUsuario.getText().toUpperCase());
+			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(txtUsuario.getText().length()>=31) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		txtUsuario.setBounds(137, 12, 303, 24);
 		txtUsuario.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtUsuario.setColumns(10);
@@ -207,6 +235,19 @@ public class JpUsuarios extends JPanel {
 		pnlNew.add(txtDireccion);
 		
 		txtMail = new JTextField();
+		txtMail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtDocumento.setText(txtDocumento.getText().toUpperCase());
+			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(txtDocumento.getText().length()>=31) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		txtMail.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtMail.setColumns(10);
 		txtMail.setBounds(137, 214, 303, 24);
@@ -285,6 +326,9 @@ public class JpUsuarios extends JPanel {
 					usuario1.setEstado(obtenerEstado((String)cmbEstados.getSelectedItem()));
 					usuario1.setMail(txtMail.getText());
 					usuario1.setTipoDocumento(obtenerTipoDocumento((String)cmbTipoDocumento.getSelectedItem()));
+					if (modo.equals("UPDATE_ADMIN")) {
+						usuario1.setId(usuario.getId());
+					}
 					boolean error = controles(usuario1);
 					if(!error) {
 						if (modo.equals("UPDATE_ADMIN")) {
@@ -545,10 +589,18 @@ public class JpUsuarios extends JPanel {
 		UsuarioBeanRemote usuariodBeanRemote  = (UsuarioBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
 		
-		String respuestaBean =usuariodBeanRemote.controlarUnicidad(usuario);
-		if (!respuestaBean.equals("")) {
-			error = true;
-			JOptionPane.showMessageDialog(this,respuestaBean);
+		if(modo.equals("INSERT")) {
+			String respuestaBean =usuariodBeanRemote.controlarUnicidad(usuario);
+			if (!respuestaBean.isEmpty()) {
+				error = true;
+				JOptionPane.showMessageDialog(this,respuestaBean);
+			}
+		}else {
+			String respuestaBean =usuariodBeanRemote.controles_preModify(usuario);	
+			if (!respuestaBean.isEmpty()) {
+				error = true;
+				JOptionPane.showMessageDialog(this,respuestaBean);
+			}
 		}
 		return error;
 		
