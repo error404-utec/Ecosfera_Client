@@ -311,6 +311,39 @@ public class JFRPrincipal extends JFrame {
 		lblTopMenu_2.setForeground(new Color(240, 255, 240));
 		lblTopMenu_2.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 20));
 		PnlTopMenu_2.add(lblTopMenu_2);
+		PnlTopMenu_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					if (lblTopMenu_3.getText().equals("Perfiles")) {
+						JpPerfiles jp;
+						jp = new JpPerfiles();
+						jp.setBounds(290, 238, 660, 600);
+						jp.setVisible(true);
+						jp.setLocation(12,12);
+						PnlWorkSpace.removeAll();
+						PnlWorkSpace.add(jp);
+					}
+					
+				} catch (NamingException e) {
+					e.printStackTrace();
+				}
+
+				PnlWorkSpace.revalidate();
+				PnlWorkSpace.repaint();
+				LblNavegacion.setText("Inicio"+ " - " + lblTopMenu_3.getText());
+				lblTitulopanel.setText("Mantenimiento de " + lblTopMenu_3.getText());
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlTopMenu_3_MouseEntered();
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlTopMenu_3_MouseExited();
+			}
+		});
 		
 		
 		PnlTopMenu_3.setBackground(new Color(60, 179, 113));
@@ -723,6 +756,8 @@ public class JFRPrincipal extends JFrame {
 		lblTopMenu_1.setText("Documentos");
 		PnlTopMenu_2.setVisible(true);
 		lblTopMenu_2.setText("Estados");
+		PnlTopMenu_3.setVisible(true);
+		lblTopMenu_3.setText("Perfiles");
 	}
 
 	
