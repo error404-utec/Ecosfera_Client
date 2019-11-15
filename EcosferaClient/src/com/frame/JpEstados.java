@@ -1,11 +1,14 @@
 package com.frame;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Rectangle;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -13,22 +16,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.RowFilter;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import com.entities.Departamento;
 import com.entities.Estado;
-import com.entities.TipoObservacion;
 import com.exceptions.ServiciosException;
 import com.framework.Celda_CheckBox;
+import com.framework.EcosferaScrollBar;
 import com.framework.Render_CheckBox;
-import com.services.DepartamentoBeanRemote;
 import com.services.EstadoBeanRemote;
-import com.services.TipoObservacionBeanRemote;
+import com.services.UsuarioBeanRemote;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -36,6 +36,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JCheckBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class JpEstados extends JPanel {
 	/**
@@ -52,10 +54,6 @@ public class JpEstados extends JPanel {
 	private Estado estadoActualizar = null;
 	
 
-	/**
-	 * Create the panel.
-	 * @throws NamingException 
-	 */
 	public JpEstados() throws NamingException {
 		setBackground(Color.WHITE);
 		
@@ -68,6 +66,50 @@ public class JpEstados extends JPanel {
 		pnltable.setBounds(110, 178, 452, 291);
 		pnltable.setBackground(new Color(255, 255, 255));
 		
+		
+		JPanel PnlVolver = new JPanel();
+		PnlVolver.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+			}
+		});
+		PnlVolver.setBackground(Color.WHITE);
+		PnlVolver.setBounds(0, 255, 51, 55);
+		add(PnlVolver);
+		PnlVolver.setLayout(null);
+		
+		JLabel label_3 = new JLabel("");
+		label_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				JpListaUsuarios jp;
+				try {
+					jp = new JpListaUsuarios();
+					jp.setBounds(290, 238, 660, 600);
+					jp.setVisible(true);
+					jp.setLocation(12,12);
+					JFRPrincipal.getIntance();
+					JFRPrincipal.PnlWorkSpace.removeAll();
+					JFRPrincipal.PnlWorkSpace.add(jp);
+					JFRPrincipal.PnlWorkSpace.revalidate();
+					JFRPrincipal.PnlWorkSpace.repaint();
+					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Usuarios");
+				} catch (NamingException e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlVolver.setBackground(new Color(46,139,87));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlVolver.setBackground(new Color(240,240,240));
+			}
+		});
+		label_3.setIcon(new ImageIcon(jpDep_Zona.class.getResource("/recursos/icons/go_back.png")));
+		label_3.setBounds(0, 0, 51, 55);
+		PnlVolver.add(label_3);
 		JLabel lblFiltro = new JLabel("Filtro");
 		lblFiltro.setBounds(12, 18, 109, 20);
 		lblFiltro.setForeground(new Color(46, 139, 87));
@@ -79,12 +121,49 @@ public class JpEstados extends JPanel {
 		txtFiltro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				txtFiltro.setText(txtFiltro.getText().toUpperCase());
 				filtrar();
 			}
 		});
 		
 		JScrollPane scrollTablaEstado = new JScrollPane();
 		scrollTablaEstado.setBounds(12, 78, 428, 200);
+		
+		scrollTablaEstado.setLayout(new ScrollPaneLayout() {
+
+			private static final long serialVersionUID = 1L;
+
+				@Override
+				  public void layoutContainer(Container parent) {
+				    JScrollPane scrollPane = (JScrollPane) parent;
+				
+				    Rectangle availR = scrollPane.getBounds();
+				    availR.x = availR.y = 0;
+				
+				    Insets parentInsets = parent.getInsets();
+				    availR.x = parentInsets.left;
+				    availR.y = parentInsets.top;
+				    availR.width -= parentInsets.left + parentInsets.right + 10;
+				    availR.height -= parentInsets.top + parentInsets.bottom;
+				
+				    Rectangle vsbR = new Rectangle();
+				    vsbR.width = 12;
+				    vsbR.height = availR.height;
+				    vsbR.x = availR.x + availR.width - vsbR.width;
+				    vsbR.y = availR.y;
+				
+				    vsbR.x = vsbR.x + 10;
+				    if (viewport != null) {
+				      viewport.setBounds(availR);
+				    }
+				    if (vsb != null) {
+				      vsb.setVisible(true);
+				      vsb.setBounds(vsbR);
+				    }
+				  }
+				});
+			scrollTablaEstado.getVerticalScrollBar().setUI(new EcosferaScrollBar());
+		
 		
 		txtNombre = new JTextField();
 		txtNombre.setBounds(110, 12, 330, 24);
@@ -95,6 +174,13 @@ public class JpEstados extends JPanel {
 			public void keyReleased(KeyEvent e) {
 				txtNombre.setText(txtNombre.getText().toUpperCase());
 			}
+			@Override		
+			public void keyTyped(KeyEvent arg0) {
+				if(txtNombre.getText().length()>=50) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
 		});
 		
 		JLabel lblNombre = new JLabel("Nombre");
@@ -102,89 +188,57 @@ public class JpEstados extends JPanel {
 		lblNombre.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		lblNombre.setForeground(new Color(46, 139, 87));
 		
-		//--------------- Agregando tipo de observacion --------------------------
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBounds(240, 125, 96, 27);
 		btnAceptar.setBackground(Color.WHITE);
 		btnAceptar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				if (estadoActualizar!=null) {
-					try {
-						estadoActualizar.setNombre(txtNombre.getText());
-						if (chkEliminado.isSelected()) {
-							estadoActualizar.setEliminado(true);
+				try {
+					if(!controles_preCreate()) {
+						if (estadoActualizar!=null) {
+							estadoActualizar.setNombre(txtNombre.getText());
+							if (chkEliminado.isSelected()) {estadoActualizar.setEliminado(true);}else {estadoActualizar.setEliminado(false);}
+							if (chkPemLogin.isSelected()) {estadoActualizar.setPermiteLogin(true);}else {estadoActualizar.setPermiteLogin(false);}
+							if (chkPermRegistro.isSelected()) {estadoActualizar.setPermiteRegistro(true);}else {estadoActualizar.setPermiteRegistro(false);}
+							
+							if (!controles_postCreate(estadoActualizar)) {
+								crearoModificarEstado(estadoActualizar);
+								tablaTipoEstados.setVisible(false);
+								tablaTipoEstados= cargarEstado();
+								scrollTablaEstado.setViewportView(tablaTipoEstados);
+								tablaTipoEstados.setVisible(true);
+								txtNombre.setText("");
+								chkEliminado.setSelected(false);
+								chkPermRegistro.setSelected(false);
+								chkPemLogin.setSelected(false);
+								txtNombre.setEditable(true);
+								estadoActualizar = null;
+								filtrar();
+							}
 						}else {
-							estadoActualizar.setEliminado(false);
+							Estado estado = new Estado();
+							estado.setNombre(txtNombre.getText());
+							if (chkEliminado.isSelected()) {estado.setEliminado(true);}else {estado.setEliminado(false);}
+							if (chkPemLogin.isSelected()) {estado.setPermiteLogin(true);}else {estado.setPermiteLogin(false);}
+							if (chkPermRegistro.isSelected()) {estado.setPermiteRegistro(true);}else {estado.setPermiteRegistro(false);}
+							
+							
+							if (!controles_postCreate(estado)) {
+								crearEstado(estado);
+								tablaTipoEstados.setVisible(false);
+								tablaTipoEstados = cargarEstado();
+								scrollTablaEstado.setViewportView(tablaTipoEstados);
+								tablaTipoEstados.setVisible(true);
+								chkEliminado.setSelected(false);
+								chkPermRegistro.setSelected(false);
+								chkPemLogin.setSelected(false);
+								txtNombre.setText("");
+							}
 						}
-						
-						if (chkPemLogin.isSelected()) {
-							estadoActualizar.setPermiteLogin(true);
-						}else {
-							estadoActualizar.setPermiteLogin(false);
-						}
-
-						if (chkPermRegistro.isSelected()) {
-							estadoActualizar.setPermiteRegistro(true);
-						}else {
-							estadoActualizar.setPermiteRegistro(false);
-						}
-						
-						crearoModificarEstado(estadoActualizar);
-						tablaTipoEstados.setVisible(false);
-						tablaTipoEstados= cargarEstado();
-						scrollTablaEstado.setViewportView(tablaTipoEstados);
-						tablaTipoEstados.setVisible(true);
-						txtNombre.setText("");
-						chkEliminado.setSelected(false);
-						chkPermRegistro.setSelected(false);
-						chkPemLogin.setSelected(false);
-						txtNombre.setEditable(true);
-						estadoActualizar = null;
-						filtrar();
-						
-					} catch (NamingException e1) {
-						e1.printStackTrace();
 					}
-				}else {
-					
-					
-					Estado estado = new Estado();
-					estado.setNombre(txtNombre.getText());
-					if (chkEliminado.isSelected()) {
-						estado.setEliminado(true);
-					}else {
-						estado.setEliminado(false);
-					}
-					
-					if (chkPemLogin.isSelected()) {
-						estado.setPermiteLogin(true);
-					}else {
-						estado.setPermiteLogin(false);
-					}
-
-					if (chkPermRegistro.isSelected()) {
-						estado.setPermiteRegistro(true);
-					}else {
-						estado.setPermiteRegistro(false);
-					}
-					
-					try {
-						//if (!controles_postCreate(estado)) {
-							crearEstado(estado);
-							tablaTipoEstados.setVisible(false);
-							tablaTipoEstados = cargarEstado();
-							scrollTablaEstado.setViewportView(tablaTipoEstados);
-							tablaTipoEstados.setVisible(true);
-							chkEliminado.setSelected(false);
-							chkPermRegistro.setSelected(false);
-							chkPemLogin.setSelected(false);
-							txtNombre.setText("");
-						//}
-					} catch (NamingException e1) {
-						e1.printStackTrace();
-					}
+				} catch (NamingException e1) {
+					reportarError(e1.getMessage());
 				}
 			}
 		});
@@ -225,6 +279,19 @@ public class JpEstados extends JPanel {
 		chkPermRegistro.setBackground(Color.WHITE);
 		chkPermRegistro.setBounds(257, 45, 133, 25);
 		pnlNew.add(chkPermRegistro);
+		chkEliminado.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if(chkEliminado.isSelected()) {
+					chkPemLogin.setSelected(false);
+					chkPermRegistro.setSelected(false);
+					chkPermRegistro.setEnabled(false);
+					chkPemLogin.setEnabled(false);
+				}else {
+					chkPermRegistro.setEnabled(true);
+					chkPemLogin.setEnabled(true);
+				}
+			}
+		});
 		
 		
 		chkEliminado.setBackground(Color.WHITE);
@@ -255,19 +322,21 @@ public class JpEstados extends JPanel {
 					Long id = (Long) tablaTipoEstados.getValueAt(tablaTipoEstados.getSelectedRow(), 0);
 					try {
 						estadoEliminar = obtenerEstadoPorID(id);
-						//if(!controles_preDelete(estadoEliminar)) {
-							eliminarEstado(estadoEliminar);
-							tablaTipoEstados.setVisible(false);
-							tablaTipoEstados = cargarEstado();
-							scrollTablaEstado.setViewportView(tablaTipoEstados);
-							tablaTipoEstados.setVisible(true);
-							filtrar();
-						//}
+						if(!controles_preDelete(estadoEliminar)) {
+							if(solicitarConfirmaciones(estadoEliminar)) {
+								eliminarEstado(estadoEliminar);
+								tablaTipoEstados.setVisible(false);
+								tablaTipoEstados = cargarEstado();
+								scrollTablaEstado.setViewportView(tablaTipoEstados);
+								tablaTipoEstados.setVisible(true);
+								filtrar();
+							}
+						}
 					} catch (NamingException ev) {
 						ev.printStackTrace();
 					}
 				}else {
-					reportarError("Debe seleccionar un tipo de observacion");
+					reportarError("Debe seleccionar un Estado");
 				}
 				
 
@@ -298,7 +367,7 @@ public class JpEstados extends JPanel {
 						e.printStackTrace();
 					}
 				}else {
-					reportarError("Debe seleccionar un tipo de observacion");
+					reportarError("Debe seleccionar un Estado");
 				}
 			}
 		});
@@ -309,9 +378,6 @@ public class JpEstados extends JPanel {
 		pnlOptions.add(btnEliminar);
 		pnlOptions.add(btnModificarf);
 		
-		//scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
-		//pnlTable.add(txtFiltro);
-		//this.tablaTipoObservacion = cargarTiposObservaciones();
 
 	}
 	
@@ -443,60 +509,67 @@ public class JpEstados extends JPanel {
 	
 	}
 	
-	/*
+	
 	public boolean controles_preCreate() {
 		boolean error = false;
 		String mensajeError ="";
-		if (!txtDescripcion.getText().isEmpty()) {
-			if(!txtNombre.getText().isEmpty()) {
-				if (!txtTelEmergencia.getText().isEmpty()) {
-					error = false;
-				}else {
-					error = true;
-					mensajeError = "El telefono de emeregencia del tipo de observacion es un campo obligatorio.";
-				}
-			}else {
-				error = true;
-				mensajeError = "El nombre del tipo de observacion es un campo obligatorio.";
-			}
+		if(!txtNombre.getText().isEmpty()) {
+				error = false;
 		}else {
 			error = true;
-			mensajeError = "La descripcion del tipo de observacion  es un campo obligatorio.";
+			mensajeError = "El nombre del estado es un campo obligatorio.";
 		}
 		
-		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el departamento", JOptionPane.ERROR_MESSAGE);}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el Estado", JOptionPane.ERROR_MESSAGE);}
 		return error;	
 	}
 	
-	public boolean controles_postCreate(TipoObservacion tipoObservacion) throws NamingException {
+	public boolean controles_postCreate(Estado estado) throws NamingException {
 		boolean error = false;
 		String mensajeError = "";
-		TipoObservacionBeanRemote tipoObservacionBean = (TipoObservacionBeanRemote)
-				InitialContext.doLookup("ECOSFERA_MARK1/TipoObservacionBean!com.services.TipoObservacionBeanRemote");
-		mensajeError = tipoObservacionBean.controles_postCreate(tipoObservacion);
+		EstadoBeanRemote estadoBean = (EstadoBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/EstadoBean!com.services.EstadoBeanRemote");
+		mensajeError = estadoBean.controles_postCreate(estado);
 		if (!mensajeError.isEmpty()) {
 			error = true;
 		}
-		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el Tipo de Observacion", JOptionPane.ERROR_MESSAGE);}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el Estado", JOptionPane.ERROR_MESSAGE);}
 		return error;		
 	}
 	
-	
-	public boolean controles_preDelete(TipoObservacion tipoObservacion) throws NamingException {
+	public boolean controles_preDelete(Estado estado) throws NamingException {
 		boolean error = false;
 		String mensajeError = "";
-		TipoObservacionBeanRemote tipoObservacionBean = (TipoObservacionBeanRemote)
-				InitialContext.doLookup("ECOSFERA_MARK1/TipoObservacionBean!com.services.TipoObservacionBeanRemote");
-		mensajeError = tipoObservacionBean.controles_preDelete(tipoObservacion);
+		if (estado.getId()==1) {
+			error = true;
+			mensajeError="No se permite la eliminacion del estado NUEVO.";
+		}
+		if (estado.getId()==2) {
+			error = true;
+			mensajeError="No se permite la eliminacion del estado ELIMINADO.";
+		}
+		
+		UsuarioBeanRemote usuarioBeanRemote = (UsuarioBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
+		mensajeError = usuarioBeanRemote.controles_PreDelteEstado(estado);
 		if (!mensajeError.isEmpty()) {
 			error = true;
 		}
-		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar el Tipo de Observacion", JOptionPane.ERROR_MESSAGE);}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar el Estado", JOptionPane.ERROR_MESSAGE);}
 		return error;		
-	}*/
+	}
 	
 	public void reportarError(String error) {
 		JOptionPane.showMessageDialog(this, error);
+	}
+	
+	public boolean solicitarConfirmaciones(Estado estado) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar el Estado "+ estado.getNombre()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
 	}
 }
 

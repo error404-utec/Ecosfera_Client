@@ -37,6 +37,7 @@ import com.entities.TipoObservacion;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
 import com.services.PerfilesBeanRemote;
+import com.services.UsuarioBeanRemote;
 
 
 public class JpPerfiles extends JPanel {
@@ -250,7 +251,7 @@ public class JpPerfiles extends JPanel {
 							}
 						}
 					} catch (NamingException e) {
-						e.printStackTrace();
+						reportarError(e.getMessage());
 					}
 				}else {
 					reportarError("Debe seleccionar un Perfil");
@@ -474,16 +475,16 @@ public class JpPerfiles extends JPanel {
 	
 	public boolean controles_preDelete(Perfil perfil) throws NamingException {
 		boolean error = false;
-		/*
+		
 		String mensajeError = "";
-		LocalidadBeanRemote localidadBeanRemote  = (LocalidadBeanRemote)
-				InitialContext.doLookup("ECOSFERA_MARK1/LocalidadBean!com.services.LocalidadBeanRemote");
-		mensajeError = localidadBeanRemote.controles_preDelete(localidad);
+		UsuarioBeanRemote usuarioBeanRemote  = (UsuarioBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
+		mensajeError = usuarioBeanRemote.controles_PreDeltePerfiles(perfil);
 		if (!mensajeError.isEmpty()) {
 			error = true;
 		}
-		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar la localidad", JOptionPane.ERROR_MESSAGE);}
-		*/
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar el perfil", JOptionPane.ERROR_MESSAGE);}
+		
 		return error;		
 	}
 	

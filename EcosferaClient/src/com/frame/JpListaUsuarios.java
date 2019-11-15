@@ -30,10 +30,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import com.entities.Estado;
 import com.entities.Usuario;
 import com.entities.Zona;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
+import com.services.EstadoBeanRemote;
 import com.services.UsuarioBeanRemote;
 import com.services.ZonaBeanRemote;
 import java.awt.event.ActionListener;
@@ -127,6 +129,7 @@ public class JpListaUsuarios extends JPanel {
 		txtfiltro.setBounds(78, 17, 362, 24);
 		txtfiltro.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
+				txtfiltro.setText(txtfiltro.getText().toUpperCase());
 				filtrar();
 			}
 		});
@@ -179,24 +182,26 @@ public class JpListaUsuarios extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Usuario usuarioEliminar = null;
-				if (tablaUsuario.getSelectedRow() > -1) {
-					Long id = (Long) tablaUsuario.getValueAt(tablaUsuario.getSelectedRow(), 0);
-					try {
+				try {
+					if (tablaUsuario.getSelectedRow() > -1) {
+						Long id = (Long) tablaUsuario.getValueAt(tablaUsuario.getSelectedRow(), 0);
 						usuarioEliminar = obtenerPorID(id);
-						
-						//if(!controles_preDelete(usuarioEliminar)) {
-							eliminarUsuario(usuarioEliminar);;
+						if(!(usuarioEliminar.getEstado().getId() == 2)) {
+							eliminarUsuario(usuarioEliminar);
 							tablaUsuario.setVisible(false);
 							tablaUsuario = cargarPermisos();
 							scroolTablaUsuarios.setViewportView(tablaUsuario);
 							tablaUsuario.setVisible(true);
 							filtrar();
-//						}
-					} catch (NamingException e) {
-						e.printStackTrace();
+						}else {
+							reportarError("El usuario ya esta eliminado");
+						}
+	
+					}else {
+						reportarError("Debe seleccionar un Usuario");
 					}
-				}else {
-					reportarError("Debe seleccionar un Usuario");
+				} catch (NamingException e) {
+					e.printStackTrace();
 				}
 			}
 		});
@@ -270,7 +275,7 @@ public class JpListaUsuarios extends JPanel {
 		pnltable.add(lblfiltro);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 57, 144, 24);
+		panel.setBounds(12, 57, 109, 24);
 		pnltable.add(panel);
 		
 		JLabel lblId = new JLabel("ID");
@@ -279,7 +284,7 @@ public class JpListaUsuarios extends JPanel {
 		lblId.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(153, 57, 144, 24);
+		panel_1.setBounds(119, 57, 109, 24);
 		pnltable.add(panel_1);
 		
 		JLabel lblUsuario = new JLabel("Usuario");
@@ -288,13 +293,22 @@ public class JpListaUsuarios extends JPanel {
 		lblUsuario.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(296, 57, 144, 24);
+		panel_2.setBounds(222, 57, 109, 24);
 		pnltable.add(panel_2);
 		
 		JLabel lblMail = new JLabel("Mail");
 		panel_2.add(lblMail);
 		lblMail.setForeground(new Color(46, 139, 87));
 		lblMail.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(331, 57, 109, 24);
+		pnltable.add(panel_3);
+		
+		JLabel lblEstado = new JLabel("Estado");
+		lblEstado.setForeground(new Color(46, 139, 87));
+		lblEstado.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
+		panel_3.add(lblEstado);
 		add(pnlOptions);
 
 	}
@@ -305,11 +319,20 @@ public class JpListaUsuarios extends JPanel {
 		UsuarioBeanRemote usuarioBeanRemote  = (UsuarioBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
 		try {
-			usuarioBeanRemote.borrar(usuario.getId());
+			usuario.setEstado(obtenerEstado());
+			usuarioBeanRemote.actualizar(usuario);
 		} catch (ServiciosException e) {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public Estado obtenerEstado() throws NamingException {
+		EstadoBeanRemote estadoBeanRemote  = (EstadoBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/EstadoBean!com.services.EstadoBeanRemote");
+		
+		Estado estado = estadoBeanRemote.obtenerporID((long) 2);
+		return estado;
 	}
 	
 	
@@ -318,9 +341,9 @@ public class JpListaUsuarios extends JPanel {
 		
 		List<Usuario> lista = listarUsuario();
 
-		String[] nombreColumnas = {"ID", "Usuario", "Mail" };
+		String[] nombreColumnas = {"ID", "Usuario", "Mail", "Estado" };
 
-		Object[][] datos = new Object[lista.size()][3];
+		Object[][] datos = new Object[lista.size()][4];
 		int fila = 0;
 
 		
@@ -328,6 +351,7 @@ public class JpListaUsuarios extends JPanel {
 			datos[fila][0] = c.getId();
 			datos[fila][1] = c.getUsuario();
 			datos[fila][2] = c.getMail();
+			datos[fila][3] = c.getEstado().getNombre();
 			fila++;
 
 		}

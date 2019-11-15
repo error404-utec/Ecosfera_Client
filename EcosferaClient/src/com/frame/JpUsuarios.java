@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -78,6 +79,51 @@ public class JpUsuarios extends JPanel {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.insets = new Insets(10, 2, 2, 10);
+		
+		
+		JPanel PnlVolver = new JPanel();
+		PnlVolver.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+			}
+		});
+		PnlVolver.setBackground(Color.WHITE);
+		PnlVolver.setBounds(0, 255, 51, 55);
+		add(PnlVolver);
+		PnlVolver.setLayout(null);
+		
+		JLabel label_3 = new JLabel("");
+		label_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				JpListaUsuarios jp;
+				try {
+					jp = new JpListaUsuarios();
+					jp.setBounds(290, 238, 660, 600);
+					jp.setVisible(true);
+					jp.setLocation(12,12);
+					JFRPrincipal.getIntance();
+					JFRPrincipal.PnlWorkSpace.removeAll();
+					JFRPrincipal.PnlWorkSpace.add(jp);
+					JFRPrincipal.PnlWorkSpace.revalidate();
+					JFRPrincipal.PnlWorkSpace.repaint();
+					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Usuarios");
+				} catch (NamingException e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlVolver.setBackground(new Color(46,139,87));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlVolver.setBackground(new Color(240,240,240));
+			}
+		});
+		label_3.setIcon(new ImageIcon(jpDep_Zona.class.getResource("/recursos/icons/go_back.png")));
+		label_3.setBounds(0, 0, 51, 55);
+		PnlVolver.add(label_3);
 		
 		JLabel lblDocumento = new JLabel("Nro. Documento");
 		lblDocumento.setBounds(12, 83, 113, 20);
