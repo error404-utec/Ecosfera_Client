@@ -46,6 +46,7 @@ public class JpZonas extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtNombre;
 	private JTextField txtCodigo;
+	private JScrollPane scroolTablaZonas = new JScrollPane();
 
 
 
@@ -150,7 +151,7 @@ public class JpZonas extends JPanel {
 		BtnCancelar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		BtnCancelar.setBackground(new Color(245, 255, 250));
 		
-		JScrollPane scroolTablaZonas = new JScrollPane();
+		
 		scroolTablaZonas.setBounds(12, 78, 428, 200);
 		
 		scroolTablaZonas.setLayout(new ScrollPaneLayout() {
@@ -251,14 +252,15 @@ public class JpZonas extends JPanel {
 					Long id = (Long) tablaZonas.getValueAt(tablaZonas.getSelectedRow(), 0);
 					try {
 						zonaEliminar = obtenerPorID(id);
-						
 						if(!controles_preDelete(zonaEliminar)) {
-							eliminarZona(zonaEliminar);;
-							tablaZonas.setVisible(false);
-							tablaZonas = cargarPermisos();
-							scroolTablaZonas.setViewportView(tablaZonas);
-							tablaZonas.setVisible(true);
-							filtrar();
+							if(solicitarConfirmaciones(zonaEliminar)) {
+								eliminarZona(zonaEliminar);
+								tablaZonas.setVisible(false);
+								tablaZonas = cargarPermisos();
+								scroolTablaZonas.setViewportView(tablaZonas);
+								tablaZonas.setVisible(true);
+								filtrar();
+							}
 						}
 					} catch (NamingException e) {
 						e.printStackTrace();
@@ -594,6 +596,16 @@ public class JpZonas extends JPanel {
 	public void reportarError(String error) {
 		JOptionPane.showMessageDialog(this, error);
 	}
+	
+	public boolean solicitarConfirmaciones(Zona zonaEliminar) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar la zona "+ zonaEliminar.getNombre()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
+	}
+
 }
 
 

@@ -252,12 +252,14 @@ public class jpDep_Zona extends JPanel {
 					try {
 						departamentoEliminar = obtenerPorID(id);
 						if(!controles_preDelete(departamentoEliminar)) {
-							eliminarDepartamento(departamentoEliminar);
-							tablaDepartamento.setVisible(false);
-							tablaDepartamento = cargarDepartamento();
-							scroolTablaDepartamento.setViewportView(tablaDepartamento);
-							tablaDepartamento.setVisible(true);
-							filtrar();
+							if (solicitarConfirmaciones(departamentoEliminar)) {
+								eliminarDepartamento(departamentoEliminar);
+								tablaDepartamento.setVisible(false);
+								tablaDepartamento = cargarDepartamento();
+								scroolTablaDepartamento.setViewportView(tablaDepartamento);
+								tablaDepartamento.setVisible(true);
+								filtrar();
+							}
 						}	
 					} catch (NamingException e) {
 						e.printStackTrace();
@@ -282,7 +284,7 @@ public class jpDep_Zona extends JPanel {
 					Long id = (Long) tablaDepartamento.getValueAt(tablaDepartamento.getSelectedRow(), 0);
 					try {
 						departamentoParametro = obtenerPorID(id);
-						jp = new JpLoc_Dep(departamentoParametro);
+						jp = new JpLoc_Dep(departamentoParametro,zona);
 						jp.setBounds(290, 238, 660, 600);
 						jp.setVisible(true);
 						jp.setLocation(12,12);
@@ -647,7 +649,14 @@ public class jpDep_Zona extends JPanel {
 		JOptionPane.showMessageDialog(this, error);
 	}
 	
-	
+	public boolean solicitarConfirmaciones(Departamento departmanetoEliminar) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar el departamento "+ departmanetoEliminar.getNombre()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
+	}
 }
 
 

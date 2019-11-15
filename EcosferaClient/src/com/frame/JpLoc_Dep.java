@@ -33,6 +33,7 @@ import javax.swing.table.TableRowSorter;
 
 import com.entities.Departamento;
 import com.entities.Localidad;
+import com.entities.Zona;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
 import com.services.DepartamentoBeanRemote;
@@ -45,6 +46,7 @@ public class JpLoc_Dep extends JPanel {
 	private JTextField txtNombre;
 	private JTextField txtCodigo;
 	private Departamento departamento;
+	private static Zona zonastatic;
 	
 
 
@@ -58,9 +60,9 @@ public class JpLoc_Dep extends JPanel {
 	 * Create the panel.
 	 * @throws NamingException 
 	 */
-	public JpLoc_Dep(Departamento departamento) throws NamingException {
+	public JpLoc_Dep(Departamento departamento,Zona zona) throws NamingException {
 		JFRPrincipal.setlblTitulopanel("Mantenimiento Departamentos");
-		
+		zonastatic = zona;
 		this.departamento = departamento;
 		setBounds(new Rectangle(295, 256, 650, 582));
 		setBackground(new Color(255, 255, 255));
@@ -117,9 +119,9 @@ public class JpLoc_Dep extends JPanel {
 		label_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				JpZonas jp;
+				jpDep_Zona jp;
 				try {
-					jp = new JpZonas();
+					jp = new jpDep_Zona(zonastatic);
 					jp.setBounds(290, 238, 660, 600);
 					jp.setVisible(true);
 					jp.setLocation(12,12);
@@ -317,12 +319,14 @@ public class JpLoc_Dep extends JPanel {
 						
 						localidadEliminar = obtenerPorID(id);
 						if(!controles_preDelete(localidadEliminar)) {
-							eliminarLocalidad(localidadEliminar);
-							tablaLocalidad.setVisible(false);
-							tablaLocalidad = cargarLocalidad();
-							scroolTablaLocalidad.setViewportView(tablaLocalidad);
-							tablaLocalidad.setVisible(true);
-							filtrar();
+							if (solicitarConfirmaciones(localidadEliminar)) {
+								eliminarLocalidad(localidadEliminar);
+								tablaLocalidad.setVisible(false);
+								tablaLocalidad = cargarLocalidad();
+								scroolTablaLocalidad.setViewportView(tablaLocalidad);
+								tablaLocalidad.setVisible(true);
+								filtrar();
+							}
 						}
 					} catch (NamingException e) {
 						e.printStackTrace();
@@ -606,6 +610,14 @@ public class JpLoc_Dep extends JPanel {
 		JOptionPane.showMessageDialog(this, error);
 	}
 	
+	public boolean solicitarConfirmaciones(Localidad localidadEliminar) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar la localidad "+ localidadEliminar.getNombre()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
+	}
 	
 }
 

@@ -25,6 +25,7 @@ import com.entities.TipoDocumento;
 import com.entities.Usuario;
 import com.exceptions.ServiciosException;
 import com.services.EstadoBeanRemote;
+import com.services.PerfilesBeanRemote;
 import com.services.TipoDocumentoBeanRemote;
 import com.services.UsuarioBeanRemote;
 
@@ -274,12 +275,12 @@ public class JpUsuarios extends JPanel {
 		
 		JPanel PnlPerfiles = new JPanel();
 		PnlPerfiles.setBackground(Color.WHITE);
-		PnlPerfiles.setBounds(110, 414, 452, 168);
+		PnlPerfiles.setBounds(110, 400, 452, 182);
 		add(PnlPerfiles);
 		PnlPerfiles.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 13, 428, 108);
+		scrollPane.setBounds(12, 55, 428, 87);
 		PnlPerfiles.add(scrollPane);
 		
 		TablaPerfiles = new JTable((TableModel) null);
@@ -292,9 +293,12 @@ public class JpUsuarios extends JPanel {
 		TablaPerfiles.setBorder(null);
 		TablaPerfiles.setBackground(Color.WHITE);
 		TablaPerfiles.setAutoscrolls(true);
+		if (modo.equals("UPDATE_ADMIN")) {
+			TablaPerfiles = cargarPerfiles();
+		}
 		scrollPane.setViewportView(TablaPerfiles);
 		
-		JButton btnAgregafrPerfil = new JButton("Agregar");
+		JButton btnAgregafrPerfil = new JButton("Mantenimiento");
 		btnAgregafrPerfil.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -319,15 +323,32 @@ public class JpUsuarios extends JPanel {
 		btnAgregafrPerfil.setForeground(new Color(46, 139, 87));
 		btnAgregafrPerfil.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		btnAgregafrPerfil.setBackground(new Color(245, 255, 250));
-		btnAgregafrPerfil.setBounds(346, 134, 94, 27);
+		btnAgregafrPerfil.setBounds(281, 155, 159, 27);
 		PnlPerfiles.add(btnAgregafrPerfil);
 		
-		JButton BtnEliminar = new JButton("Eliminar");
-		BtnEliminar.setForeground(new Color(46, 139, 87));
-		BtnEliminar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
-		BtnEliminar.setBackground(new Color(245, 255, 250));
-		BtnEliminar.setBounds(240, 134, 94, 27);
-		PnlPerfiles.add(BtnEliminar);
+		JLabel lblPerfiles = new JLabel("Perfiles");
+		lblPerfiles.setForeground(new Color(46, 139, 87));
+		lblPerfiles.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
+		lblPerfiles.setBounds(12, 1, 122, 20);
+		PnlPerfiles.add(lblPerfiles);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(224, 33, 216, 24);
+		PnlPerfiles.add(panel);
+		
+		JLabel label = new JLabel("Nombre");
+		label.setForeground(new Color(46, 139, 87));
+		label.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
+		panel.add(label);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(12, 33, 216, 24);
+		PnlPerfiles.add(panel_1);
+		
+		JLabel label_1 = new JLabel("ID");
+		label_1.setForeground(new Color(46, 139, 87));
+		label_1.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 12));
+		panel_1.add(label_1);
 		
 		
 		
@@ -392,7 +413,6 @@ public class JpUsuarios extends JPanel {
 			cmbTipoDocumento.setEnabled(false);
 			cmbEstados.setEnabled(false);
 			btnAgregafrPerfil.setEnabled(false);
-			BtnEliminar.setEnabled(false);
 			txtUsuario.setText(usuario.getNombre());
 			txtNombre.setText(usuario.getNombre());
 			txtApellido.setText(usuario.getApellido());
@@ -408,7 +428,6 @@ public class JpUsuarios extends JPanel {
 			txtMail.setEditable(false);
 			cmbTipoDocumento.setEnabled(false);;
 			btnAgregafrPerfil.setEnabled(true);
-			BtnEliminar.setEnabled(true);
 			pssContra.setEditable(false);
 			txtUsuario.setText(usuario.getUsuario());
 			txtNombre.setText(usuario.getNombre());
@@ -429,7 +448,6 @@ public class JpUsuarios extends JPanel {
 			cmbTipoDocumento.setEnabled(true);
 			cmbEstados.setEnabled(true);
 			btnAgregafrPerfil.setEnabled(true);
-			BtnEliminar.setEnabled(true);
 			pssContra.setEditable(true);
 			passRepetirContra.setEditable(true);
 		}
@@ -439,7 +457,6 @@ public class JpUsuarios extends JPanel {
 	
 	private JTable cargarPerfiles() throws NamingException {
 		List<Perfil> lista = usuario.getPerfiles();
-		
 		
 		String[] nombreColumnas = {"ID", "Nombre" };
 
@@ -568,6 +585,12 @@ public class JpUsuarios extends JPanel {
 		
 	}
 	
+	public Perfil obtenerPerfilPorID(Long id) throws NamingException {
+		PerfilesBeanRemote perfilesBeanRemote  = (PerfilesBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/PerfilesBean!com.services.PerfilesBeanRemote");
+		return perfilesBeanRemote.obtenerPorID(id);
+	}
+	
 	@SuppressWarnings("deprecation")
 	public boolean controles(Usuario usuario) throws NamingException {
 		boolean error = false;
@@ -624,6 +647,10 @@ public class JpUsuarios extends JPanel {
 		}
 		return error;
 		
+	}
+	
+	public void reportarError(String error) {
+		JOptionPane.showMessageDialog(this, error);
 	}
 }
 
