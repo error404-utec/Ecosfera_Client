@@ -70,7 +70,7 @@ public class JpUsuarios extends JPanel {
 		setBackground(new Color(255, 255, 255));
 		
 		JPanel pnlNew = new JPanel();
-		pnlNew.setBounds(0, 13, 452, 388);
+		pnlNew.setBounds(110, 0, 452, 401);
 		pnlNew.setBackground(new Color(255, 255, 255));
 		pnlNew.setForeground(new Color(255, 255, 255));
 		
@@ -274,7 +274,7 @@ public class JpUsuarios extends JPanel {
 		
 		JPanel PnlPerfiles = new JPanel();
 		PnlPerfiles.setBackground(Color.WHITE);
-		PnlPerfiles.setBounds(0, 414, 452, 168);
+		PnlPerfiles.setBounds(110, 414, 452, 168);
 		add(PnlPerfiles);
 		PnlPerfiles.setLayout(null);
 		
@@ -295,6 +295,27 @@ public class JpUsuarios extends JPanel {
 		scrollPane.setViewportView(TablaPerfiles);
 		
 		JButton btnAgregafrPerfil = new JButton("Agregar");
+		btnAgregafrPerfil.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					JpUsuarios_Perfiles jp;
+					jp = new JpUsuarios_Perfiles(usuario,modo);
+					jp.setBounds(290, 238, 660, 600);
+					jp.setVisible(true);
+					jp.setLocation(12,12);
+					JFRPrincipal.getIntance();
+					JFRPrincipal.PnlWorkSpace.removeAll();
+					JFRPrincipal.PnlWorkSpace.add(jp);
+					JFRPrincipal.PnlWorkSpace.revalidate();
+					JFRPrincipal.PnlWorkSpace.repaint();
+					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Perfiles");
+				} catch (NamingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		btnAgregafrPerfil.setForeground(new Color(46, 139, 87));
 		btnAgregafrPerfil.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		btnAgregafrPerfil.setBackground(new Color(245, 255, 250));
@@ -386,7 +407,6 @@ public class JpUsuarios extends JPanel {
 			txtDocumento.setEditable(false);
 			txtMail.setEditable(false);
 			cmbTipoDocumento.setEnabled(false);;
-			cmbEstados.setEditable(true);
 			btnAgregafrPerfil.setEnabled(true);
 			BtnEliminar.setEnabled(true);
 			pssContra.setEditable(false);
@@ -406,8 +426,8 @@ public class JpUsuarios extends JPanel {
 			txtUsuario.setEditable(true);
 			txtDocumento.setEditable(true);
 			txtMail.setEditable(true);
-			cmbTipoDocumento.setEditable(true);
-			cmbEstados.setEditable(true);
+			cmbTipoDocumento.setEnabled(true);
+			cmbEstados.setEnabled(true);
 			btnAgregafrPerfil.setEnabled(true);
 			BtnEliminar.setEnabled(true);
 			pssContra.setEditable(true);
