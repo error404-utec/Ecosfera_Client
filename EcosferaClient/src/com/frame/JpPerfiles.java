@@ -210,6 +210,7 @@ public class JpPerfiles extends JPanel {
 		txtfiltro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				txtfiltro.setText(txtfiltro.getText().toUpperCase());
 				filtrar();
 			}
 		});

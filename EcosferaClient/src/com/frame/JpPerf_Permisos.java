@@ -44,13 +44,15 @@ public class JpPerf_Permisos extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTable tablaPermisos;
 	private JTextField txtfiltro;
-	private JTextField textField;
+	private JTextField txtfiltro1;
 	private JTable tablePermisosPerfil;
-	private Perfil perfil;
+	private static Perfil perfilStatic;
+	private JLabel lblNombrePefil = new JLabel((String) null);
 
 	public JpPerf_Permisos(Perfil perfil) throws NamingException {
-		this.perfil = perfil;
+		perfilStatic = perfil;
 		JFRPrincipal.setlblTitulopanel("Mantenimiento Perfiles");
+		lblNombrePefil.setText(perfilStatic.getId() + " - " + perfilStatic.getNombre());
 		
 		setBounds(new Rectangle(295, 256, 650, 582));
 		setBackground(new Color(255, 255, 255));
@@ -97,9 +99,9 @@ public class JpPerf_Permisos extends JPanel {
 		label_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				JpListaUsuarios jp;
+				JpPerfiles jp;
 				try {
-					jp = new JpListaUsuarios();
+					jp = new JpPerfiles();
 					jp.setBounds(290, 238, 660, 600);
 					jp.setVisible(true);
 					jp.setLocation(12,12);
@@ -113,6 +115,14 @@ public class JpPerf_Permisos extends JPanel {
 					e.printStackTrace();
 				}
 			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlVolver.setBackground(new Color(46,139,87));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlVolver.setBackground(new Color(240,240,240));
+			}
 		});
 		label_3.setIcon(new ImageIcon(jpDep_Zona.class.getResource("/recursos/icons/go_back.png")));
 		label_3.setBounds(0, 0, 51, 55);
@@ -123,11 +133,12 @@ public class JpPerf_Permisos extends JPanel {
 		constraints.insets = new Insets(10, 2, 2, 10);
 		
 		JScrollPane scroolTablaPermisos = new JScrollPane();
+		scroolTablaPermisos.setBackground(Color.WHITE);
 		scroolTablaPermisos.setBounds(12, 76, 428, 176);
 		
 		
-/*
-		scroolTablaLocalidad.setLayout(new ScrollPaneLayout() {
+
+		scroolTablaPermisos.setLayout(new ScrollPaneLayout() {
 
 			private static final long serialVersionUID = 1L;
 
@@ -159,20 +170,17 @@ public class JpPerf_Permisos extends JPanel {
 			    }
 			  }
 			});
-		scroolTablaLocalidad.getVerticalScrollBar().setUI(new EcosferaScrollBar());
-		scroolTablaLocalidad.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				
-			}
-		});
-*/		
+		scroolTablaPermisos.getVerticalScrollBar().setUI(new EcosferaScrollBar());
+		
+		
+
+
 		txtfiltro = new JTextField();
 		txtfiltro.setBounds(78, 17, 362, 24);
 		txtfiltro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				txtfiltro.setText(txtfiltro.getText().toUpperCase());
 				filtrar();
 			}
 		});
@@ -199,27 +207,61 @@ public class JpPerf_Permisos extends JPanel {
 		label.setBounds(12, 55, 109, 20);
 		pnlNew.add(label);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
-		textField.setColumns(10);
-		textField.setBounds(78, 54, 362, 24);
-		pnlNew.add(textField);
+		txtfiltro1 = new JTextField();
+		txtfiltro1.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				txtfiltro1.setText(txtfiltro1.getText().toUpperCase());
+				filtrar1();
+			}
+		});
+		
+		txtfiltro1.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
+		txtfiltro1.setColumns(10);
+		txtfiltro1.setBounds(78, 54, 362, 24);
+		pnlNew.add(txtfiltro1);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 113, 428, 145);
 		pnlNew.add(scrollPane);
 		
-		tablePermisosPerfil = new JTable((TableModel) null);
-		scrollPane.setColumnHeaderView(tablePermisosPerfil);
-		tablePermisosPerfil.setShowVerticalLines(false);
-		tablePermisosPerfil.setSelectionBackground(new Color(144, 238, 144));
-		tablePermisosPerfil.setRowSelectionAllowed(true);
-		tablePermisosPerfil.setForeground(new Color(153, 153, 153));
-		tablePermisosPerfil.setFont(new Font("Yu Gothic UI Semibold", Font.ITALIC, 13));
-		tablePermisosPerfil.setColumnSelectionAllowed(false);
-		tablePermisosPerfil.setBorder(null);
-		tablePermisosPerfil.setBackground(Color.WHITE);
-		tablePermisosPerfil.setAutoscrolls(true);
+		scrollPane.setLayout(new ScrollPaneLayout() {
+
+			private static final long serialVersionUID = 1L;
+
+			public void layoutContainer(Container parent) {
+			    JScrollPane scrollPane = (JScrollPane) parent;
+			
+			    Rectangle availR = scrollPane.getBounds();
+			    availR.x = availR.y = 0;
+			
+			    Insets parentInsets = parent.getInsets();
+			    availR.x = parentInsets.left;
+			    availR.y = parentInsets.top;
+			    availR.width -= parentInsets.left + parentInsets.right + 10;
+			    availR.height -= parentInsets.top + parentInsets.bottom;
+			
+			    Rectangle vsbR = new Rectangle();
+			    vsbR.width = 12;
+			    vsbR.height = availR.height;
+			    vsbR.x = availR.x + availR.width - vsbR.width;
+			    vsbR.y = availR.y;
+			
+			    vsbR.x = vsbR.x + 10;
+			    if (viewport != null) {
+			      viewport.setBounds(availR);
+			    }
+			    if (vsb != null) {
+			      vsb.setVisible(true);
+			      vsb.setBounds(vsbR);
+			    }
+			  }
+			});
+		scrollPane.getVerticalScrollBar().setUI(new EcosferaScrollBar());
+		
+		this.tablePermisosPerfil = this.cargarPermisosDelperfil();
+		scrollPane.setViewportView(tablePermisosPerfil);
+
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBounds(154, 91, 143, 24);
@@ -264,36 +306,43 @@ public class JpPerf_Permisos extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Permiso permisoEliminar = null;
-				/*
 				if (tablePermisosPerfil.getSelectedRow() > -1) {
 					Long id = (Long) tablePermisosPerfil.getValueAt(tablePermisosPerfil.getSelectedRow(), 0);
 					try {
-						
 						permisoEliminar = obtenerPermisoPorID(id);
-						
-						eliminarPerfil(perfilEliminar);
-						tablaPerfiles.setVisible(false);
-						tablaPerfiles = cargarPerfil();
-						scroolTablaPermisos.setViewportView(tablaPerfiles);
-						tablaPerfiles.setVisible(true);
-						filtrar();
+						perfilStatic.eliminarPermiso(permisoEliminar);
+						for (Permiso per: perfilStatic.getPermisos()) {
+							System.out.println("1 " +per.getId());
+						}
+						actualizarPerfil(perfilStatic);
+						for (Permiso per: perfilStatic.getPermisos()) {
+							System.out.println(per.getId());
+						}
+						tablaPermisos.setVisible(false);
+						tablaPermisos = cargarTodoslosPermisos();
+						tablePermisosPerfil.setVisible(false);
+						tablePermisosPerfil = cargarPermisosDelperfil();
+						scrollPane.setViewportView(tablePermisosPerfil);
+						scroolTablaPermisos.setViewportView(tablaPermisos);
+						tablaPermisos.setVisible(true);
+						tablePermisosPerfil.setVisible(true);
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
 				}else {
-					reportarError("Debe seleccionar un Perfil");
-				}*/
+					reportarError("Debe seleccionar un Permiso");
+				}
 			}
 		});
 		btnDesasignar.setForeground(new Color(46, 139, 87));
 		btnDesasignar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		btnDesasignar.setBackground(new Color(245, 255, 250));
 		
-		JLabel label_5 = new JLabel((String) null);
-		label_5.setForeground(new Color(46, 139, 87));
-		label_5.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 18));
-		label_5.setBounds(12, 0, 272, 33);
-		pnlNew.add(label_5);
+		
+		lblNombrePefil.setForeground(new Color(46, 139, 87));
+		lblNombrePefil.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 18));
+		lblNombrePefil.setBounds(12, 0, 272, 33);
+		pnlNew.add(lblNombrePefil);
 		
 		
 		
@@ -301,19 +350,26 @@ public class JpPerf_Permisos extends JPanel {
 		btnAgregar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				/*if (!controles_preCreate()) {
-					Perfil perfil = new Perfil();		
-					try {
-						crearPerfil(perfil);
-						tablaPerfiles.setVisible(false);
-						tablaPerfiles = cargarPerfil();
-						scroolTablaPermisos.setViewportView(tablaPerfiles);
-						tablaPerfiles.setVisible(true);
-						
-					} catch (NamingException e1) {
-						e1.printStackTrace();
-					}
-				}			*/	
+				try {
+					if (tablaPermisos.getSelectedRow() > -1) {
+						Long id = (Long) tablaPermisos.getValueAt(tablaPermisos.getSelectedRow(), 0);
+						Permiso permiso = obtenerPermisoPorID(id);
+						perfilStatic.asginarPermiso(permiso);
+						actualizarPerfil(perfilStatic);
+						tablaPermisos.setVisible(false);
+						tablaPermisos = cargarTodoslosPermisos();
+						tablePermisosPerfil.setVisible(false);
+						tablePermisosPerfil = cargarPermisosDelperfil();
+						scrollPane.setViewportView(tablePermisosPerfil);
+						scroolTablaPermisos.setViewportView(tablaPermisos);
+						tablaPermisos.setVisible(true);
+						tablePermisosPerfil.setVisible(true);
+					}else {
+						reportarError("Debe seleccionar un permiso");
+					}	
+				} catch (NamingException e1) {
+					reportarError(e1.getMessage());
+				}
 			}
 		});
 		add(pnltable);
@@ -344,29 +400,42 @@ public class JpPerf_Permisos extends JPanel {
 		}
 	}
 	
-	
-	
-	public Perfil obtenerPorID(Long id) throws NamingException {
+
+	public Perfil obtenerPerfilPorID(Long id) throws NamingException {
 		PerfilesBeanRemote perfilesBeanRemote  = (PerfilesBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/PerfilesBean!com.services.PerfilesBeanRemote");
 		return perfilesBeanRemote.obtenerPorID(id);
+	}
+	
+	public Permiso obtenerPermisoPorID(Long id) throws NamingException {
+		PermisoBeanRemote permisoBeanRemote  = (PermisoBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/PermisoBean!com.services.PermisoBeanRemote");
+		return permisoBeanRemote.obtenerporID(id);
 	}
 	
 	private JTable cargarTodoslosPermisos() throws NamingException {
 		PermisoBeanRemote permisosBeanRemote  = (PermisoBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/PermisoBean!com.services.PermisoBeanRemote");
 		List<Permiso> lista = permisosBeanRemote.obtenerTodos();
-		
-		PerfilesBeanRemote perfilesBeanRemote  = (PerfilesBeanRemote)
-				InitialContext.doLookup("ECOSFERA_MARK1/PerfilesBean!com.services.PerfilesBeanRemote");
-		Perfil perfil1 = perfilesBeanRemote.obtenerPorID(perfil.getId());
-		
-		List<Permiso> permisosYasignados = perfil1.getPermisos();
+		List<Permiso> permisosYasignados = perfilStatic.getPermisos();
 		
 		String[] nombreColumnas = {"ID", "Descripción", "Funcionalidad" };
 
-		Object[][] datos = new Object[lista.size()][3];
 		int fila = 0;
+		for (Permiso c : lista) {
+			boolean agregar = true;
+			for(Permiso a: permisosYasignados) {
+				if(a.getId() == c.getId()) {
+					agregar = false;
+				}
+			}
+			if (agregar) {
+				fila++;
+			}
+		}
+		
+		Object[][] datos = new Object[fila][3];
+		fila = 0;
 
 		
 		for (Permiso c : lista) {
@@ -377,11 +446,10 @@ public class JpPerf_Permisos extends JPanel {
 				}
 			}
 			if (agregar) {
-			datos[fila][0] = c.getId();
-			datos[fila][1] = c.getDescripcion();
-			datos[fila][2] = c.getFuncionalidad();	
-			
-			fila++;
+				datos[fila][0] = c.getId();
+				datos[fila][1] = c.getDescripcion();
+				datos[fila][2] = c.getFuncionalidad();	
+				fila++;
 			}
 		}
 		
@@ -418,11 +486,7 @@ public class JpPerf_Permisos extends JPanel {
 		
 		
 		private JTable cargarPermisosDelperfil() throws NamingException {
-			PerfilesBeanRemote perfilesBeanRemote  = (PerfilesBeanRemote)
-					InitialContext.doLookup("ECOSFERA_MARK1/PerfilesBean!com.services.PerfilesBeanRemote");
-			Perfil perfil1 = perfilesBeanRemote.obtenerPorID(perfil.getId());
-			
-			List<Permiso> lista = perfil1.getPermisos();
+			List<Permiso> lista = perfilStatic.getPermisos();
 			
 			
 			String[] nombreColumnas = {"ID", "Descripción", "Funcionalidad" };
@@ -432,6 +496,7 @@ public class JpPerf_Permisos extends JPanel {
 
 			
 			for (Permiso c : lista) {
+				System.out.println(c.getDescripcion());
 				datos[fila][0] = c.getId();
 				datos[fila][1] = c.getDescripcion();
 				datos[fila][2] = c.getFuncionalidad();		
@@ -466,7 +531,7 @@ public class JpPerf_Permisos extends JPanel {
 		Color color = new Color(144,238,144);
 		tablePermisosPerfil.setSelectionBackground(color);
 		
-		return tablaPermisos;
+		return tablePermisosPerfil;
 
 	}
 	
@@ -474,6 +539,13 @@ public class JpPerf_Permisos extends JPanel {
 		TableRowSorter<TableModel> filtro = new TableRowSorter<>(this.tablaPermisos.getModel());
 		filtro.setRowFilter(RowFilter.regexFilter(this.txtfiltro.getText(), 1));
 		this.tablaPermisos.setRowSorter(filtro);
+
+	}
+	
+	private void filtrar1() {
+		TableRowSorter<TableModel> filtro = new TableRowSorter<>(this.tablePermisosPerfil.getModel());
+		filtro.setRowFilter(RowFilter.regexFilter(this.txtfiltro1.getText(), 1));
+		this.tablePermisosPerfil.setRowSorter(filtro);
 
 	}
 	
