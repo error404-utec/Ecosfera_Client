@@ -33,6 +33,7 @@ import javax.swing.table.TableRowSorter;
 
 import com.entities.Departamento;
 import com.entities.Perfil;
+import com.entities.TipoObservacion;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
 import com.services.PerfilesBeanRemote;
@@ -239,12 +240,14 @@ public class JpPerfiles extends JPanel {
 						
 						perfilEliminar = obtenerPorID(id);
 						if(!controles_preDelete(perfilEliminar)) {
-							eliminarPerfil(perfilEliminar);
-							tablaPerfiles.setVisible(false);
-							tablaPerfiles = cargarPerfil();
-							scroolTablaPerfiles.setViewportView(tablaPerfiles);
-							tablaPerfiles.setVisible(true);
-							filtrar();
+							if (solicitarConfirmaciones(perfilEliminar)) {
+								eliminarPerfil(perfilEliminar);
+								tablaPerfiles.setVisible(false);
+								tablaPerfiles = cargarPerfil();
+								scroolTablaPerfiles.setViewportView(tablaPerfiles);
+								tablaPerfiles.setVisible(true);
+								filtrar();
+							}
 						}
 					} catch (NamingException e) {
 						e.printStackTrace();
@@ -486,6 +489,16 @@ public class JpPerfiles extends JPanel {
 	
 	public void reportarError(String error) {
 		JOptionPane.showMessageDialog(this, error);
+	}
+	
+	
+	public boolean solicitarConfirmaciones(Perfil perfil) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar el perfil "+ perfil.getNombre()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
 	}
 }
 

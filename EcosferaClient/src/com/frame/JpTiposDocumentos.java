@@ -5,6 +5,7 @@ import javax.swing.JScrollPane;
 import java.awt.Color;
 import java.awt.Container;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -20,10 +21,14 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import com.entities.Departamento;
 import com.entities.TipoDocumento;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
 import com.services.TipoDocumentoBeanRemote;
+import com.services.TipoObservacionBeanRemote;
+
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.ScrollPaneLayout;
@@ -482,6 +487,15 @@ public class JpTiposDocumentos extends JPanel {
 		filtro.setRowFilter(RowFilter.regexFilter(this.txtfiltro.getText(), 1));
 		this.tablaTiposDocumentos.setRowSorter(filtro);
 
+	}
+	
+	public boolean solicitarConfirmaciones(TipoDocumento tipoDocumentoEliminar) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar el tipo de documento "+ tipoDocumentoEliminar.getNombre()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
 	}
 	
 	

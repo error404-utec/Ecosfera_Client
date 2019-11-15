@@ -21,6 +21,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import com.entities.Departamento;
+import com.entities.TipoDocumento;
 import com.entities.TipoObservacion;
 import com.exceptions.ServiciosException;
 import com.services.DepartamentoBeanRemote;
@@ -237,12 +238,14 @@ public class JpTiposObservaciones extends JPanel {
 					try {
 						tipoObservacionEliminar = obtenerTipoObservacionPorID(id);
 						if(!controles_preDelete(tipoObservacionEliminar)) {
-							eliminarTipoObservacion(tipoObservacionEliminar);
-							tablaTipoObservacion.setVisible(false);
-							tablaTipoObservacion = cargarTiposObservaciones();
-							scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
-							tablaTipoObservacion.setVisible(true);
-							filtrar();
+							if (solicitarConfirmaciones(tipoObservacionEliminar)) {
+								eliminarTipoObservacion(tipoObservacionEliminar);
+								tablaTipoObservacion.setVisible(false);
+								tablaTipoObservacion = cargarTiposObservaciones();
+								scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
+								tablaTipoObservacion.setVisible(true);
+								filtrar();
+							}
 						}
 					} catch (NamingException ev) {
 						ev.printStackTrace();
@@ -471,6 +474,15 @@ private JTable cargarTiposObservaciones() throws NamingException {
 	
 	public void reportarError(String error) {
 		JOptionPane.showMessageDialog(this, error);
+	}
+	
+	public boolean solicitarConfirmaciones(TipoObservacion tipoObservacion) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar el tipo de observacion "+ tipoObservacion.getNombre()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
 	}
 }
 

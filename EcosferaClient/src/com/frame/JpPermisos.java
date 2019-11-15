@@ -15,6 +15,7 @@ import javax.naming.NamingException;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,6 +27,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import com.entities.Perfil;
 import com.entities.Permiso;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
@@ -266,12 +269,14 @@ public class JpPermisos extends JPanel {
 					Long id = (Long) tablaPermisos.getValueAt(tablaPermisos.getSelectedRow(), 0);
 					try {
 						permEliminar = obtenerPorID(id);
-						eliminarPermiso(permEliminar);;
-						tablaPermisos.setVisible(false);
-						tablaPermisos = cargarPermisos();
-						scroolTablaPermisos.setViewportView(tablaPermisos);
-						tablaPermisos.setVisible(true);
-						filtrar();
+						if(solicitarConfirmaciones(permEliminar)) {
+							eliminarPermiso(permEliminar);;
+							tablaPermisos.setVisible(false);
+							tablaPermisos = cargarPermisos();
+							scroolTablaPermisos.setViewportView(tablaPermisos);
+							tablaPermisos.setVisible(true);
+							filtrar();
+						}
 					} catch (NamingException e) {
 						e.printStackTrace();
 					}
@@ -463,6 +468,15 @@ public class JpPermisos extends JPanel {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public boolean solicitarConfirmaciones(Permiso permiso) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar el persmio "+ permiso.getDescripcion()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
 	}
 }
 
