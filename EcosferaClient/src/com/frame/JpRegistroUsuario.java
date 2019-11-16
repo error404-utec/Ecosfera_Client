@@ -27,6 +27,8 @@ import com.services.UsuarioBeanRemote;
 
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
+import javax.swing.JTextPane;
+import javax.swing.ImageIcon;
 
 public class JpRegistroUsuario extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -39,7 +41,8 @@ public class JpRegistroUsuario extends JPanel {
 	private JPasswordField pssContra;
 	private JPasswordField passRepetirContra;
 	private JComboBox<String> cmbTipoDocumento = new JComboBox<String>();
-	
+	private JTextPane lblError = new JTextPane();
+	private JLabel label = new JLabel("");
 	
 	/**
 	 * Create the panel.
@@ -51,7 +54,7 @@ public class JpRegistroUsuario extends JPanel {
 		setBackground(new Color(255, 255, 255));
 		
 		JPanel pnlNew = new JPanel();
-		pnlNew.setBounds(0, 13, 452, 357);
+		pnlNew.setBounds(0, 0, 342, 489);
 		pnlNew.setBackground(new Color(255, 255, 255));
 		pnlNew.setForeground(new Color(255, 255, 255));
 		
@@ -59,138 +62,133 @@ public class JpRegistroUsuario extends JPanel {
 		constraints.anchor = GridBagConstraints.WEST;
 		constraints.insets = new Insets(10, 2, 2, 10);
 		
-		JLabel lblDocumento = new JLabel("Nro. Documento");
-		lblDocumento.setBounds(12, 83, 113, 20);
+		JLabel lblDocumento = new JLabel("Documento");
+		lblDocumento.setBounds(12, 84, 84, 20);
 		lblDocumento.setForeground(new Color(46, 139, 87));
 		lblDocumento.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtDocumento = new JTextField();
-		txtDocumento.setBounds(137, 82, 303, 24);
+		txtDocumento.setBounds(108, 83, 209, 24);
 		txtDocumento.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtDocumento.setColumns(10);
 		
-		JLabel lblUsuario = new JLabel("Nombre Usuario");
-		lblUsuario.setBounds(12, 13, 113, 20);
+		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario.setBounds(12, 14, 67, 20);
 		lblUsuario.setForeground(new Color(46, 139, 87));
 		lblUsuario.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtUsuario = new JTextField();
-		txtUsuario.setBounds(137, 12, 303, 24);
+		txtUsuario.setBounds(108, 13, 209, 24);
 		txtUsuario.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtUsuario.setColumns(10);
 		
 		JButton btnAgregar = new JButton("Aceptar");
-		btnAgregar.setBounds(346, 316, 94, 27);
+		btnAgregar.setBounds(227, 317, 94, 27);
 		
 		btnAgregar.setBackground(new Color(245, 255, 250));
 		btnAgregar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		btnAgregar.setForeground(new Color(46, 139, 87));
-		
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(235, 316, 99, 27);
-		btnCancelar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				txtUsuario.setText("");
-				txtDocumento.setText("");
-				txtApellido.setText("");
-				txtDireccion.setText("");
-				txtMail.setText("");
-				txtNombre.setText("");
-				cmbTipoDocumento.setSelectedIndex(-1);
-			}
-		});
-		btnCancelar.setForeground(new Color(46, 139, 87));
-		btnCancelar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
-		btnCancelar.setBackground(new Color(245, 255, 250));
 		setLayout(null);
 		add(pnlNew);
 		pnlNew.setLayout(null);
 		pnlNew.add(lblUsuario);
 		pnlNew.add(txtUsuario);
-		pnlNew.add(btnCancelar);
 		pnlNew.add(btnAgregar);
 		pnlNew.add(txtDocumento);
 		pnlNew.add(lblDocumento);
 		
-		JLabel lblTipoDocumento = new JLabel("Tipo Documento");
+		JLabel lblTipoDocumento = new JLabel("T. Documento");
 		lblTipoDocumento.setForeground(new Color(46, 139, 87));
 		lblTipoDocumento.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblTipoDocumento.setBounds(12, 50, 113, 20);
+		lblTipoDocumento.setBounds(12, 47, 99, 20);
 		pnlNew.add(lblTipoDocumento);
 		
 		
 		cmbTipoDocumento.setMaximumRowCount(99);
 		cmbTipoDocumento.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		cmbTipoDocumento.setBackground(Color.WHITE);
-		cmbTipoDocumento.setBounds(137, 45, 303, 24);
+		cmbTipoDocumento.setBounds(108, 46, 209, 24);
 		pnlNew.add(cmbTipoDocumento);
 		
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setForeground(new Color(46, 139, 87));
 		lblNombre.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblNombre.setBounds(12, 116, 113, 20);
+		lblNombre.setBounds(12, 117, 84, 20);
 		pnlNew.add(lblNombre);
 		
 		JLabel lblApellido = new JLabel("Apellido");
 		lblApellido.setForeground(new Color(46, 139, 87));
 		lblApellido.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblApellido.setBounds(12, 149, 113, 20);
+		lblApellido.setBounds(12, 150, 67, 20);
 		pnlNew.add(lblApellido);
 		
 		JLabel lblDireccin = new JLabel("Direcci\u00F3n");
 		lblDireccin.setForeground(new Color(46, 139, 87));
 		lblDireccin.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblDireccin.setBounds(12, 182, 113, 20);
+		lblDireccin.setBounds(12, 183, 84, 20);
 		pnlNew.add(lblDireccin);
 		
 		JLabel lblMail = new JLabel("Mail");
 		lblMail.setForeground(new Color(46, 139, 87));
 		lblMail.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblMail.setBounds(12, 215, 113, 20);
+		lblMail.setBounds(12, 216, 72, 20);
 		pnlNew.add(lblMail);
 		
 		JLabel lblPass = new JLabel("Contrase\u00F1a");
 		lblPass.setForeground(new Color(46, 139, 87));
 		lblPass.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblPass.setBounds(12, 248, 113, 20);
+		lblPass.setBounds(12, 249, 94, 20);
 		pnlNew.add(lblPass);
 		
-		JLabel lblConfPass = new JLabel("Repetir contrase\u00F1a");
+		JLabel lblConfPass = new JLabel("Confirmar");
 		lblConfPass.setForeground(new Color(46, 139, 87));
 		lblConfPass.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblConfPass.setBounds(12, 281, 122, 20);
+		lblConfPass.setBounds(12, 282, 84, 20);
 		pnlNew.add(lblConfPass);
 		
 		txtNombre = new JTextField();
 		txtNombre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtNombre.setColumns(10);
-		txtNombre.setBounds(137, 115, 303, 24);
+		txtNombre.setBounds(108, 116, 209, 24);
 		pnlNew.add(txtNombre);
 		
 		txtApellido = new JTextField();
 		txtApellido.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtApellido.setColumns(10);
-		txtApellido.setBounds(137, 148, 303, 24);
+		txtApellido.setBounds(108, 149, 209, 24);
 		pnlNew.add(txtApellido);
 		
 		txtDireccion = new JTextField();
 		txtDireccion.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtDireccion.setColumns(10);
-		txtDireccion.setBounds(137, 181, 303, 24);
+		txtDireccion.setBounds(108, 182, 209, 24);
 		pnlNew.add(txtDireccion);
 		
 		txtMail = new JTextField();
 		txtMail.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtMail.setColumns(10);
-		txtMail.setBounds(137, 214, 303, 24);
+		txtMail.setBounds(108, 215, 209, 24);
 		pnlNew.add(txtMail);
 		pssContra = new JPasswordField();
-		pssContra.setBounds(137, 247, 303, 24);
+		pssContra.setBounds(108, 248, 209, 24);
 		pnlNew.add(pssContra);
 		passRepetirContra = new JPasswordField();
-		passRepetirContra.setBounds(137, 280, 303, 24);
+		passRepetirContra.setBounds(108, 281, 209, 24);
 		pnlNew.add(passRepetirContra);
+		lblError.setEditable(false);
+		
+		
+		lblError.setForeground(new Color(255, 69, 0));
+		lblError.setBackground(Color.WHITE);
+		lblError.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 16));
+		lblError.setBounds(42, 357, 288, 55);
+		pnlNew.add(lblError);
+		
+		
+		label.setIcon(new ImageIcon(JpRegistroUsuario.class.getResource("/recursos/icons/Icon_ErrorMsg.png")));
+		label.setBounds(12, 357, 33, 39);
+		label.setVisible(false);
+		pnlNew.add(label);
 		
 		
 		
@@ -295,37 +293,37 @@ public class JpRegistroUsuario extends JPanel {
 		boolean error = false;
 		if (txtApellido.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(this, "El campo apellido es obligatorio");
+			lblError.setText("El campo apellido es obligatorio");
 		}else if(txtDireccion.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo direccion es obligatorio");
+			lblError.setText("El campo direccion es obligatorio");
 		}else if(txtDocumento.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo nro. de documento es obligatorio");
+			lblError.setText("El campo nro. de documento es obligatorio");
 		}else if(txtMail.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo mail es obligatorio");
+			lblError.setText("El campo mail es obligatorio");
 		}else if(txtNombre.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo nombre es obligatorio");
+			lblError.setText("El campo nombre es obligatorio");
 		}else if(txtUsuario.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "El campo usuario es obligatorio");
+			lblError.setText( "El campo usuario es obligatorio");
 		}else if(cmbTipoDocumento.getSelectedIndex()==-1) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "debe seleccionar un tipo de documento");
+			lblError.setText( "debe seleccionar un tipo de documento");
 		}else if(pssContra.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "el campo contraseña es obligatorio");
+			lblError.setText("el campo contraseña es obligatorio");
 		}else if(passRepetirContra.getText().isEmpty()) {
 			error = true;
-			JOptionPane.showMessageDialog(null, "el campo repetir contraseña es obligatorio");
+			lblError.setText("el campo repetir contraseña es obligatorio");
 		}
 		
 		if (!error) {
 			if (!passRepetirContra.getText().equals(pssContra.getText())) {
 				error = true;
-				JOptionPane.showMessageDialog(this, "La confirmacion de contraseña no es igual a la contraseña");
+				lblError.setText( "La confirmacion de contraseña no es igual a la contraseña");
 			}
 		}
 		UsuarioBeanRemote usuariodBeanRemote  = (UsuarioBeanRemote)
@@ -334,7 +332,11 @@ public class JpRegistroUsuario extends JPanel {
 		String respuestaBean =usuariodBeanRemote.controlarUnicidad(usuario);
 		if (!respuestaBean.equals("")) {
 			error = true;
-			JOptionPane.showMessageDialog(this,respuestaBean);
+			lblError.setText(respuestaBean);
+		}
+		
+		if(error) {
+			label.setVisible(true);
 		}
 		return error;
 		

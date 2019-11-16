@@ -101,6 +101,7 @@ public class JFRPrincipal extends JFrame {
     }
 
 	private void reinicarMenu() {
+		
 		PnlUsuarios.setVisible(true);
 		PnlTiposObservaciones.setVisible(true);
 		PnlZonas.setVisible(true);
