@@ -62,7 +62,7 @@ public class jpDep_Zona extends JPanel {
 	public jpDep_Zona(Zona zona) throws NamingException {
 		this.zona = zona;
 		lblZonaName.setText(zona.getNombre());
-		JFRPrincipal.setlblTitulopanel("Mantenimiento Localidades");
+		JFRPrincipal.setlblTitulopanel("Mantenimiento de Departamentos");
 		setBounds(new Rectangle(295, 256, 650, 582));
 		setBackground(new Color(255, 255, 255));
 		
@@ -95,6 +95,12 @@ public class jpDep_Zona extends JPanel {
 			public void keyReleased(KeyEvent e) {
 				txtNombre.setText(txtNombre.getText().toUpperCase());
 			}
+			public void keyTyped(KeyEvent arg0) {
+				if(txtNombre.getText().length()>=50) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
 		});
 		txtNombre.setBounds(78, 88, 362, 24);
 		txtNombre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
@@ -116,7 +122,7 @@ public class jpDep_Zona extends JPanel {
 				getToolkit().beep();
 				arg0.consume();
 				}
-				if(txtCodigo.getText().length()>=5) {
+				if(txtCodigo.getText().length()>=38) {
 					getToolkit().beep();
 					arg0.consume();
 				}
@@ -293,7 +299,7 @@ public class jpDep_Zona extends JPanel {
 						JFRPrincipal.PnlWorkSpace.add(jp);
 						JFRPrincipal.PnlWorkSpace.revalidate();
 						JFRPrincipal.PnlWorkSpace.repaint();
-						JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Localidades");
+						JFRPrincipal.LblNavegacion.setText(JFRPrincipal.LblNavegacion.getText() + "- Localidades");
 					} catch (NamingException e1) {
 						e1.printStackTrace();
 					}
@@ -412,6 +418,14 @@ public class jpDep_Zona extends JPanel {
 				} catch (NamingException e) {
 					e.printStackTrace();
 				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlVolver.setBackground(new Color(46,139,87));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlVolver.setBackground(new Color(240,240,240));
 			}
 		});
 		label_3.setIcon(new ImageIcon(jpDep_Zona.class.getResource("/recursos/icons/go_back.png")));

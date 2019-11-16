@@ -94,6 +94,12 @@ public class JpZonas extends JPanel {
 			public void keyReleased(KeyEvent e) {
 				txtNombre.setText(txtNombre.getText().toUpperCase());
 			}
+			public void keyTyped(KeyEvent arg0) {
+				if(txtNombre.getText().length()>=50) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
 		});
 		txtNombre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtNombre.setColumns(10);
@@ -189,13 +195,7 @@ public class JpZonas extends JPanel {
 			});
 		scroolTablaZonas.getVerticalScrollBar().setUI(new EcosferaScrollBar());
 		
-		scroolTablaZonas.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				
-			}
-		});
+
 		
 		
 		txtfiltro = new JTextField();

@@ -56,10 +56,7 @@ public class JpListaUsuarios extends JPanel {
 	private JTextField txtfiltro;
 	
 
-	/**
-	 * Create the panel.
-	 * @throws NamingException 
-	 */
+
 	public JpListaUsuarios() throws NamingException {
 		JFRPrincipal.setlblTitulopanel("Mantenimiento Zonas");
 
@@ -319,7 +316,7 @@ public class JpListaUsuarios extends JPanel {
 		UsuarioBeanRemote usuarioBeanRemote  = (UsuarioBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
 		try {
-			usuario.setEstado(obtenerEstado());
+			usuario.setEstado(obtenerEstado2());
 			usuarioBeanRemote.actualizar(usuario);
 		} catch (ServiciosException e) {
 			e.printStackTrace();
@@ -327,13 +324,15 @@ public class JpListaUsuarios extends JPanel {
 		
 	}
 	
-	public Estado obtenerEstado() throws NamingException {
+	public Estado obtenerEstado2() throws NamingException {
 		EstadoBeanRemote estadoBeanRemote  = (EstadoBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/EstadoBean!com.services.EstadoBeanRemote");
 		
 		Estado estado = estadoBeanRemote.obtenerporID((long) 2);
 		return estado;
 	}
+	
+
 	
 	
 	

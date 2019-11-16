@@ -38,6 +38,7 @@ import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
 import com.services.DepartamentoBeanRemote;
 import com.services.LocalidadBeanRemote;
+import com.services.ObservacionBeanRemote;
 
 
 public class JpLoc_Dep extends JPanel {
@@ -61,7 +62,7 @@ public class JpLoc_Dep extends JPanel {
 	 * @throws NamingException 
 	 */
 	public JpLoc_Dep(Departamento departamento,Zona zona) throws NamingException {
-		JFRPrincipal.setlblTitulopanel("Mantenimiento Departamentos");
+		JFRPrincipal.setlblTitulopanel("Mantenimiento Localidades");
 		zonastatic = zona;
 		this.departamento = departamento;
 		setBounds(new Rectangle(295, 256, 650, 582));
@@ -130,10 +131,18 @@ public class JpLoc_Dep extends JPanel {
 					JFRPrincipal.PnlWorkSpace.add(jp);
 					JFRPrincipal.PnlWorkSpace.revalidate();
 					JFRPrincipal.PnlWorkSpace.repaint();
-					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Zonas");
+					JFRPrincipal.LblNavegacion.setText("Inicio - Zonas - Departamentos");
 				} catch (NamingException e) {
 					e.printStackTrace();
 				}
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlVolver.setBackground(new Color(46,139,87));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlVolver.setBackground(new Color(240,240,240));
 			}
 		});
 		label_3.setIcon(new ImageIcon(jpDep_Zona.class.getResource("/recursos/icons/go_back.png")));
@@ -159,6 +168,13 @@ public class JpLoc_Dep extends JPanel {
 			public void keyReleased(KeyEvent e) {
 				txtNombre.setText(txtNombre.getText().toUpperCase());
 			}
+			
+			public void keyTyped(KeyEvent arg0) {
+				if(txtNombre.getText().length()>=50) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
 		});
 		txtNombre.setBounds(78, 88, 362, 24);
 		txtNombre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
@@ -180,7 +196,7 @@ public class JpLoc_Dep extends JPanel {
 				getToolkit().beep();
 				arg0.consume();
 				}
-				if(txtCodigo.getText().length()>=5) {
+				if(txtCodigo.getText().length()>=38) {
 					getToolkit().beep();
 					arg0.consume();
 				}
@@ -596,9 +612,16 @@ public class JpLoc_Dep extends JPanel {
 	public boolean controles_preDelete(Localidad localidad) throws NamingException {
 		boolean error = false;
 		String mensajeError = "";
-		LocalidadBeanRemote localidadBeanRemote  = (LocalidadBeanRemote)
-				InitialContext.doLookup("ECOSFERA_MARK1/LocalidadBean!com.services.LocalidadBeanRemote");
-		mensajeError = localidadBeanRemote.controles_preDelete(localidad);
+		ObservacionBeanRemote observacionBeanRemote  = (ObservacionBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/ObservacionBean!com.services.ObservacionBeanRemote");
+		mensajeError = observacionBeanRemote.controles_PreDeleteLocalidad(localidad);
+		
+		if (mensajeError.isEmpty()) {
+			LocalidadBeanRemote localidadBeanRemote  = (LocalidadBeanRemote)
+					InitialContext.doLookup("ECOSFERA_MARK1/LocalidadBean!com.services.LocalidadBeanRemote");
+			mensajeError = localidadBeanRemote.controles_preDelete(localidad);
+		}
+		
 		if (!mensajeError.isEmpty()) {
 			error = true;
 		}

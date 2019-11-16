@@ -1,6 +1,7 @@
 package com.frame;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -17,14 +18,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.RowFilter;
+import javax.swing.ScrollPaneLayout;
 
-import com.entities.Departamento;
 import com.entities.Estado;
 import com.entities.Perfil;
 import com.entities.TipoDocumento;
 import com.entities.Usuario;
 import com.exceptions.ServiciosException;
+import com.framework.EcosferaScrollBar;
 import com.services.EstadoBeanRemote;
 import com.services.PerfilesBeanRemote;
 import com.services.TipoDocumentoBeanRemote;
@@ -36,9 +37,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-
-import org.apache.activemq.artemis.core.protocol.core.impl.wireformat.CreateSessionResponseMessage;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -109,7 +107,7 @@ public class JpUsuarios extends JPanel {
 					JFRPrincipal.PnlWorkSpace.repaint();
 					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Usuarios");
 				} catch (NamingException e) {
-					e.printStackTrace();
+					reportarError(e.getMessage());
 				}
 			}
 			@Override
@@ -138,7 +136,7 @@ public class JpUsuarios extends JPanel {
 			}
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(txtDocumento.getText().length()>=31) {
+				if(txtDocumento.getText().length()>=30) {
 					getToolkit().beep();
 					e.consume();
 				}
@@ -161,7 +159,7 @@ public class JpUsuarios extends JPanel {
 			}
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(txtUsuario.getText().length()>=31) {
+				if(txtUsuario.getText().length()>=30) {
 					getToolkit().beep();
 					e.consume();
 				}
@@ -196,8 +194,7 @@ public class JpUsuarios extends JPanel {
 					JFRPrincipal.PnlWorkSpace.revalidate();
 					JFRPrincipal.PnlWorkSpace.repaint();
 				} catch (NamingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					reportarError(e.getMessage());
 				}
 			}
 		});
@@ -264,18 +261,59 @@ public class JpUsuarios extends JPanel {
 		pnlNew.add(lblConfPass);
 		
 		txtNombre = new JTextField();
+		txtNombre.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!(Character.isAlphabetic(c) ||
+						(c == KeyEvent.VK_BACK_SPACE) ||
+						(c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_SPACE))) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+				if(txtNombre.getText().length()>=50) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
+		});
 		txtNombre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtNombre.setColumns(10);
 		txtNombre.setBounds(137, 115, 303, 24);
 		pnlNew.add(txtNombre);
 		
 		txtApellido = new JTextField();
+		txtApellido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!(Character.isAlphabetic(c) ||
+						(c == KeyEvent.VK_BACK_SPACE) ||
+						(c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_SPACE))) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+				if(txtApellido.getText().length()>=50) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
+		});
 		txtApellido.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtApellido.setColumns(10);
 		txtApellido.setBounds(137, 148, 303, 24);
 		pnlNew.add(txtApellido);
 		
 		txtDireccion = new JTextField();
+		txtDireccion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if(txtDireccion.getText().length()>=100) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
+		});
 		txtDireccion.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtDireccion.setColumns(10);
 		txtDireccion.setBounds(137, 181, 303, 24);
@@ -289,7 +327,7 @@ public class JpUsuarios extends JPanel {
 			}
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(txtDocumento.getText().length()>=31) {
+				if(txtDocumento.getText().length()>=30) {
 					getToolkit().beep();
 					e.consume();
 				}
@@ -300,9 +338,39 @@ public class JpUsuarios extends JPanel {
 		txtMail.setBounds(137, 214, 303, 24);
 		pnlNew.add(txtMail);
 		pssContra = new JPasswordField();
+		pssContra.addKeyListener(new KeyAdapter() {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if ((c == KeyEvent.VK_SPACE)) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+				if(pssContra.getText().length()>=30) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
+		});
 		pssContra.setBounds(137, 247, 303, 24);
 		pnlNew.add(pssContra);
 		passRepetirContra = new JPasswordField();
+		passRepetirContra.addKeyListener(new KeyAdapter() {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if ((c == KeyEvent.VK_SPACE)) {
+					getToolkit().beep();
+					e.consume();
+				}
+				if(passRepetirContra.getText().length()>=30) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		passRepetirContra.setBounds(137, 280, 303, 24);
 		pnlNew.add(passRepetirContra);
 		
@@ -328,6 +396,41 @@ public class JpUsuarios extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 55, 428, 87);
 		PnlPerfiles.add(scrollPane);
+		
+		scrollPane.setLayout(new ScrollPaneLayout() {
+
+			private static final long serialVersionUID = 1L;
+
+				@Override
+				  public void layoutContainer(Container parent) {
+				    JScrollPane scrollPane = (JScrollPane) parent;
+				
+				    Rectangle availR = scrollPane.getBounds();
+				    availR.x = availR.y = 0;
+				
+				    Insets parentInsets = parent.getInsets();
+				    availR.x = parentInsets.left;
+				    availR.y = parentInsets.top;
+				    availR.width -= parentInsets.left + parentInsets.right + 10;
+				    availR.height -= parentInsets.top + parentInsets.bottom;
+				
+				    Rectangle vsbR = new Rectangle();
+				    vsbR.width = 12;
+				    vsbR.height = availR.height;
+				    vsbR.x = availR.x + availR.width - vsbR.width;
+				    vsbR.y = availR.y;
+				
+				    vsbR.x = vsbR.x + 10;
+				    if (viewport != null) {
+				      viewport.setBounds(availR);
+				    }
+				    if (vsb != null) {
+				      vsb.setVisible(true);
+				      vsb.setBounds(vsbR);
+				    }
+				  }
+				});
+		scrollPane.getVerticalScrollBar().setUI(new EcosferaScrollBar());
 		
 		TablaPerfiles = new JTable((TableModel) null);
 		TablaPerfiles.setShowVerticalLines(false);
@@ -361,8 +464,7 @@ public class JpUsuarios extends JPanel {
 					JFRPrincipal.PnlWorkSpace.repaint();
 					JFRPrincipal.LblNavegacion.setText("Inicio"+ " - " + "Perfiles");
 				} catch (NamingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					reportarError(e.getMessage());
 				}
 			}
 		});
@@ -445,7 +547,7 @@ public class JpUsuarios extends JPanel {
 						}
 					}
 				} catch (NamingException e1) {
-					e1.printStackTrace();
+					reportarError(e1.getMessage());
 				}		
 			}
 		});
@@ -468,6 +570,8 @@ public class JpUsuarios extends JPanel {
 			cmbEstados.setSelectedItem(usuario.getEstado().getNombre());
 			cmbTipoDocumento.setSelectedItem(usuario.getTipoDocumento().getNombre());
 			TablaPerfiles = cargarPerfiles();
+			btnAgregafrPerfil.setEnabled(false);
+			btnAgregafrPerfil.setVisible(false);
 		}else if(modo.equals("UPDATE_ADMIN")) {
 			txtUsuario.setEditable(false);
 			txtDocumento.setEditable(false);
@@ -558,7 +662,7 @@ public class JpUsuarios extends JPanel {
 		try {
 			usuariodBeanRemote.actualizar(usuario);
 		} catch (ServiciosException e) {
-			e.printStackTrace();
+			reportarError(e.getMessage());
 		}
 		
 	}
@@ -569,7 +673,7 @@ public class JpUsuarios extends JPanel {
 		try {
 			usuariodBeanRemote.borrar(usuario.getId());
 		} catch (ServiciosException e) {
-			e.printStackTrace();
+			reportarError(e.getMessage());
 		}
 		
 	}
@@ -580,7 +684,7 @@ public class JpUsuarios extends JPanel {
 		try {
 			usuariodBeanRemote.actualizar(usuario);
 		} catch (ServiciosException e) {
-			e.printStackTrace();
+			reportarError(e.getMessage());
 		}
 		
 	}
@@ -667,8 +771,10 @@ public class JpUsuarios extends JPanel {
 		}else if(passRepetirContra.getText().isEmpty()) {
 			error = true;
 			JOptionPane.showMessageDialog(this, "el campo repetir contraseña es obligatorio");
+		}else if(!txtMail.getText().contains("@")) {
+			error = true;
+			JOptionPane.showMessageDialog(this, "Formato de mail incorrecto");
 		}
-		
 		if (!error) {
 			if (!passRepetirContra.getText().equals(pssContra.getText())) {
 				error = true;
