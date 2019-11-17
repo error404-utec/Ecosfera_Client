@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.entities.Usuario;
+import com.framework.MDTVerficarPermisos;
+import com.session.Sesion;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -77,9 +80,7 @@ public class JFRPrincipal extends JFrame {
 		PnlTopMenu_Title.repaint();
 	}
 	
-	/**
-	 * Launch the application.
-	 */
+	
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -137,6 +138,7 @@ public class JFRPrincipal extends JFrame {
 	private JFRPrincipal() {
 		contentPane = new JPanel();
 		setAlwaysOnTop(true);
+		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 958, 885);
@@ -659,322 +661,355 @@ public class JFRPrincipal extends JFrame {
 		PnlWorkSpace.setLayout(null);
 		contentPane.add(PnlTopMenu);
 		
-
+		validarPermisos();
 	}
 	
 	//Mouse Cliked
 
 	private void PnlZonas_MouseClicked() throws NamingException {
-		JpZonas jp = new JpZonas();
-		jp.setBounds(290, 238, 660, 600);
-		jp.setVisible(true);
-		jp.setLocation(12,12);
-		
-		
-		
-		PnlWorkSpace.removeAll();
-		PnlWorkSpace.add(jp);
-		
-		PnlWorkSpace.revalidate();
-		PnlWorkSpace.repaint();
-		LblNavegacion.setText("Inicio"+ " - " + "Zonas");
-		lblTitulopanel.setText("Mantenimiento de Zonas");
-		
-		new Thread() {
-			public void run() {
-				reinicarMenu();
-				int x = 278;
-				int y = 57;
-				while (y >1) {
-					x= x -1;
-					y--;
-					PnlZonas.setSize(x, y);
-					PnlMenuInicio_MouseClikedFX(5);
-					try {
-						sleep(0,1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+		if(PnlZonas.isEnabled()) {
+			JpZonas jp = new JpZonas();
+			jp.setBounds(290, 238, 660, 600);
+			jp.setVisible(true);
+			jp.setLocation(12,12);
+			
+			
+			
+			PnlWorkSpace.removeAll();
+			PnlWorkSpace.add(jp);
+			
+			PnlWorkSpace.revalidate();
+			PnlWorkSpace.repaint();
+			LblNavegacion.setText("Inicio"+ " - " + "Zonas");
+			lblTitulopanel.setText("Mantenimiento de Zonas");
+			
+			new Thread() {
+				public void run() {
+					reinicarMenu();
+					int x = 278;
+					int y = 57;
+					while (y >1) {
+						x= x -1;
+						y--;
+						PnlZonas.setSize(x, y);
+						PnlMenuInicio_MouseClikedFX(5);
+						try {
+							sleep(0,1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}	
 					}	
-				}	
-				
-				PnlZonas.setVisible(false);
-				PnlMenuInicio.revalidate();
-				PnlMenuInicio.repaint();
-				
-				reinicarTopMenu();
-				PnlTopMenu_1.setVisible(true);
-				lblTopMenu_1.setText("Zonas");
-				PnlTopMenu_Repaint();
-				
-			}
-		}.start();
-		
-		
+					
+					PnlZonas.setVisible(false);
+					PnlMenuInicio.revalidate();
+					PnlMenuInicio.repaint();
+					
+					reinicarTopMenu();
+					PnlTopMenu_1.setVisible(true);
+					lblTopMenu_1.setText("Zonas");
+					PnlTopMenu_Repaint();
+					
+				}
+			}.start();	
+		}
 	}
 	
 	private void PnlUsuarios_MouseClicked() throws NamingException {	
-		reinicarMenu();
-		
-		JpListaUsuarios jp = new JpListaUsuarios();
-		jp.setBounds(290, 238, 660, 600);
-		jp.setVisible(true);
-		jp.setLocation(12,12);
-		
-		PnlWorkSpace.removeAll();
-		PnlWorkSpace.add(jp);
-		PnlWorkSpace.revalidate();
-		PnlWorkSpace.repaint();
-		LblNavegacion.setText("Inicio" + " - " + "Usuarios");
-		lblTitulopanel.setText("Mantenimiento de Usuarios");
-		new Thread() {
-			public void run() {
-				reinicarMenu();
-				int x = 278;
-				int y = 57;
-				while (y >1) {
-					x= x -3;
-					y--;
-					PnlUsuarios.setSize(x, y);
-					PnlMenuInicio_MouseClikedFX(4);
-					try {
-						sleep(0,1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+		if(PnlUsuarios.isEnabled()) {
+			reinicarMenu();
+			
+			JpListaUsuarios jp = new JpListaUsuarios();
+			jp.setBounds(290, 238, 660, 600);
+			jp.setVisible(true);
+			jp.setLocation(12,12);
+			
+			PnlWorkSpace.removeAll();
+			PnlWorkSpace.add(jp);
+			PnlWorkSpace.revalidate();
+			PnlWorkSpace.repaint();
+			LblNavegacion.setText("Inicio" + " - " + "Usuarios");
+			lblTitulopanel.setText("Mantenimiento de Usuarios");
+			new Thread() {
+				public void run() {
+					reinicarMenu();
+					int x = 278;
+					int y = 57;
+					while (y >1) {
+						x= x -3;
+						y--;
+						PnlUsuarios.setSize(x, y);
+						PnlMenuInicio_MouseClikedFX(4);
+						try {
+							sleep(0,1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}	
 					}	
-				}	
-				PnlUsuarios.setVisible(false);
-				PnlMenuInicio.revalidate();
-				PnlMenuInicio.repaint();
-			}
-		}.start();
-		PnlUsuarios.setVisible(false);
-		
-		//Revalido y pinto PnlMenuInicio
-		PnlMenuInicio.revalidate();
-		PnlMenuInicio.repaint();
-		reinicarTopMenu();
-		PnlTopMenu_1.setVisible(true);
-		lblTopMenu_1.setText("Documentos");
-		PnlTopMenu_2.setVisible(true);
-		lblTopMenu_2.setText("Estados");
-		PnlTopMenu_3.setVisible(true);
-		lblTopMenu_3.setText("Perfiles");
+					PnlUsuarios.setVisible(false);
+					PnlMenuInicio.revalidate();
+					PnlMenuInicio.repaint();
+				}
+			}.start();
+			PnlUsuarios.setVisible(false);
+			
+			//Revalido y pinto PnlMenuInicio
+			PnlMenuInicio.revalidate();
+			PnlMenuInicio.repaint();
+			reinicarTopMenu();
+			PnlTopMenu_1.setVisible(true);
+			lblTopMenu_1.setText("Documentos");
+			PnlTopMenu_2.setVisible(true);
+			lblTopMenu_2.setText("Estados");
+			PnlTopMenu_3.setVisible(true);
+			lblTopMenu_3.setText("Perfiles");
+		}
 	}
 
 	
 	private void PnlTiposObervacion_MouseClicked() throws NamingException {
-		JpTiposObservaciones jp;
-		
-		jp = new JpTiposObservaciones();
-		jp.setBounds(290, 238, 660, 600);
-		jp.setVisible(true);
-		jp.setLocation(12,12);
-		
-		PnlWorkSpace.removeAll();
-		PnlWorkSpace.add(jp);
-		PnlWorkSpace.revalidate();
-		PnlWorkSpace.repaint();
-		LblNavegacion.setText("Inicio" + " - " + "Tipos de Obervaciones");
-		lblTitulopanel.setText("Mantenimiento de Tipos de Obervaciones");
-		
-		new Thread() {
-			public void run() {
-				reinicarMenu();
-				int x = 278;
-				int y = 57;
-				while (y >1) {
-					x= x -3;
-					y--;
-					PnlTiposObservaciones.setSize(x, y);
-					PnlMenuInicio_MouseClikedFX(3);
-					try {
-						sleep(0,1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+		if (PnlTiposObservaciones.isEnabled()) {
+			JpTiposObservaciones jp;
+			
+			jp = new JpTiposObservaciones();
+			jp.setBounds(290, 238, 660, 600);
+			jp.setVisible(true);
+			jp.setLocation(12,12);
+			
+			PnlWorkSpace.removeAll();
+			PnlWorkSpace.add(jp);
+			PnlWorkSpace.revalidate();
+			PnlWorkSpace.repaint();
+			LblNavegacion.setText("Inicio" + " - " + "Tipos de Obervaciones");
+			lblTitulopanel.setText("Mantenimiento de Tipos de Obervaciones");
+			
+			new Thread() {
+				public void run() {
+					reinicarMenu();
+					int x = 278;
+					int y = 57;
+					while (y >1) {
+						x= x -3;
+						y--;
+						PnlTiposObservaciones.setSize(x, y);
+						PnlMenuInicio_MouseClikedFX(3);
+						try {
+							sleep(0,1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}	
 					}	
-				}	
-				PnlTiposObservaciones.setVisible(false);
-				PnlMenuInicio.revalidate();
-				PnlMenuInicio.repaint();
-			}
-		}.start();
+					PnlTiposObservaciones.setVisible(false);
+					PnlMenuInicio.revalidate();
+					PnlMenuInicio.repaint();
+				}
+			}.start();
+		}
 	}
 	
 	private void PnlPermisos_MouseClicked() throws NamingException {
-		JPanel jp = new JpPermisos();
-		jp.setBounds(290, 238, 660, 600);
-		jp.setVisible(true);
-		jp.setLocation(12,12);
-		
-		PnlWorkSpace.removeAll();
-		PnlWorkSpace.add(jp);
-		PnlWorkSpace.revalidate();
-		PnlWorkSpace.repaint();
-		LblNavegacion.setText("Inicio"+ " - " + "Permisos");
-		lblTitulopanel.setText("Mantenimiento de Permisos");
-		new Thread() {
-			public void run() {
-				reinicarMenu();
-				int x = 278;
-				int y = 57;
-				while (y >1) {
-					x= x -3;
-					y--;
-					PnlPermisos.setSize( x, y);
-					PnlMenuInicio_MouseClikedFX(2);
-					try {
-						sleep(0,1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+		if(PnlPermisos.isEnabled()) {
+			JPanel jp = new JpPermisos();
+			jp.setBounds(290, 238, 660, 600);
+			jp.setVisible(true);
+			jp.setLocation(12,12);
+			
+			PnlWorkSpace.removeAll();
+			PnlWorkSpace.add(jp);
+			PnlWorkSpace.revalidate();
+			PnlWorkSpace.repaint();
+			LblNavegacion.setText("Inicio"+ " - " + "Permisos");
+			lblTitulopanel.setText("Mantenimiento de Permisos");
+			new Thread() {
+				public void run() {
+					reinicarMenu();
+					int x = 278;
+					int y = 57;
+					while (y >1) {
+						x= x -3;
+						y--;
+						PnlPermisos.setSize( x, y);
+						PnlMenuInicio_MouseClikedFX(2);
+						try {
+							sleep(0,1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}	
 					}	
-				}	
-				PnlPermisos.setVisible(false);
-				PnlMenuInicio.revalidate();
-				PnlMenuInicio.repaint();
-			}
-		}.start();
-		
-		
+					PnlPermisos.setVisible(false);
+					PnlMenuInicio.revalidate();
+					PnlMenuInicio.repaint();
+				}
+			}.start();
+			
+		}
 	}
 	
 	private void PnlObservacion_MouseClicked() {
-		new Thread() {
-			public void run() {
-				reinicarMenu();
-				int x = 278;
-				int y = 57;
-				while (y >1) {
-					x= x -3;
-					y--;
-					PnlObservaciones.setSize(x, y);
-					PnlMenuInicio_MouseClikedFX(1);
-					try {
-						sleep(0,1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+		if (PnlObservaciones.isEnabled()) {
+			new Thread() {
+				public void run() {
+					reinicarMenu();
+					int x = 278;
+					int y = 57;
+					while (y >1) {
+						x= x -3;
+						y--;
+						PnlObservaciones.setSize(x, y);
+						PnlMenuInicio_MouseClikedFX(1);
+						try {
+							sleep(0,1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}	
 					}	
-				}	
-				PnlObservaciones.setVisible(false);
-				PnlMenuInicio.revalidate();
-				PnlMenuInicio.repaint();
-			}
-		}.start();
+					PnlObservaciones.setVisible(false);
+					PnlMenuInicio.revalidate();
+					PnlMenuInicio.repaint();
+				}
+			}.start();
+		}
 	}
 	
 	private void PnlRevision_MouseClicked() {
-		new Thread() {
-			public void run() {
-				reinicarMenu();
-				int x = 278;
-				int y = 57;
-				while (y >1) {
-					x= x -3;
-					y--;
-					PnlRevision.setSize( x, y);
-					try {
-						sleep(0,1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+		if (PnlRevision.isEnabled()) {
+			new Thread() {
+				public void run() {
+					reinicarMenu();
+					int x = 278;
+					int y = 57;
+					while (y >1) {
+						x= x -3;
+						y--;
+						PnlRevision.setSize( x, y);
+						try {
+							sleep(0,1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}	
 					}	
-				}	
-				PnlRevision.setVisible(false);
-				PnlMenuInicio.revalidate();
-				PnlMenuInicio.repaint();
-			}
-		}.start();
+					PnlRevision.setVisible(false);
+					PnlMenuInicio.revalidate();
+					PnlMenuInicio.repaint();
+				}
+			}.start();
+		}
 	}
 	
 	//Mouse Entered
 	private void PnlZonas_MouseEntered() {
-		PnlZonas.setBackground(new Color(144, 238, 144));
-		LblZonas_Icon.setVisible(true);
-		LblZonas_Icon.setBounds(177, 0, 89, 80);
-		PnlZonas.setSize( 278, 80);
-		PnlMenuInicio_MouseEnteredX(5);
+		if(PnlZonas.isEnabled()) {
+			PnlZonas.setBackground(new Color(144, 238, 144));
+			LblZonas_Icon.setVisible(true);
+			LblZonas_Icon.setBounds(177, 0, 89, 80);
+			PnlZonas.setSize( 278, 80);
+			PnlMenuInicio_MouseEnteredX(5);
+		}
 	}
 	
 	private void PnlUsuarios_MouseEntered() {
-		PnlUsuarios.setBackground(new Color(144, 238, 144));
-		LblUsuario_Icon.setSize(113, 80);
-		PnlUsuarios.setSize(278, 80);	
-		LblUsuario_Icon.setVisible(true);
-		PnlMenuInicio_MouseEnteredX(4);
+		if(PnlUsuarios.isEnabled()) {
+			PnlUsuarios.setBackground(new Color(144, 238, 144));
+			LblUsuario_Icon.setSize(113, 80);
+			PnlUsuarios.setSize(278, 80);	
+			LblUsuario_Icon.setVisible(true);
+			PnlMenuInicio_MouseEnteredX(4);
+		}
 	}
 	
 	private void PnlTiposObervacion_MouseEntered() {
-		PnlTiposObservaciones.setBackground(new Color(144, 238, 144));
-		LblTiposObservaciones_Icon.setVisible(true);
-		LblTiposObservaciones_Icon.setSize(113, 80);
-		PnlTiposObservaciones.setSize(278, 80);	
-		PnlMenuInicio_MouseEnteredX(3);			
+		if(PnlTiposObservaciones.isEnabled()) {
+			PnlTiposObservaciones.setBackground(new Color(144, 238, 144));
+			LblTiposObservaciones_Icon.setVisible(true);
+			LblTiposObservaciones_Icon.setSize(113, 80);
+			PnlTiposObservaciones.setSize(278, 80);	
+			PnlMenuInicio_MouseEnteredX(3);			
+		}
 	}
 	
 	private void PnlPermisos_MouseEntered() {
-		PnlPermisos.setBackground(new Color(144, 238, 144));
-		LblPermisos_Icon.setVisible(true);
-		LblPermisos_Icon.setSize(120, 80);
-		PnlPermisos.setSize(278, 80);
-		PnlMenuInicio_MouseEnteredX(2);
+		if (PnlPermisos.isEnabled()) {
+			PnlPermisos.setBackground(new Color(144, 238, 144));
+			LblPermisos_Icon.setVisible(true);
+			LblPermisos_Icon.setSize(120, 80);
+			PnlPermisos.setSize(278, 80);
+			PnlMenuInicio_MouseEnteredX(2);
+		}
 	}
 	
 	private void PnlObservacion_MouseEntered() {
-		PnlObservaciones.setBackground(new Color(144, 238, 144));
-		LblObservaciones_Icon.setVisible(true);
-		PnlObservaciones.setSize(278, 80);
-		PnlMenuInicio_MouseEnteredX(1);
+		if(PnlObservaciones.isEnabled()) {
+			PnlObservaciones.setBackground(new Color(144, 238, 144));
+			LblObservaciones_Icon.setVisible(true);
+			PnlObservaciones.setSize(278, 80);
+			PnlMenuInicio_MouseEnteredX(1);
+		}
 	}
 	
 	private void PnlRevision_MouseEntered() {
-		PnlRevision.setBackground(new Color(144, 238, 144));
-		LblRevision_Icon.setVisible(true);
-		PnlRevision.setSize(278, 80);
-		PnlMenuInicio_repaint();
+		if (PnlRevision.isEnabled()) {
+			PnlRevision.setBackground(new Color(144, 238, 144));
+			LblRevision_Icon.setVisible(true);
+			PnlRevision.setSize(278, 80);
+			PnlMenuInicio_repaint();
+		}
 	}
 	
 	//Mouse Exited
 	private void PnlZonas_MouseExited() {
-		PnlZonas.setBackground(new Color(60, 179, 113));
-		LblZonas_Icon.setVisible(false);
-		PnlZonas.setBounds(0, 121, 278, 57);
-		if (PnlZonas.isVisible()) {PnlMenuInicio_MouseExitedFX(5);}
+		if(PnlZonas.isEnabled()) {
+			PnlZonas.setBackground(new Color(60, 179, 113));
+			LblZonas_Icon.setVisible(false);
+			PnlZonas.setBounds(0, 121, 278, 57);
+			if (PnlZonas.isVisible()) {PnlMenuInicio_MouseExitedFX(5);}
+		}
 	}
 	
 	private void PnlUsuarios_MouseExited() {
-		PnlUsuarios.setBackground(new Color(60, 179, 113));
-		LblUsuario_Icon.setSize(278, 57);
-		PnlUsuarios.setSize(278, 57);
-		LblUsuario_Icon.setVisible(false);
-		if (PnlUsuarios.isVisible()) {PnlMenuInicio_MouseExitedFX(4);}
+		if(PnlUsuarios.isEnabled()) {
+			PnlUsuarios.setBackground(new Color(60, 179, 113));
+			LblUsuario_Icon.setSize(278, 57);
+			PnlUsuarios.setSize(278, 57);
+			LblUsuario_Icon.setVisible(false);
+			if (PnlUsuarios.isVisible()) {PnlMenuInicio_MouseExitedFX(4);}
+		}
 	}
 	
 	private void PnlTiposObervacion_MouseExited() {
-		PnlTiposObservaciones.setBackground(new Color(60, 179, 113));
-		LblTiposObservaciones_Icon.setVisible(false);
-		LblTiposObservaciones_Icon.setSize(113, 57);
-		PnlTiposObservaciones.setSize(278, 57);
-		if (PnlTiposObservaciones.isVisible()) {PnlMenuInicio_MouseExitedFX(3);	}
+		if(PnlTiposObservaciones.isEnabled()) {
+			PnlTiposObservaciones.setBackground(new Color(60, 179, 113));
+			LblTiposObservaciones_Icon.setVisible(false);
+			LblTiposObservaciones_Icon.setSize(113, 57);
+			PnlTiposObservaciones.setSize(278, 57);
+			if (PnlTiposObservaciones.isVisible()) {PnlMenuInicio_MouseExitedFX(3);	}
+		}
 	}
 	
 	private void PnlPermisos_MouseExited() {
-		PnlPermisos.setBackground(new Color(60, 179, 113));
-		LblPermisos_Icon.setVisible(false);
-		LblPermisos_Icon.setSize(113, 57);
-		PnlPermisos.setSize(278, 57);
-		if (PnlPermisos.isVisible()) {PnlMenuInicio_MouseExitedFX(2);}
+		if(PnlPermisos.isEnabled()) {
+			PnlPermisos.setBackground(new Color(60, 179, 113));
+			LblPermisos_Icon.setVisible(false);
+			LblPermisos_Icon.setSize(113, 57);
+			PnlPermisos.setSize(278, 57);
+			if (PnlPermisos.isVisible()) {PnlMenuInicio_MouseExitedFX(2);}
+		}
 	}
 	
 	private void PnlObservacion_MouseExited() {
-		PnlObservaciones.setBackground(new Color(60, 179, 113));
-		LblObservaciones_Icon.setVisible(false);
-		PnlObservaciones.setSize(278, 57);
-		if (PnlObservaciones.isVisible()) {PnlMenuInicio_MouseExitedFX(1);}
+		if (PnlObservaciones.isEnabled()) {
+			PnlObservaciones.setBackground(new Color(60, 179, 113));
+			LblObservaciones_Icon.setVisible(false);
+			PnlObservaciones.setSize(278, 57);
+			if (PnlObservaciones.isVisible()) {PnlMenuInicio_MouseExitedFX(1);}
+		}
 	}
 	
 	private void PnlRevision_MouseExited() {
-		PnlRevision.setBackground(new Color(60, 179, 113));
-		LblRevision_Icon.setVisible(false);
-		PnlRevision.setSize(278, 57);
-		PnlMenuInicio_repaint();
+		if(PnlRevision.isEnabled()) {
+			PnlRevision.setBackground(new Color(60, 179, 113));
+			LblRevision_Icon.setVisible(false);
+			PnlRevision.setSize(278, 57);
+			PnlMenuInicio_repaint();
+		}
 	}
 	
 	private void PnlMenuInicio_repaint() {
@@ -1040,4 +1075,32 @@ public class JFRPrincipal extends JFrame {
 	private void PnlTopMenu_4_MouseExited() {
 		PnlTopMenu_4.setBackground(new Color(60, 179, 113));
 	}
+	
+	private void validarPermisos() {
+		Sesion.getInstance();
+		Usuario userLogin = Sesion.getUsuario();
+		MDTVerficarPermisos MDT1 = MDTVerficarPermisos.getInstance();
+		System.out.println(userLogin.getNombre());
+		try {
+			PnlObservaciones.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlObservaciones"));
+			if(!PnlObservaciones.isEnabled()) {PnlObservaciones.setBackground(new Color(204,255,204));}
+			PnlPermisos.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlPermisos"));
+			if(!PnlPermisos.isEnabled()) {PnlPermisos.setBackground(new Color(204,255,204));}
+			PnlRevision.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlRevision"));
+			if(!PnlRevision.isEnabled()) {PnlRevision.setBackground(new Color(204,255,204));}
+			PnlTiposObservaciones.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlTiposObservaciones"));
+			if(!PnlTiposObservaciones.isEnabled()) {PnlTiposObservaciones.setBackground(new Color(204,255,204));}
+			PnlUsuarios.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlUsuarios"));
+			if(!PnlUsuarios.isEnabled()) {PnlUsuarios.setBackground(new Color(204,255,204));}
+			PnlZonas.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlZonas"));
+			if(!PnlZonas.isEnabled()) {PnlZonas.setBackground(new Color(204,255,204));}
+			PnlTopMenu_Repaint();
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 }
