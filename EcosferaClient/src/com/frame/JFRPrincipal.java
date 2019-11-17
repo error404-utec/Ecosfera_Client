@@ -895,7 +895,7 @@ public class JFRPrincipal extends JFrame {
 		if (PnlRevision.isEnabled()) {
 			JPanel jp;
 			
-				jp = new JpConsulta();
+				jp = new JpObservaciones();
 			
 			jp.setBounds(290, 238, 660, 600);
 			jp.setVisible(true);
