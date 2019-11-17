@@ -283,13 +283,14 @@ public class JpLoc_Dep extends JPanel {
 		txtfiltro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				txtfiltro.setText(txtfiltro.getText().toUpperCase());
 				filtrar();
 			}
 		});
 		txtfiltro.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtfiltro.setColumns(10);
 		
-		JLabel lblfiltro = new JLabel("C\u00F3digo");
+		JLabel lblfiltro = new JLabel("Filtro");
 		lblfiltro.setBounds(12, 18, 109, 20);
 		lblfiltro.setForeground(new Color(46, 139, 87));
 		lblfiltro.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
@@ -556,7 +557,7 @@ public class JpLoc_Dep extends JPanel {
 	
 	private void filtrar() {
 		TableRowSorter<TableModel> filtro = new TableRowSorter<>(this.tablaLocalidad.getModel());
-		filtro.setRowFilter(RowFilter.regexFilter(this.txtfiltro.getText(), 1));
+		filtro.setRowFilter(RowFilter.regexFilter(this.txtfiltro.getText(), 2));
 		this.tablaLocalidad.setRowSorter(filtro);
 
 	}

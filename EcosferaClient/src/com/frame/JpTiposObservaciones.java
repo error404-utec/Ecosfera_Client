@@ -77,6 +77,7 @@ public class JpTiposObservaciones extends JPanel {
 		txtFiltro.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				txtFiltro.setText(txtFiltro.getText().toUpperCase());
 				filtrar();
 			}
 		});
@@ -93,6 +94,13 @@ public class JpTiposObservaciones extends JPanel {
 			public void keyReleased(KeyEvent e) {
 				txtNombre.setText(txtNombre.getText().toUpperCase());
 			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(txtNombre.getText().length()>=50) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
 		});
 		
 		JLabel lblNombre = new JLabel("Nombre");
@@ -101,6 +109,15 @@ public class JpTiposObservaciones extends JPanel {
 		lblNombre.setForeground(new Color(46, 139, 87));
 		
 		txtDescripcion = new JTextField();
+		txtDescripcion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(txtDescripcion.getText().length()>=250) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		txtDescripcion.setBounds(166, 49, 274, 22);
 		txtDescripcion.setColumns(10);
 		
@@ -123,7 +140,12 @@ public class JpTiposObservaciones extends JPanel {
 				getToolkit().beep();
 				arg0.consume();
 				}
+				if(txtTelEmergencia.getText().length()>=20) {
+					getToolkit().beep();
+					arg0.consume();
+				}
 			}
+			
 		});
 		
 		JLabel lblTelfonoDeEmergencia = new JLabel("Tel\u00E9fono de Emergencia");

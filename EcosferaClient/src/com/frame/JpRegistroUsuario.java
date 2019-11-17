@@ -340,7 +340,7 @@ public class JpRegistroUsuario extends JPanel {
 		UsuarioBeanRemote usuariodBeanRemote  = (UsuarioBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
 		try {
-			usuariodBeanRemote.actualizar(usuario);
+			usuariodBeanRemote.crear(usuario);
 		} catch (ServiciosException e) {
 			e.printStackTrace();
 		}
