@@ -165,8 +165,8 @@ public class JpPerfiles extends JPanel {
 		JScrollPane scroolTablaPerfiles = new JScrollPane();
 		scroolTablaPerfiles.setBounds(12, 76, 428, 176);
 		
-/*
-		scroolTablaLocalidad.setLayout(new ScrollPaneLayout() {
+
+		scroolTablaPerfiles.setLayout(new ScrollPaneLayout() {
 
 			private static final long serialVersionUID = 1L;
 
@@ -198,15 +198,9 @@ public class JpPerfiles extends JPanel {
 			    }
 			  }
 			});
-		scroolTablaLocalidad.getVerticalScrollBar().setUI(new EcosferaScrollBar());
-		scroolTablaLocalidad.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				
-			}
-		});
-*/		
+		scroolTablaPerfiles.getVerticalScrollBar().setUI(new EcosferaScrollBar());
+		
+
 		txtfiltro = new JTextField();
 		txtfiltro.setBounds(78, 17, 362, 24);
 		txtfiltro.addKeyListener(new KeyAdapter() {
@@ -453,7 +447,7 @@ public class JpPerfiles extends JPanel {
 			error = false;
 		}else {
 			error = true;
-			mensajeError = "El nombre de la localidad es un campo obligatorio.";
+			mensajeError = "El nombre del Perfil es un campo obligatorio.";
 		}
 		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el perfil", JOptionPane.ERROR_MESSAGE);}
 		return error;	
@@ -480,6 +474,15 @@ public class JpPerfiles extends JPanel {
 		UsuarioBeanRemote usuarioBeanRemote  = (UsuarioBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
 		mensajeError = usuarioBeanRemote.controles_PreDeltePerfiles(perfil);
+		if (!mensajeError.isEmpty()) {
+			error = true;
+		}else {
+			if(perfil.getId()==1) {
+				mensajeError = "Control de integridad funcional, no se puede eliminar el perfil " + perfil.getNombre();
+			}else if(perfil.getId()==2) {
+				mensajeError = "Control de integridad funcional, no se puede eliminar el perfil " + perfil.getNombre();
+			}
+		}
 		if (!mensajeError.isEmpty()) {
 			error = true;
 		}

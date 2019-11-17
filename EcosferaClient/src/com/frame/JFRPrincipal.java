@@ -1083,17 +1083,17 @@ public class JFRPrincipal extends JFrame {
 		System.out.println(userLogin.getNombre());
 		try {
 			PnlObservaciones.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlObservaciones"));
-			if(!PnlObservaciones.isEnabled()) {PnlObservaciones.setBackground(new Color(204,255,204));}
+			if(!PnlObservaciones.isEnabled()) {PnlObservaciones.setBackground(Color.LIGHT_GRAY);}
 			PnlPermisos.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlPermisos"));
-			if(!PnlPermisos.isEnabled()) {PnlPermisos.setBackground(new Color(204,255,204));}
+			if(!PnlPermisos.isEnabled()) {PnlPermisos.setBackground(Color.LIGHT_GRAY);}
 			PnlRevision.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlRevision"));
-			if(!PnlRevision.isEnabled()) {PnlRevision.setBackground(new Color(204,255,204));}
+			if(!PnlRevision.isEnabled()) {PnlRevision.setBackground(Color.LIGHT_GRAY);}
 			PnlTiposObservaciones.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlTiposObservaciones"));
-			if(!PnlTiposObservaciones.isEnabled()) {PnlTiposObservaciones.setBackground(new Color(204,255,204));}
+			if(!PnlTiposObservaciones.isEnabled()) {PnlTiposObservaciones.setBackground(Color.LIGHT_GRAY);}
 			PnlUsuarios.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlUsuarios"));
-			if(!PnlUsuarios.isEnabled()) {PnlUsuarios.setBackground(new Color(204,255,204));}
+			if(!PnlUsuarios.isEnabled()) {PnlUsuarios.setBackground(Color.LIGHT_GRAY);}
 			PnlZonas.setEnabled(MDT1.validarPermiso(userLogin, JFRPrincipal.class.getSimpleName() +".PnlZonas"));
-			if(!PnlZonas.isEnabled()) {PnlZonas.setBackground(new Color(204,255,204));}
+			if(!PnlZonas.isEnabled()) {PnlZonas.setBackground(Color.LIGHT_GRAY);}
 			PnlTopMenu_Repaint();
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block

@@ -30,6 +30,7 @@ import com.services.EstadoBeanRemote;
 import com.services.PerfilesBeanRemote;
 import com.services.TipoDocumentoBeanRemote;
 import com.services.UsuarioBeanRemote;
+import com.session.Sesion;
 
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
@@ -54,7 +55,7 @@ public class JpUsuarios extends JPanel {
 	private JComboBox<String> cmbEstados = new JComboBox<String>();
 	private JTable TablaPerfiles;
 	private String modo;
-	private Usuario usuario;
+	private static Usuario usuariost;
 	
 	
 	/**
@@ -63,7 +64,7 @@ public class JpUsuarios extends JPanel {
 	 */
 	public JpUsuarios(String modo,Usuario usuario) throws NamingException {
 		this.modo = modo;
-		this.usuario = usuario;
+		this.usuariost = usuario;
 		cargarCombo();
 		cargarComboEstado();
 		setBounds(new Rectangle(295, 256, 650, 582));
@@ -323,11 +324,11 @@ public class JpUsuarios extends JPanel {
 		txtMail.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				txtDocumento.setText(txtDocumento.getText().toUpperCase());
+				txtMail.setText(txtMail.getText().toUpperCase());
 			}
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(txtDocumento.getText().length()>=30) {
+				if(txtMail.getText().length()>=30) {
 					getToolkit().beep();
 					e.consume();
 				}
@@ -516,13 +517,12 @@ public class JpUsuarios extends JPanel {
 					usuario1.setEstado(obtenerEstado((String)cmbEstados.getSelectedItem()));
 					usuario1.setMail(txtMail.getText());
 					usuario1.setTipoDocumento(obtenerTipoDocumento((String)cmbTipoDocumento.getSelectedItem()));
-					if (modo.equals("UPDATE_ADMIN")) {
-						usuario1.setId(usuario.getId());
+					if (!modo.equals("INSERT")) {
+						usuario1.setId(usuariost.getId());
 					}
 					boolean error = controles(usuario1);
 					if(!error) {
 						if (modo.equals("UPDATE_ADMIN")) {
-							usuario1.setId(usuario.getId());
 							acutalizarUsuario(usuario1);
 							JpListaUsuarios jp = new JpListaUsuarios();
 							jp.setBounds(290, 238, 660, 600);
@@ -534,7 +534,20 @@ public class JpUsuarios extends JPanel {
 							JFRPrincipal.PnlWorkSpace.revalidate();
 							JFRPrincipal.PnlWorkSpace.repaint();
 						}else if(modo.equals("INSERT")) {
+							Perfil perfil1 = obtenerPerfilPorID((long) 2);
+							usuario1.asginarPerfil(perfil1);
 							crearUsuario(usuario1);
+							JpListaUsuarios jp = new JpListaUsuarios();
+							jp.setBounds(290, 238, 660, 600);
+							jp.setVisible(true);
+							jp.setLocation(12,12);
+							JFRPrincipal.getIntance();
+							JFRPrincipal.PnlWorkSpace.removeAll();
+							JFRPrincipal.PnlWorkSpace.add(jp);
+							JFRPrincipal.PnlWorkSpace.revalidate();
+							JFRPrincipal.PnlWorkSpace.repaint();
+						}else {
+							acutalizarUsuario(usuario1);
 							JpListaUsuarios jp = new JpListaUsuarios();
 							jp.setBounds(290, 238, 660, 600);
 							jp.setVisible(true);
@@ -561,7 +574,7 @@ public class JpUsuarios extends JPanel {
 			cmbTipoDocumento.setEnabled(false);
 			cmbEstados.setEnabled(false);
 			btnAgregafrPerfil.setEnabled(false);
-			txtUsuario.setText(usuario.getNombre());
+			txtUsuario.setText(usuario.getUsuario());
 			txtNombre.setText(usuario.getNombre());
 			txtApellido.setText(usuario.getApellido());
 			txtDireccion.setText(usuario.getDireccion());
@@ -570,6 +583,8 @@ public class JpUsuarios extends JPanel {
 			cmbEstados.setSelectedItem(usuario.getEstado().getNombre());
 			cmbTipoDocumento.setSelectedItem(usuario.getTipoDocumento().getNombre());
 			TablaPerfiles = cargarPerfiles();
+			pssContra.setText(usuario.getPasswrd());
+			passRepetirContra.setText(usuario.getPasswrd());
 			btnAgregafrPerfil.setEnabled(false);
 			btnAgregafrPerfil.setVisible(false);
 		}else if(modo.equals("UPDATE_ADMIN")) {
@@ -606,7 +621,7 @@ public class JpUsuarios extends JPanel {
 	
 	
 	private JTable cargarPerfiles() throws NamingException {
-		List<Perfil> lista = usuario.getPerfiles();
+		List<Perfil> lista = usuariost.getPerfiles();
 		
 		String[] nombreColumnas = {"ID", "Nombre" };
 
@@ -783,7 +798,6 @@ public class JpUsuarios extends JPanel {
 		}
 		UsuarioBeanRemote usuariodBeanRemote  = (UsuarioBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
-		
 		if(modo.equals("INSERT")) {
 			String respuestaBean =usuariodBeanRemote.controlarUnicidad(usuario);
 			if (!respuestaBean.isEmpty()) {
@@ -791,6 +805,7 @@ public class JpUsuarios extends JPanel {
 				JOptionPane.showMessageDialog(this,respuestaBean);
 			}
 		}else {
+			
 			String respuestaBean =usuariodBeanRemote.controles_preModify(usuario);	
 			if (!respuestaBean.isEmpty()) {
 				error = true;
@@ -799,6 +814,19 @@ public class JpUsuarios extends JPanel {
 		}
 		return error;
 		
+	}
+	
+	public boolean controles_preModify(Usuario usuario) throws NamingException {
+		boolean error = false;
+		
+		UsuarioBeanRemote usuariodBeanRemote  = (UsuarioBeanRemote)
+				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
+		String respuestaBean =usuariodBeanRemote.controles_preModify(usuario);	
+		if (!respuestaBean.isEmpty()) {
+			error = true;
+			JOptionPane.showMessageDialog(this,respuestaBean);
+		}	
+		return error;
 	}
 	
 	public void reportarError(String error) {

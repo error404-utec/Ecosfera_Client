@@ -31,6 +31,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import com.entities.Estado;
+import com.entities.Localidad;
 import com.entities.Usuario;
 import com.entities.Zona;
 import com.exceptions.ServiciosException;
@@ -38,6 +39,8 @@ import com.framework.EcosferaScrollBar;
 import com.services.EstadoBeanRemote;
 import com.services.UsuarioBeanRemote;
 import com.services.ZonaBeanRemote;
+import com.session.Sesion;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -153,7 +156,11 @@ public class JpListaUsuarios extends JPanel {
 					Long id = (Long) tablaUsuario.getValueAt(tablaUsuario.getSelectedRow(), 0);
 					try {
 						usuarioActualizar = obtenerPorID(id);
-						JpUsuarios jp = new JpUsuarios("UPDATE_ADMIN", usuarioActualizar);
+						String modo ="UPDATE_ADMIN";
+						if(usuarioActualizar.getId()==Sesion.getUsuario().getId()) {
+							modo = "UPDATE_USER";
+						}
+						JpUsuarios jp = new JpUsuarios(modo, usuarioActualizar);
 						jp.setBounds(290, 238, 660, 600);
 						jp.setVisible(true);
 						jp.setLocation(12,12);
@@ -184,12 +191,14 @@ public class JpListaUsuarios extends JPanel {
 						Long id = (Long) tablaUsuario.getValueAt(tablaUsuario.getSelectedRow(), 0);
 						usuarioEliminar = obtenerPorID(id);
 						if(!(usuarioEliminar.getEstado().getId() == 2)) {
-							eliminarUsuario(usuarioEliminar);
-							tablaUsuario.setVisible(false);
-							tablaUsuario = cargarPermisos();
-							scroolTablaUsuarios.setViewportView(tablaUsuario);
-							tablaUsuario.setVisible(true);
-							filtrar();
+							if(solicitarConfirmaciones(usuarioEliminar)) {
+								eliminarUsuario(usuarioEliminar);
+								tablaUsuario.setVisible(false);
+								tablaUsuario = cargarPermisos();
+								scroolTablaUsuarios.setViewportView(tablaUsuario);
+								tablaUsuario.setVisible(true);
+								filtrar();
+							}
 						}else {
 							reportarError("El usuario ya esta eliminado");
 						}
@@ -411,28 +420,21 @@ public class JpListaUsuarios extends JPanel {
 	}
 	
 	
-	public boolean controles_preCreate() {
-		boolean error = false;
-		
-		return error;	
-	}
 	
 	
-	public boolean controles_preDelete(Zona zona) throws NamingException {
-		boolean error = false;
-		String mensajeError = "";
-		ZonaBeanRemote zonaBeanRemote  = (ZonaBeanRemote)
-				InitialContext.doLookup("ECOSFERA_MARK1/ZonaBean!com.services.ZonaBeanRemote");
-		mensajeError = zonaBeanRemote.controles_preDelete(zona);
-		if (!mensajeError.isEmpty()) {
-			error = true;
-		}
-		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar la zona", JOptionPane.ERROR_MESSAGE);}
-		return error;		
-	}
+	
 	
 	public void reportarError(String error) {
 		JOptionPane.showMessageDialog(this, error);
+	}
+	
+	public boolean solicitarConfirmaciones(Usuario usuario) {
+		boolean confirmado = false;
+		int i =JOptionPane.showConfirmDialog(this,"¿Realmente Desea eliminar el Usuario "+ usuario.getNombre()+"?","Confirmar",JOptionPane.YES_NO_OPTION);
+		if (i==0) {
+			confirmado = true;
+		}
+		return confirmado;
 	}
 }
 

@@ -29,6 +29,8 @@ import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.ImageIcon;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class JpRegistroUsuario extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -68,6 +70,19 @@ public class JpRegistroUsuario extends JPanel {
 		lblDocumento.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtDocumento = new JTextField();
+		txtDocumento.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtDocumento.setText(txtDocumento.getText().toUpperCase());
+			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(txtDocumento.getText().length()>=30) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		txtDocumento.setBounds(108, 83, 209, 24);
 		txtDocumento.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtDocumento.setColumns(10);
@@ -78,6 +93,22 @@ public class JpRegistroUsuario extends JPanel {
 		lblUsuario.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
 		
 		txtUsuario = new JTextField();
+		txtUsuario.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtUsuario.setText(txtUsuario.getText().toUpperCase());
+			}
+			
+			public void keyTyped(KeyEvent e) {
+				if(txtUsuario.getText().length()>=30) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		txtUsuario.setBounds(108, 13, 209, 24);
 		txtUsuario.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtUsuario.setColumns(10);
@@ -147,32 +178,115 @@ public class JpRegistroUsuario extends JPanel {
 		pnlNew.add(lblConfPass);
 		
 		txtNombre = new JTextField();
+		txtNombre.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!(Character.isAlphabetic(c) ||
+						(c == KeyEvent.VK_BACK_SPACE) ||
+						(c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_SPACE))) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+				if(txtNombre.getText().length()>=50) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
+		});
 		txtNombre.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtNombre.setColumns(10);
 		txtNombre.setBounds(108, 116, 209, 24);
 		pnlNew.add(txtNombre);
 		
 		txtApellido = new JTextField();
+		txtApellido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if (!(Character.isAlphabetic(c) ||
+						(c == KeyEvent.VK_BACK_SPACE) ||
+						(c == KeyEvent.VK_DELETE) || (c == KeyEvent.VK_SPACE))) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+				if(txtApellido.getText().length()>=50) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
+		});
 		txtApellido.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtApellido.setColumns(10);
 		txtApellido.setBounds(108, 149, 209, 24);
 		pnlNew.add(txtApellido);
 		
 		txtDireccion = new JTextField();
+		txtDireccion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if(txtDireccion.getText().length()>=100) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
+		});
 		txtDireccion.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtDireccion.setColumns(10);
 		txtDireccion.setBounds(108, 182, 209, 24);
 		pnlNew.add(txtDireccion);
 		
 		txtMail = new JTextField();
+		txtMail.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtMail.setText(txtMail.getText().toUpperCase());
+			}
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(txtMail.getText().length()>=30) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		txtMail.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 13));
 		txtMail.setColumns(10);
 		txtMail.setBounds(108, 215, 209, 24);
 		pnlNew.add(txtMail);
 		pssContra = new JPasswordField();
+		pssContra.addKeyListener(new KeyAdapter() {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				char c = arg0.getKeyChar();
+				if ((c == KeyEvent.VK_SPACE)) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+				if(pssContra.getText().length()>=30) {
+					getToolkit().beep();
+					arg0.consume();
+				}
+			}
+		});
 		pssContra.setBounds(108, 248, 209, 24);
 		pnlNew.add(pssContra);
 		passRepetirContra = new JPasswordField();
+		passRepetirContra.addKeyListener(new KeyAdapter() {
+			@SuppressWarnings("deprecation")
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if ((c == KeyEvent.VK_SPACE)) {
+					getToolkit().beep();
+					e.consume();
+				}
+				if(passRepetirContra.getText().length()>=30) {
+					getToolkit().beep();
+					e.consume();
+				}
+			}
+		});
 		passRepetirContra.setBounds(108, 281, 209, 24);
 		pnlNew.add(passRepetirContra);
 		lblError.setEditable(false);
@@ -181,7 +295,7 @@ public class JpRegistroUsuario extends JPanel {
 		lblError.setForeground(new Color(255, 69, 0));
 		lblError.setBackground(Color.WHITE);
 		lblError.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 16));
-		lblError.setBounds(42, 357, 288, 55);
+		lblError.setBounds(42, 357, 288, 99);
 		pnlNew.add(lblError);
 		
 		
@@ -211,6 +325,8 @@ public class JpRegistroUsuario extends JPanel {
 					boolean error = controles(usuario);
 					if(!error) {
 						crearUsuario(usuario);
+						JFRInicioSesion jfr = JFRInicioSesion.getFrame();
+						jfr.volveraInicio();
 					}
 				} catch (NamingException e1) {
 					e1.printStackTrace();
@@ -308,39 +424,43 @@ public class JpRegistroUsuario extends JPanel {
 			lblError.setText("El campo nombre es obligatorio");
 		}else if(txtUsuario.getText().isEmpty()) {
 			error = true;
-			lblError.setText( "El campo usuario es obligatorio");
+			lblError.setText("El campo usuario es obligatorio");
 		}else if(cmbTipoDocumento.getSelectedIndex()==-1) {
 			error = true;
-			lblError.setText( "debe seleccionar un tipo de documento");
+			lblError.setText("debe seleccionar un tipo de documento");
 		}else if(pssContra.getText().isEmpty()) {
 			error = true;
 			lblError.setText("el campo contraseña es obligatorio");
 		}else if(passRepetirContra.getText().isEmpty()) {
 			error = true;
 			lblError.setText("el campo repetir contraseña es obligatorio");
+		}else if(!txtMail.getText().contains("@")) {
+			error = true;
+			lblError.setText("Formato de mail incorrecto");
 		}
-		
 		if (!error) {
 			if (!passRepetirContra.getText().equals(pssContra.getText())) {
 				error = true;
-				lblError.setText( "La confirmacion de contraseña no es igual a la contraseña");
+				lblError.setText("La confirmacion de contraseña no es igual a la contraseña");
 			}
 		}
 		UsuarioBeanRemote usuariodBeanRemote  = (UsuarioBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
 		
+		
 		String respuestaBean =usuariodBeanRemote.controlarUnicidad(usuario);
-		if (!respuestaBean.equals("")) {
+		if (!respuestaBean.isEmpty()) {
 			error = true;
 			lblError.setText(respuestaBean);
 		}
-		
 		if(error) {
 			label.setVisible(true);
 		}
 		return error;
 		
 	}
+	
+	
 }
 
 

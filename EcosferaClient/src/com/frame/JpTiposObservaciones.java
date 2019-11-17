@@ -21,10 +21,13 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import com.entities.Departamento;
+import com.entities.Localidad;
 import com.entities.TipoDocumento;
 import com.entities.TipoObservacion;
 import com.exceptions.ServiciosException;
 import com.services.DepartamentoBeanRemote;
+import com.services.LocalidadBeanRemote;
+import com.services.ObservacionBeanRemote;
 import com.services.TipoObservacionBeanRemote;
 
 import java.awt.event.KeyAdapter;
@@ -456,6 +459,7 @@ private JTable cargarTiposObservaciones() throws NamingException {
 		}
 		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el Tipo de Observacion", JOptionPane.ERROR_MESSAGE);}
 		return error;		
+		
 	}
 	
 	
@@ -465,12 +469,20 @@ private JTable cargarTiposObservaciones() throws NamingException {
 		TipoObservacionBeanRemote tipoObservacionBean = (TipoObservacionBeanRemote)
 				InitialContext.doLookup("ECOSFERA_MARK1/TipoObservacionBean!com.services.TipoObservacionBeanRemote");
 		mensajeError = tipoObservacionBean.controles_preDelete(tipoObservacion);
+		
+		if (mensajeError.isEmpty()) {
+			ObservacionBeanRemote observacionBeanRemote  = (ObservacionBeanRemote)
+					InitialContext.doLookup("ECOSFERA_MARK1/ObservacionBean!com.services.ObservacionBeanRemote");
+			mensajeError = observacionBeanRemote.controles_PreDeleteTipoObservaciones(tipoObservacion);
+		}
 		if (!mensajeError.isEmpty()) {
 			error = true;
 		}
 		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar el Tipo de Observacion", JOptionPane.ERROR_MESSAGE);}
 		return error;		
 	}
+	
+	
 	
 	public void reportarError(String error) {
 		JOptionPane.showMessageDialog(this, error);

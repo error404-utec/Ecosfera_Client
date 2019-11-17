@@ -542,18 +542,19 @@ public class JpEstados extends JPanel {
 		String mensajeError = "";
 		if (estado.getId()==1) {
 			error = true;
-			mensajeError="No se permite la eliminacion del estado NUEVO.";
+			mensajeError="Control de integridad funcional, No se permite la eliminacion del estado " + estado.getNombre();
 		}
 		if (estado.getId()==2) {
 			error = true;
-			mensajeError="No se permite la eliminacion del estado ELIMINADO.";
+			mensajeError="Control de integridad funcional, No se permite la eliminacion del estado " + estado.getNombre();
 		}
-		
-		UsuarioBeanRemote usuarioBeanRemote = (UsuarioBeanRemote)
-				InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
-		mensajeError = usuarioBeanRemote.controles_PreDelteEstado(estado);
-		if (!mensajeError.isEmpty()) {
-			error = true;
+		if (!error) {
+			UsuarioBeanRemote usuarioBeanRemote = (UsuarioBeanRemote)
+					InitialContext.doLookup("ECOSFERA_MARK1/UsuarioBean!com.services.UsuarioBeanRemote");
+			mensajeError = usuarioBeanRemote.controles_PreDelteEstado(estado);
+			if (!mensajeError.isEmpty()) {
+				error = true;
+			}
 		}
 		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se puede eliminar el Estado", JOptionPane.ERROR_MESSAGE);}
 		return error;		
