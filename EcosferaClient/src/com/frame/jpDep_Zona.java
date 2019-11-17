@@ -234,8 +234,8 @@ public class jpDep_Zona extends JPanel {
 					Long id = (Long) tablaDepartamento.getValueAt(tablaDepartamento.getSelectedRow(), 0);
 					try {
 						departamentoActualizar = obtenerPorID(id);
-						txtNombre.setText(Long.toString(departamentoActualizar.getCodigo()));
-						txtCodigo.setText(departamentoActualizar.getNombre());
+						txtNombre.setText(departamentoActualizar.getNombre());
+						txtCodigo.setText(Long.toString(departamentoActualizar.getCodigo()));
 						txtCodigo.setEditable(false);
 					} catch (NamingException e) {
 						e.printStackTrace();

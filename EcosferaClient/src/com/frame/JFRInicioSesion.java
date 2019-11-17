@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JTextPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.SwingConstants;
 
 public class JFRInicioSesion extends JFrame {
 	private static int tipoInicio;
@@ -80,6 +81,12 @@ public class JFRInicioSesion extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.setOpaque(false);
 		tipoInicio = 1;
+		
+		JLabel label_4 = new JLabel("");
+		label_4.setHorizontalAlignment(SwingConstants.LEFT);
+		label_4.setIcon(new ImageIcon(JFRInicioSesion.class.getResource("/recursos/logo.png")));
+		label_4.setBounds(29, 28, 403, 650);
+		contentPane.add(label_4);
 		
 		JLabel lblSingUp = new JLabel("Sing up");
 		lblSingUp.setForeground(new Color(152, 251, 152));
@@ -257,7 +264,7 @@ public class JFRInicioSesion extends JFrame {
 							lblNewLabel.setVisible(true);
 							
 						}else {
-							dispose();
+							//dispose();
 							JFRPrincipal.main(null);
 						}
 					}

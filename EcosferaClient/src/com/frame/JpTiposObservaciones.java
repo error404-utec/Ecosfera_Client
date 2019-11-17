@@ -160,49 +160,50 @@ public class JpTiposObservaciones extends JPanel {
 		btnAceptar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				if (observacionActualizar!=null) {
-					try {
-						observacionActualizar.setNombre(txtNombre.getText());
-						observacionActualizar.setDescripcion(txtDescripcion.getText());
-						observacionActualizar.setTelEmergencia(txtTelEmergencia.getText());
-						
-						crearoModificarTipoObservacion(observacionActualizar);
-						tablaTipoObservacion.setVisible(false);
-						tablaTipoObservacion= cargarTiposObservaciones();
-						scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
-						tablaTipoObservacion.setVisible(true);
-						txtNombre.setText("");
-						txtDescripcion.setText("");
-						txtTelEmergencia.setText("");
-						txtNombre.setEditable(true);
-						observacionActualizar = null;
-						filtrar();
-						
-					} catch (NamingException e1) {
-						e1.printStackTrace();
-					}
-				}else {
-					
-					
-					TipoObservacion tipoObservacion = new TipoObservacion();
-					tipoObservacion.setNombre(txtNombre.getText());
-					tipoObservacion.setDescripcion(txtDescripcion.getText());
-					tipoObservacion.setTelEmergencia(txtTelEmergencia.getText());
-					
-					try {
-						if (!controles_postCreate(tipoObservacion)) {
-							crearTipoObservacion(tipoObservacion);
+				if(!controles_preCreate()) {
+					if (observacionActualizar!=null) {
+						try {
+							observacionActualizar.setNombre(txtNombre.getText());
+							observacionActualizar.setDescripcion(txtDescripcion.getText());
+							observacionActualizar.setTelEmergencia(txtTelEmergencia.getText());
+							
+							crearoModificarTipoObservacion(observacionActualizar);
 							tablaTipoObservacion.setVisible(false);
-							tablaTipoObservacion = cargarTiposObservaciones();
+							tablaTipoObservacion= cargarTiposObservaciones();
 							scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
 							tablaTipoObservacion.setVisible(true);
 							txtNombre.setText("");
 							txtDescripcion.setText("");
 							txtTelEmergencia.setText("");
+							txtNombre.setEditable(true);
+							observacionActualizar = null;
+							filtrar();
+							
+						} catch (NamingException e1) {
+							e1.printStackTrace();
 						}
-					} catch (NamingException e1) {
-						e1.printStackTrace();
+					}else {
+						
+						
+						TipoObservacion tipoObservacion = new TipoObservacion();
+						tipoObservacion.setNombre(txtNombre.getText());
+						tipoObservacion.setDescripcion(txtDescripcion.getText());
+						tipoObservacion.setTelEmergencia(txtTelEmergencia.getText());
+						
+						try {
+							if (!controles_postCreate(tipoObservacion)) {
+								crearTipoObservacion(tipoObservacion);
+								tablaTipoObservacion.setVisible(false);
+								tablaTipoObservacion = cargarTiposObservaciones();
+								scrollTablaTipoObservacion.setViewportView(tablaTipoObservacion);
+								tablaTipoObservacion.setVisible(true);
+								txtNombre.setText("");
+								txtDescripcion.setText("");
+								txtTelEmergencia.setText("");
+							}
+						} catch (NamingException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
@@ -383,7 +384,6 @@ public class JpTiposObservaciones extends JPanel {
 	
 private JTable cargarTiposObservaciones() throws NamingException {
 		
-		//List<TipoObservacion> lista = listaTipoObservacion();
 		List<TipoObservacion> lista = listarTipoObservacion();
 		String[] nombreColumnas = {"ID", "Nombre", "Descripción", "Tel Emergencia" };
 
@@ -466,7 +466,7 @@ private JTable cargarTiposObservaciones() throws NamingException {
 			mensajeError = "La descripcion del tipo de observacion  es un campo obligatorio.";
 		}
 		
-		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el departamento", JOptionPane.ERROR_MESSAGE);}
+		if (error) {JOptionPane.showMessageDialog(this, mensajeError, "No se pudo crear el tipo de observacion", JOptionPane.ERROR_MESSAGE);}
 		return error;	
 	}
 	

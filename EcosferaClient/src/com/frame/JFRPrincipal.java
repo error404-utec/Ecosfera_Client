@@ -600,11 +600,11 @@ public class JFRPrincipal extends JFrame {
 		PnlMenuInicio.add(PnlRevision);
 		PnlRevision.setLayout(null);
 		
-		JLabel LblRevision_Title = new JLabel("Revision");
-		LblRevision_Title.setForeground(new Color(240, 255, 240));
-		LblRevision_Title.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 20));
-		LblRevision_Title.setBounds(12, 13, 210, 29);
-		PnlRevision.add(LblRevision_Title);
+		JLabel Reporte = new JLabel("Reporte");
+		Reporte.setForeground(new Color(240, 255, 240));
+		Reporte.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 20));
+		Reporte.setBounds(12, 13, 210, 29);
+		PnlRevision.add(Reporte);
 		LblRevision_Icon.setIcon(new ImageIcon(JFRPrincipal.class.getResource("/recursos/icons/revision.png")));
 		LblRevision_Icon.setBounds(155, 0, 123, 84);
 		LblRevision_Icon.setVisible(false);
@@ -711,6 +711,10 @@ public class JFRPrincipal extends JFrame {
 					
 				}
 			}.start();	
+			PnlTopMenu_1.setVisible(false);
+			PnlTopMenu_2.setVisible(false);
+			PnlTopMenu_3.setVisible(false);
+			PnlTopMenu_4.setVisible(false);
 		}
 	}
 	
@@ -751,6 +755,10 @@ public class JFRPrincipal extends JFrame {
 				}
 			}.start();
 			PnlUsuarios.setVisible(false);
+			PnlTopMenu_1.setVisible(false);
+			PnlTopMenu_2.setVisible(false);
+			PnlTopMenu_3.setVisible(false);
+			PnlTopMenu_4.setVisible(false);
 			
 			//Revalido y pinto PnlMenuInicio
 			PnlMenuInicio.revalidate();
@@ -803,6 +811,10 @@ public class JFRPrincipal extends JFrame {
 					PnlMenuInicio.repaint();
 				}
 			}.start();
+			PnlTopMenu_1.setVisible(false);
+			PnlTopMenu_2.setVisible(false);
+			PnlTopMenu_3.setVisible(false);
+			PnlTopMenu_4.setVisible(false);
 		}
 	}
 	
@@ -840,6 +852,10 @@ public class JFRPrincipal extends JFrame {
 					PnlMenuInicio.repaint();
 				}
 			}.start();
+			PnlTopMenu_1.setVisible(false);
+			PnlTopMenu_2.setVisible(false);
+			PnlTopMenu_3.setVisible(false);
+			PnlTopMenu_4.setVisible(false);
 			
 		}
 	}
@@ -867,11 +883,30 @@ public class JFRPrincipal extends JFrame {
 					PnlMenuInicio.repaint();
 				}
 			}.start();
+			PnlTopMenu_1.setVisible(false);
+			PnlTopMenu_2.setVisible(false);
+			PnlTopMenu_3.setVisible(false);
+			PnlTopMenu_4.setVisible(false);
 		}
 	}
 	
 	private void PnlRevision_MouseClicked() {
+		try {
 		if (PnlRevision.isEnabled()) {
+			JPanel jp;
+			
+				jp = new JpConsulta();
+			
+			jp.setBounds(290, 238, 660, 600);
+			jp.setVisible(true);
+			jp.setLocation(12,12);
+			
+			PnlWorkSpace.removeAll();
+			PnlWorkSpace.add(jp);
+			PnlWorkSpace.revalidate();
+			PnlWorkSpace.repaint();
+			LblNavegacion.setText("Inicio"+ " - " + "Reporte");
+			lblTitulopanel.setText("Reporte Observaciones entre fechas");
 			new Thread() {
 				public void run() {
 					reinicarMenu();
@@ -892,6 +927,14 @@ public class JFRPrincipal extends JFrame {
 					PnlMenuInicio.repaint();
 				}
 			}.start();
+			PnlTopMenu_1.setVisible(false);
+			PnlTopMenu_2.setVisible(false);
+			PnlTopMenu_3.setVisible(false);
+			PnlTopMenu_4.setVisible(false);
+		}
+		} catch (NamingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 	

@@ -80,8 +80,8 @@ public class JpListaUsuarios extends JPanel {
 		
 		JScrollPane scroolTablaUsuarios = new JScrollPane();
 		scroolTablaUsuarios.setBounds(12, 78, 428, 365);
-		/*
-		scroolTablaZonas.setLayout(new ScrollPaneLayout() {
+		
+		scroolTablaUsuarios.setLayout(new ScrollPaneLayout() {
 
 		private static final long serialVersionUID = 1L;
 
@@ -114,15 +114,9 @@ public class JpListaUsuarios extends JPanel {
 			    }
 			  }
 			});
-		scroolTablaZonas.getVerticalScrollBar().setUI(new EcosferaScrollBar());
+		scroolTablaUsuarios.getVerticalScrollBar().setUI(new EcosferaScrollBar());
 		
-		scroolTablaZonas.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				
-				
-			}
-		});*/
+		
 		
 		
 		txtfiltro = new JTextField();
