@@ -2,6 +2,8 @@ package com.frame;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -41,7 +43,7 @@ public class JpObservaciones extends JPanel {
 		JLabel lblFechaInicial = new JLabel("Fecha Inicial");
 		lblFechaInicial.setForeground(new Color(46, 139, 87));
 		lblFechaInicial.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblFechaInicial.setBounds(31, 18, 116, 20);
+		lblFechaInicial.setBounds(0, 18, 116, 20);
 		panel.add(lblFechaInicial);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -54,7 +56,7 @@ public class JpObservaciones extends JPanel {
 		JLabel lblFechaFinal = new JLabel("Fecha Final");
 		lblFechaFinal.setForeground(new Color(46, 139, 87));
 		lblFechaFinal.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 14));
-		lblFechaFinal.setBounds(416, 18, 116, 20);
+		lblFechaFinal.setBounds(383, 18, 116, 20);
 		panel.add(lblFechaFinal);
 		
 		JButton btnFiltrar = new JButton("Filtrar");
@@ -62,26 +64,44 @@ public class JpObservaciones extends JPanel {
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				tablaObservaciones.setVisible(false);
-				tablaObservaciones = filtrar();
-				scrollPane.setViewportView(tablaObservaciones);
-				tablaObservaciones.setVisible(true);
-				scrollPane.revalidate();
-				scrollPane.repaint();
+				
+				Date mifecha = calendar.getDate();
+				long dato = mifecha.getTime();
+				java.sql.Date coso = new java.sql.Date(dato);
+				
+				Date mifecha2 = calendar_1.getDate();
+				long dato2 = mifecha2.getTime();
+				java.sql.Date coso2 = new java.sql.Date(dato2);
 
+				if(!(coso.after(coso2))) {
+					tablaObservaciones.setVisible(false);
+					tablaObservaciones = filtrar();
+					scrollPane.setViewportView(tablaObservaciones);
+					tablaObservaciones.setVisible(true);
+					scrollPane.revalidate();
+					scrollPane.repaint();
+				}else {
+					reportarError("La fecha final debe ser mayor a la fecha inicial.");
+				}
+				
 			}
 		});
 		btnFiltrar.setForeground(new Color(46, 139, 87));
 		btnFiltrar.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 13));
 		btnFiltrar.setBackground(Color.WHITE);
-		btnFiltrar.setBounds(258, 43, 86, 27);
+		btnFiltrar.setBounds(252, 43, 86, 27);
 		panel.add(btnFiltrar);
-		calendar.setBounds(31, 43, 163, 130);
+		calendar.setBounds(0, 43, 198, 130);
 		panel.add(calendar);
-		calendar_1.setBounds(418, 43, 163, 130);
+		calendar_1.setBounds(383, 43, 198, 130);
 		panel.add(calendar_1);
 
 	}
+	
+	public void reportarError(String error) {
+		JOptionPane.showMessageDialog(this, error);
+	}
+	
 	
 	
 private JTable cargarObservaciones() throws NamingException {
@@ -144,6 +164,7 @@ private JTable cargarObservaciones() throws NamingException {
 	
 	}
 
+
 	private JTable filtrar() {
 		Date mifecha = calendar.getDate();
 		long dato = mifecha.getTime();
@@ -162,7 +183,7 @@ private JTable cargarObservaciones() throws NamingException {
 		int fila = 0;
 		
 		for (Observacion o : lista) {
-			if ((o.getFecha().after(coso) && o.getFecha().before(coso2))) {
+			if ((o.getFecha().after(coso) && o.getFecha().before(coso2))){
 				fila ++;
 			}
 		}
@@ -171,6 +192,7 @@ private JTable cargarObservaciones() throws NamingException {
 
 		
 		for (Observacion o : lista) {
+
 			if ((o.getFecha().after(coso) && o.getFecha().before(coso2))) {
 				datos[fila][0] = o.getId();
 				datos[fila][1] = o.getFecha();
@@ -227,4 +249,6 @@ private JTable cargarObservaciones() throws NamingException {
 		return observacionesBean.obtenerTodas();
 	
 	}
+	
+	
 }

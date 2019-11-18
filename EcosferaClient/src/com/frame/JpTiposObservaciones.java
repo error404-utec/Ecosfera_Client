@@ -5,7 +5,6 @@ import java.awt.Font;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -13,20 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import com.entities.Departamento;
-import com.entities.Localidad;
-import com.entities.TipoDocumento;
 import com.entities.TipoObservacion;
 import com.exceptions.ServiciosException;
-import com.services.DepartamentoBeanRemote;
-import com.services.LocalidadBeanRemote;
 import com.services.ObservacionBeanRemote;
 import com.services.TipoObservacionBeanRemote;
 

@@ -40,9 +40,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
 public class JpEstados extends JPanel {
-	/**
-	 * 
-	 */
+
+	
 	private static final long serialVersionUID = 1L;
 	private JTextField txtNombre;
 	private JTextField txtFiltro;

@@ -7,27 +7,16 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.entities.Estado;
-import com.entities.TipoDocumento;
-import com.entities.Usuario;
-import com.exceptions.ServiciosException;
-import com.services.EstadoBeanRemote;
-import com.services.IniciarSesionBeanRemote;
-import com.services.TipoDocumentoBeanRemote;
-import com.services.UsuarioBeanRemote;
+
 import com.session.IniciarSesion;
 
-import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import javax.swing.ImageIcon;

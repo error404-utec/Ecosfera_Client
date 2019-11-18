@@ -30,7 +30,6 @@ import com.services.EstadoBeanRemote;
 import com.services.PerfilesBeanRemote;
 import com.services.TipoDocumentoBeanRemote;
 import com.services.UsuarioBeanRemote;
-import com.session.Sesion;
 
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
@@ -62,9 +61,10 @@ public class JpUsuarios extends JPanel {
 	 * Create the panel.
 	 * @throws NamingException 
 	 */
+	@SuppressWarnings("static-access")
 	public JpUsuarios(String modo,Usuario usuario) throws NamingException {
 		this.modo = modo;
-		this.usuariost = usuario;
+		this.setUsuariost(usuario);
 		cargarCombo();
 		cargarComboEstado();
 		setBounds(new Rectangle(295, 256, 650, 582));
@@ -518,7 +518,7 @@ public class JpUsuarios extends JPanel {
 					usuario1.setMail(txtMail.getText());
 					usuario1.setTipoDocumento(obtenerTipoDocumento((String)cmbTipoDocumento.getSelectedItem()));
 					if (!modo.equals("INSERT")) {
-						usuario1.setId(usuariost.getId());
+						usuario1.setId(getUsuariost().getId());
 					}
 					boolean error = controles(usuario1);
 					if(!error) {
@@ -621,7 +621,7 @@ public class JpUsuarios extends JPanel {
 	
 	
 	private JTable cargarPerfiles() throws NamingException {
-		List<Perfil> lista = usuariost.getPerfiles();
+		List<Perfil> lista = getUsuariost().getPerfiles();
 		
 		String[] nombreColumnas = {"ID", "Nombre" };
 
@@ -831,6 +831,16 @@ public class JpUsuarios extends JPanel {
 	
 	public void reportarError(String error) {
 		JOptionPane.showMessageDialog(this, error);
+	}
+
+
+	public static Usuario getUsuariost() {
+		return usuariost;
+	}
+
+
+	public static void setUsuariost(Usuario usuariost) {
+		JpUsuarios.usuariost = usuariost;
 	}
 }
 

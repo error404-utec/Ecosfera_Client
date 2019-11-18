@@ -28,7 +28,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import com.entities.Perfil;
 import com.entities.Permiso;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;

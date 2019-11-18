@@ -22,12 +22,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import com.entities.Departamento;
+
 import com.entities.TipoDocumento;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
 import com.services.TipoDocumentoBeanRemote;
-import com.services.TipoObservacionBeanRemote;
+
 
 import javax.swing.JTable;
 import javax.swing.RowFilter;

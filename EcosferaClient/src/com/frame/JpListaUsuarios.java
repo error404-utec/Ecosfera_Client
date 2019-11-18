@@ -31,14 +31,11 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import com.entities.Estado;
-import com.entities.Localidad;
 import com.entities.Usuario;
-import com.entities.Zona;
 import com.exceptions.ServiciosException;
 import com.framework.EcosferaScrollBar;
 import com.services.EstadoBeanRemote;
 import com.services.UsuarioBeanRemote;
-import com.services.ZonaBeanRemote;
 import com.session.Sesion;
 
 import java.awt.event.ActionListener;
@@ -61,7 +58,7 @@ public class JpListaUsuarios extends JPanel {
 
 
 	public JpListaUsuarios() throws NamingException {
-		JFRPrincipal.setlblTitulopanel("Mantenimiento Zonas");
+		JFRPrincipal.setlblTitulopanel("Listado de Usuarios");
 
 		setBounds(new Rectangle(295, 256, 662, 609));
 		setBackground(new Color(255, 255, 255));
@@ -229,12 +226,9 @@ public class JpListaUsuarios extends JPanel {
 					JFRPrincipal.PnlWorkSpace.revalidate();
 					JFRPrincipal.PnlWorkSpace.repaint();
 				} catch (NamingException e) {
-					// TODO Auto-generated catch block
+					reportarError(e.getMessage());
 					e.printStackTrace();
 				}
-				
-
-				
 			}
 		});
 		BtnNuevo.setForeground(new Color(46, 139, 87));

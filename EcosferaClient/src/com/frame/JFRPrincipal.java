@@ -18,6 +18,8 @@ import java.awt.Color;
 import javax.naming.NamingException;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
@@ -358,6 +360,16 @@ public class JFRPrincipal extends JFrame {
 		lblTopMenu_3.setForeground(new Color(240, 255, 240));
 		lblTopMenu_3.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 20));
 		PnlTopMenu_3.add(lblTopMenu_3);
+		PnlTopMenu_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				PnlTopMenu_4_MouseEntered();
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlTopMenu_4_MouseExited();
+			}
+		});
 		
 		
 		PnlTopMenu_4.setBackground(new Color(60, 179, 113));
@@ -405,7 +417,7 @@ public class JFRPrincipal extends JFrame {
 				try {
 					PnlUsuarios_MouseClicked();
 				} catch (NamingException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
 			}
@@ -652,7 +664,7 @@ public class JFRPrincipal extends JFrame {
 				try {
 					PnlTiposObervacion_MouseClicked();
 				} catch (NamingException e1) {
-					// TODO Auto-generated catch block
+					reportarError(e1.getMessage());
 					e1.printStackTrace();
 				}
 			}
@@ -933,7 +945,7 @@ public class JFRPrincipal extends JFrame {
 			PnlTopMenu_4.setVisible(false);
 		}
 		} catch (NamingException e1) {
-			// TODO Auto-generated catch block
+			reportarError(e1.getMessage());
 			e1.printStackTrace();
 		}
 	}
@@ -1139,11 +1151,15 @@ public class JFRPrincipal extends JFrame {
 			if(!PnlZonas.isEnabled()) {PnlZonas.setBackground(Color.LIGHT_GRAY);}
 			PnlTopMenu_Repaint();
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			reportarError(e.getMessage());
 		}
 	}
 	
+	
+	public void reportarError(String error) {
+		JOptionPane.showMessageDialog(this, error);
+	}
 	
 	
 }

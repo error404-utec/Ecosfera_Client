@@ -1,7 +1,6 @@
 package com.frame;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -15,7 +14,6 @@ import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,20 +22,14 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
-import javax.swing.ScrollPaneLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import com.entities.Perfil;
-import com.entities.Permiso;
 import com.entities.Usuario;
 import com.exceptions.ServiciosException;
-import com.framework.EcosferaScrollBar;
 import com.services.PerfilesBeanRemote;
-import com.services.PermisoBeanRemote;
 import com.services.UsuarioBeanRemote;
 
 

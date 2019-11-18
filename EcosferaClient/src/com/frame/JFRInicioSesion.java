@@ -1,6 +1,6 @@
 package com.frame;
 
-import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -10,8 +10,8 @@ import javax.swing.border.EmptyBorder;
 import com.session.IniciarSesion;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.naming.NamingException;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
@@ -27,6 +27,8 @@ import java.awt.event.KeyEvent;
 import javax.swing.SwingConstants;
 
 public class JFRInicioSesion extends JFrame {
+	
+	private static final long serialVersionUID = 1L;
 	private static int tipoInicio;
 	private JPanel contentPane;
 	public static JPanel WrkSpace = new JPanel();
@@ -156,7 +158,7 @@ public class JFRInicioSesion extends JFrame {
 						WrkSpace.revalidate();
 						WrkSpace.repaint();
 					} catch (NamingException e) {
-						// TODO Auto-generated catch block
+						reportarError(e.getMessage());
 						e.printStackTrace();
 					}
 				}else {
@@ -264,7 +266,7 @@ public class JFRInicioSesion extends JFrame {
 							lblNewLabel.setVisible(true);
 							
 						}else {
-							//dispose();
+							dispose();
 							JFRPrincipal.main(null);
 						}
 					}
@@ -331,14 +333,18 @@ public class JFRInicioSesion extends JFrame {
 		tipoInicio=1;
 		lblSingUp.setVisible(false);
 		LogIn.setVisible(true);
-			panel_1.setVisible(true);
-			panel_1.setBounds(12, 24, 334, 445);
-			
+		panel_1.setVisible(true);
+		panel_1.setBounds(12, 24, 334, 445);
+		
 
-			WrkSpace.removeAll();
-			WrkSpace.setLayout(null);
-			WrkSpace.add(panel_1);
-			WrkSpace.revalidate();
-			WrkSpace.repaint();
+		WrkSpace.removeAll();
+		WrkSpace.setLayout(null);
+		WrkSpace.add(panel_1);
+		WrkSpace.revalidate();
+		WrkSpace.repaint();
+	}
+	
+	public void reportarError(String error) {
+		JOptionPane.showMessageDialog(this, error);
 	}
 }
