@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.session.IniciarSesion;
+import com.session.Sesion;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -267,6 +268,12 @@ public class JFRInicioSesion extends JFrame {
 							
 						}else {
 							dispose();
+							
+							JpInicio jp = new JpInicio();
+							jp.setBounds(290, 238, 660, 600);
+							jp.setVisible(true);
+							jp.setLocation(12,12);
+							JFRPrincipal.PnlWorkSpace.add(jp);
 							JFRPrincipal.main(null);
 						}
 					}
