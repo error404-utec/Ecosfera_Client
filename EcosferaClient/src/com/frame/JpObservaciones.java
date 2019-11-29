@@ -76,6 +76,7 @@ public class JpObservaciones extends JPanel {
 				if(!(coso.after(coso2))) {
 					tablaObservaciones.setVisible(false);
 					tablaObservaciones = filtrar();
+					
 					scrollPane.setViewportView(tablaObservaciones);
 					tablaObservaciones.setVisible(true);
 					scrollPane.revalidate();
@@ -165,6 +166,84 @@ private JTable cargarObservaciones() throws NamingException {
 	}
 
 
+private JTable filtrar2() {
+	Date mifecha = calendar.getDate();
+	long dato = mifecha.getTime();
+	java.sql.Date coso = new java.sql.Date(dato);
+	
+	Date mifecha2 = calendar_1.getDate();
+	long dato2 = mifecha2.getTime();
+	java.sql.Date coso2 = new java.sql.Date(dato2);
+	
+	
+	List<Observacion> lista;
+	try {
+		lista = listarObservaciones();
+	
+	String[] nombreColumnas = {"ID", "Fecha", "Descripción", "Geolocalizacion", "Usuario", "Localidad", "Fenomeno" };
+	int fila = 0;
+	
+	for (Observacion o : lista) {
+		if ((o.getFecha().after(coso) && o.getFecha().before(coso2))){
+			fila ++;
+		}
+	}
+	Object[][] datos = new Object[fila][7];
+	fila = 0;
+
+	
+	for (Observacion o : lista) {
+
+		if ((o.getFecha().after(coso) && o.getFecha().before(coso2))) {
+			datos[fila][0] = o.getId();
+			datos[fila][1] = o.getFecha();
+			datos[fila][2] = o.getDescripcion();
+			datos[fila][3] = o.getGeolocalizacion();
+			datos[fila][4] = o.getUsuario().getNombre();
+			datos[fila][5] = o.getLocalidad().getNombre();
+			datos[fila][6] = o.getTipo().getNombre();
+			fila++;
+		}
+	}
+	
+	DefaultTableModel model = new DefaultTableModel(datos, nombreColumnas) {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			 return String.class;
+		}
+	};
+	
+	tablaObservaciones = new JTable(model);
+	tablaObservaciones.setRowSelectionAllowed(true);
+	tablaObservaciones.setColumnSelectionAllowed(false);
+	tablaObservaciones.setBorder(null);
+	tablaObservaciones.setBackground(new Color(255, 255, 255));
+	tablaObservaciones.setForeground(new Color(153, 153, 153));
+	tablaObservaciones.setFont(new Font("Yu Gothic UI Semibold", Font.ITALIC, 13));
+	tablaObservaciones.setShowVerticalLines(false);
+	tablaObservaciones.setAutoscrolls(true);
+	tablaObservaciones.setSize(600, 600);
+	Color color = new Color(144,238,144);
+	tablaObservaciones.setSelectionBackground(color);
+	
+	
+	return tablaObservaciones;
+	} catch (NamingException e) {
+		e.printStackTrace();
+	}
+	
+	return tablaObservaciones;
+
+}
+
 	private JTable filtrar() {
 		Date mifecha = calendar.getDate();
 		long dato = mifecha.getTime();
@@ -193,6 +272,7 @@ private JTable cargarObservaciones() throws NamingException {
 		
 		for (Observacion o : lista) {
 
+			filtrarFecha(coso, coso2, o);
 			if ((o.getFecha().after(coso) && o.getFecha().before(coso2))) {
 				datos[fila][0] = o.getId();
 				datos[fila][1] = o.getFecha();
@@ -250,5 +330,18 @@ private JTable cargarObservaciones() throws NamingException {
 	
 	}
 	
-	
+	public boolean filtrarFecha(Date fecha1, Date fecha2, Observacion observacion) {
+		boolean respuesta = false;
+		int a1 = fecha1.getYear();
+		int a2 = fecha2.getYear();
+		int aC = observacion.getFecha().getYear();
+		
+		
+		System.out.println(a1 +" " 
+				+ a2 + " " 
+				+ aC);
+		
+		
+		return respuesta;
+	}
 }

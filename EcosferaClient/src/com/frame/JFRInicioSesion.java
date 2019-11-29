@@ -194,7 +194,7 @@ public class JFRInicioSesion extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				PnlLogOut.setBackground(new Color(46, 139, 87));
+				PnlLogOut.setBackground(new Color(0, 0, 0, 0));
 			}
 		});
 		PnlLogOut.setBounds(29,579, 43, 44);

@@ -111,6 +111,15 @@ public class JpPerfiles extends JPanel {
 					e.printStackTrace();
 				}
 			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				PnlVolver.setBackground(new Color(46,139,87));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				PnlVolver.setBackground(new Color(240,240,240));
+			}
 		});
 		label_3.setIcon(new ImageIcon(jpDep_Zona.class.getResource("/recursos/icons/go_back.png")));
 		label_3.setBounds(0, 0, 51, 55);
